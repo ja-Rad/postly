@@ -8,7 +8,7 @@ pipeline {
         stage('Clone Git Project') {
             steps {
                 echo 'Clone Git Project...'
-                git(branch: 'develop', changelog: true, poll: true, url: 'https://github.com/Radec24/postly.git')
+                git(branch: 'master', changelog: true, poll: true, url: 'https://github.com/Radec24/postly.git')
             }
         }
 

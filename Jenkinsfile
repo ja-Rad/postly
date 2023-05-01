@@ -25,13 +25,13 @@ pipeline {
             parallel {
                 stage('Unit Tests') {
                     steps {
-                        sh 'mvn clean test'
+                        sh 'mvn clean test -DargLine=" ${JASYPT_ENCRYPTOR_PASSWORD_VALUE}"'
                     }
                 }
 
                 stage('Integration Tests') {
                     steps {
-                        sh 'mvn clean verify'
+                        sh 'mvn clean verify -DargLine=" ${JASYPT_ENCRYPTOR_PASSWORD_VALUE}"'
                     }
                 }
             }
@@ -40,7 +40,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube-localhost-9000') {
-                    sh 'mvn clean sonar:sonar'
+                    sh 'mvn clean sonar:sonar -DargLine=" ${JASYPT_ENCRYPTOR_PASSWORD_VALUE}"'
                 }
 
                 waitForQualityGate true

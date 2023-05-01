@@ -16,43 +16,34 @@ pipeline {
         }
 
         stage('Build Project') {
-            script {
-                steps {
-                    sh 'mvn clean compile -DargLine=" ' $ { JASYPT_ENCRYPTOR_PASSWORD_VALUE } ' "'
-                }
+            steps {
+                sh 'mvn clean compile -DargLine=" ' $ { JASYPT_ENCRYPTOR_PASSWORD_VALUE } ' "'
             }
         }
 
         stage('Project Tests') {
             parallel {
                 stage('Unit Tests') {
-                    script {
-                        steps {
-                            sh 'mvn clean test'
-                        }
+                    steps {
+                        sh 'mvn clean test'
                     }
                 }
 
                 stage('Integration Tests') {
-                    script {
-                        steps {
-                            sh 'mvn clean verify'
-                        }
+                    steps {
+                        sh 'mvn clean verify'
                     }
                 }
-
             }
         }
 
         stage('SonarQube Analysis') {
-            script {
-                steps {
-                    withSonarQubeEnv('SonarQube-localhost-9000') {
-                        sh 'mvn clean sonar:sonar'
-                    }
-
-                    waitForQualityGate true
+            steps {
+                withSonarQubeEnv('SonarQube-localhost-9000') {
+                    sh 'mvn clean sonar:sonar'
                 }
+
+                waitForQualityGate true
             }
         }
     }

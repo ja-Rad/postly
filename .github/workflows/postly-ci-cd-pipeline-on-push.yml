@@ -31,7 +31,7 @@ jobs:
       run: mvn clean compile -DargLine="${{ secrets.JASYPT_ENCRYPTOR_PASSWORD }}"
       
     - name: Run Unit Tests
-      run: mvn clean test -DargLine="${{ secrets.JASYPT_ENCRYPTOR_PASSWORD }}"
+      run: mvn test -DargLine="${{ secrets.JASYPT_ENCRYPTOR_PASSWORD }}"
       
     - name: Run Integration Tests
-      run: mvn clean verify -DargLine="${{ secrets.JASYPT_ENCRYPTOR_PASSWORD }}"
+      run: mvn verify -DargLine="${{ secrets.JASYPT_ENCRYPTOR_PASSWORD }}"

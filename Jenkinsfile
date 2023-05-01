@@ -45,11 +45,12 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('SonarQube-localhost-9000') {
-                    sh 'mvn clean sonar:sonar -DargLine=" ${JASYPT_ENCRYPTOR_PASSWORD_VALUE}"'
+                withSonarQubeEnv('SonarQube-Server-localhost-9000') {
+                    sh 'mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar -DargLine=" ${JASYPT_ENCRYPTOR_PASSWORD_VALUE}"'
                 }
-
-                waitForQualityGate true
+                timeout(time: 2, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
             }
         }
     }

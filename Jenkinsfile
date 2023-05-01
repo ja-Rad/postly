@@ -3,6 +3,9 @@ pipeline {
     tools {
         maven 'maven-3.9.1'
     }
+    environment {
+        JASYPT_ENCRYPTOR_PASSWORD_VALUE = credentials('JASYPT_ENCRYPTOR_PASSWORD')
+    }
 
     stages {
         stage('Clone Git Project') {
@@ -12,12 +15,10 @@ pipeline {
             }
         }
 
-        stage('Compile Project') {
+        stage('Build Project') {
             steps {
-                withCredentials([string(credentialsId: 'JASYPT_ENCRYPTOR_PASSWORD', variable: 'JASYPT_ENCRYPTOR_PASSWORD_VALUE')]) {
-                    echo 'Compile Project...'
-                    sh "mvn clean compile -DargLine="' $ { JASYPT_ENCRYPTOR_PASSWORD_VALUE } '""
-                }
+                echo 'Compile Project...'
+                sh "mvn clean compile -DargLine=" ' $ { JASYPT_ENCRYPTOR_PASSWORD_VALUE } ' ""
             }
         }
 

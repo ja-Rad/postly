@@ -25,13 +25,13 @@ pipeline {
             parallel {
                 stage('Unit Tests') {
                     steps {
-                        sh 'mvn clean test -DargLine=" ${JASYPT_ENCRYPTOR_PASSWORD_VALUE}"'
+                        sh 'mvn test -DargLine=" ${JASYPT_ENCRYPTOR_PASSWORD_VALUE}"'
                     }
                 }
 
                 stage('Integration Tests') {
                     steps {
-                        sh 'mvn clean verify -DargLine=" ${JASYPT_ENCRYPTOR_PASSWORD_VALUE}"'
+                        sh 'mvn failsafe:integration-test@it-tests -DargLine=" ${JASYPT_ENCRYPTOR_PASSWORD_VALUE}"'
                     }
                 }
             }

@@ -17,7 +17,7 @@ pipeline {
 
         stage('Build Project') {
             steps {
-                sh 'mvn clean compile -DargLine=" ' $ { JASYPT_ENCRYPTOR_PASSWORD_VALUE } ' "'
+                sh 'mvn clean compile -DargLine=" ${JASYPT_ENCRYPTOR_PASSWORD_VALUE}"'
             }
         }
 

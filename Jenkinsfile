@@ -16,7 +16,7 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'JASYPT_ENCRYPTOR_PASSWORD', variable: 'JASYPT_ENCRYPTOR_PASSWORD_VALUE')]) {
                     echo 'Compile Project...'
-                    sh 'mvn clean compile -DargLine="' $ { JASYPT_ENCRYPTOR_PASSWORD_VALUE } '"'
+                    sh "mvn clean compile -DargLine="' $ { JASYPT_ENCRYPTOR_PASSWORD_VALUE } '""
                 }
             }
         }
@@ -26,14 +26,14 @@ pipeline {
                 stage('Unit Tests') {
                     steps {
                         echo 'Unit Tests...'
-                        sh 'mvn clean test'
+                        sh "mvn clean test"
                     }
                 }
 
                 stage('Integration Tests') {
                     steps {
                         echo 'Integration Tests...'
-                        sh 'mvn clean verify'
+                        sh "mvn clean verify"
                     }
                 }
 
@@ -44,7 +44,7 @@ pipeline {
             steps {
                 echo 'SonarQube Analysis...'
                 withSonarQubeEnv('SonarQube-localhost-9000') {
-                    sh 'mvn clean sonar:sonar'
+                    sh "mvn clean sonar:sonar"
                 }
 
                 waitForQualityGate true

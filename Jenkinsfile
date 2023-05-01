@@ -13,8 +13,8 @@ pipeline {
         }
 
         stage('Compile Project') {
-            withCredentials([string(credentialsId: 'JASYPT_ENCRYPTOR_PASSWORD', variable: 'JASYPT_ENCRYPTOR_PASSWORD_VALUE')]) {
-                steps {
+            steps {
+                withCredentials([string(credentialsId: 'JASYPT_ENCRYPTOR_PASSWORD', variable: 'JASYPT_ENCRYPTOR_PASSWORD_VALUE')]) {
                     echo 'Compile Project...'
                     sh 'mvn clean compile -DargLine="' $ { JASYPT_ENCRYPTOR_PASSWORD_VALUE } '"'
                 }

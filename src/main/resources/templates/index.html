@@ -6,4 +6,8 @@
     <body>
         <p>INDEX PAGE FOR LOGGED IN USERS</p>
     </body>
+    <form th:action="@{/logout}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <input type="submit" value="Sign out" />
+    </form>
 </html>

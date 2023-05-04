@@ -2,12 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
     <body>
         <h2>Create a new account</h2>
-        <form
-            action="#"
-            method="post"
-            th:action="@{/registration}"
-            th:object="${user}"
-        >
+        <form action="#" method="post" th:action="@{/registration}" th:object="${user}">
             <p>UserName: <input th:field="*{userName}" type="text" /></p>
             <p>FirstName: <input th:field="*{firstName}" type="text" /></p>
             <p>LastName: <input th:field="*{lastName}" type="text" /></p>

@@ -69,7 +69,10 @@ public class WebSpringSecurityConfig {
                 )
 
                 // Logout Filter
-                .logout((logout) -> logout.permitAll());
+                .logout((logout) -> logout
+                        .logoutUrl("/logout").permitAll()
+                        .logoutSuccessUrl("/login")
+                );
 
         return http.build();
     }

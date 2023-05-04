@@ -46,7 +46,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube-Server-localhost-9000') {
-                    sh 'mvn clean install'
+                    sh 'mvn clean install -DargLine=" ${JASYPT_ENCRYPTOR_PASSWORD_VALUE}"'
                     sh 'mvn sonar:sonar -Dsonar.sources=src/main/java -Dsonar.java.binaries=target/classes -Dsonar.language=java -DargLine=" ${JASYPT_ENCRYPTOR_PASSWORD_VALUE}"'
                 }
                 timeout(time: 2, unit: 'MINUTES') {

@@ -5,7 +5,7 @@ import com.jarad.postly.entity.User;
 import com.jarad.postly.repository.RoleRepository;
 import com.jarad.postly.repository.UserRepository;
 import com.jarad.postly.util.dto.UserDto;
-import com.jarad.postly.util.enums.Roles;
+import com.jarad.postly.util.enums.SecurityRole;
 import com.jarad.postly.util.exception.UserAlreadyExistException;
 import com.jarad.postly.util.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,12 +36,12 @@ public class UserService implements IUserService {
             throw new UserAlreadyExistException("There is an account with that email address: " + userDto.getEmail());
         }
 
-        Optional<Role> userRole = roleRepository.findByName(Roles.USER_ROLE.toString());
+        Optional<Role> userRole = roleRepository.findByName(SecurityRole.USER_ROLE.toString());
         if (userRole.isEmpty()) {
-            Role buildUserRole = Role.builder().name(Roles.USER_ROLE.toString()).build();
+            Role buildUserRole = Role.builder().name(SecurityRole.USER_ROLE.toString()).build();
             roleRepository.save(buildUserRole);
 
-            userRole = roleRepository.findByName(Roles.USER_ROLE.toString());
+            userRole = roleRepository.findByName(SecurityRole.USER_ROLE.toString());
         }
 
         User user = userMapper.mapToEntity(userDto);

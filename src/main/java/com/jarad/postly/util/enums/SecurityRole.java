@@ -1,12 +1,12 @@
 package com.jarad.postly.util.enums;
 
-public enum Roles {
+public enum SecurityRole {
     USER_ROLE("ROLE_USER"),
     ADMIN_ROLE("ROLE_ADMIN");
 
     private final String role;
 
-    Roles(String role) {
+    SecurityRole(String role) {
         this.role = role;
     }
 

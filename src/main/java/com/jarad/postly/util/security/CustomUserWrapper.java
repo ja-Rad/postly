@@ -23,7 +23,7 @@ public class CustomUserWrapper implements UserDetails {
     @Transactional
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-        for (Role role : this.user.getRoles()) {
+        for (Role role : user.getRoles()) {
             grantedAuthorities.add(new SimpleGrantedAuthority(role.getName()));
         }
         return grantedAuthorities;

@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.jarad</groupId>
     <artifactId>postly</artifactId>
-    <version>0.2.0-SNAPSHOT</version>
+    <version>0.2.1-SNAPSHOT</version>
     <name>postly</name>
     <description>postly - web application for social interactions</description>
     <properties>

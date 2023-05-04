@@ -17,6 +17,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.io.Serializable;
 import java.util.LinkedHashSet;
@@ -52,24 +54,10 @@ public class User implements Serializable {
     private String email;
 
     @ToString.Exclude
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @Fetch(FetchMode.JOIN)
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new LinkedHashSet<>();
-
-//    @ManyToMany(fetch = FetchType.EAGER)
-//    @JoinTable(
-//            name = "users_roles",
-//            joinColumns = @JoinColumn(name = "user_id"),
-//            inverseJoinColumns = @JoinColumn(name = "role_id")
-//    )
-//    private Set<Role> roles;
-//
-//    public void addRole(Role role) {
-//        if (this.roles == null) {
-//            roles = new HashSet<>();
-//        }
-//        this.roles.add(role);
-//    }
 }

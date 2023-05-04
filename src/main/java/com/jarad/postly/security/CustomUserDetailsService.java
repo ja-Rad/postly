@@ -1,4 +1,4 @@
-package com.jarad.postly.util.security;
+package com.jarad.postly.security;
 
 import com.jarad.postly.entity.User;
 import com.jarad.postly.repository.UserRepository;

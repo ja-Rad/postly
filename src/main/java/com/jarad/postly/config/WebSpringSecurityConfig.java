@@ -1,6 +1,6 @@
 package com.jarad.postly.config;
 
-import com.jarad.postly.util.security.CustomUserDetailsService;
+import com.jarad.postly.security.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

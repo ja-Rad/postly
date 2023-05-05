@@ -1,7 +1,7 @@
 package com.jarad.postly.controller;
 
 import com.jarad.postly.entity.User;
-import com.jarad.postly.service.UserService;
+import com.jarad.postly.service.UserServiceImpl;
 import com.jarad.postly.util.dto.UserDto;
 import com.jarad.postly.util.exception.UserAlreadyExistException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,11 +20,11 @@ import org.springframework.web.context.request.WebRequest;
 @Controller
 public class UserController {
 
-    private UserService userService;
+    private UserServiceImpl userServiceImpl;
 
     @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public UserController(UserServiceImpl userServiceImpl) {
+        this.userServiceImpl = userServiceImpl;
     }
 
     @GetMapping("/registration")
@@ -40,7 +40,7 @@ public class UserController {
                                       Errors errors) {
 
         try {
-            User registered = userService.registerNewUserAccount(userDto);
+            User registered = userServiceImpl.registerNewUserAccount(userDto);
         } catch (UserAlreadyExistException userAlreadyExistException) {
             log.warn(userAlreadyExistException.toString());
         }

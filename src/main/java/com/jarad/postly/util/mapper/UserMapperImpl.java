@@ -7,12 +7,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserMapper implements IBasicMapper<User, UserDto> {
+public class UserMapperImpl implements BasicMapper<User, UserDto> {
 
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserMapper(PasswordEncoder passwordEncoder) {
+    public UserMapperImpl(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
 

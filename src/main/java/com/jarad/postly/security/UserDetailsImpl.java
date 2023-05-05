@@ -11,11 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class CustomUserWrapper implements UserDetails {
+public class UserDetailsImpl implements UserDetails {
     private User user;
 
     @Autowired
-    public CustomUserWrapper(User user) {
+    public UserDetailsImpl(User user) {
         this.user = user;
     }
 

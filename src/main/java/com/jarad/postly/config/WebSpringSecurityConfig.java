@@ -1,6 +1,6 @@
 package com.jarad.postly.config;
 
-import com.jarad.postly.security.CustomUserDetailsService;
+import com.jarad.postly.security.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,11 +20,11 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity(jsr250Enabled = true)
 public class WebSpringSecurityConfig {
 
-    private CustomUserDetailsService customUserDetailsService;
+    private UserDetailsServiceImpl userDetailsServiceImpl;
 
     @Autowired
-    public WebSpringSecurityConfig(CustomUserDetailsService customUserDetailsService) {
-        this.customUserDetailsService = customUserDetailsService;
+    public WebSpringSecurityConfig(UserDetailsServiceImpl userDetailsServiceImpl) {
+        this.userDetailsServiceImpl = userDetailsServiceImpl;
     }
 
     @Bean
@@ -35,7 +35,7 @@ public class WebSpringSecurityConfig {
     @Bean
     public DaoAuthenticationProvider authProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(customUserDetailsService);
+        authProvider.setUserDetailsService(userDetailsServiceImpl);
         // Encode password when user Authenticates
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;

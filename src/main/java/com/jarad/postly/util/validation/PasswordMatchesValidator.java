@@ -1,4 +1,4 @@
-package com.jarad.postly.validation;
+package com.jarad.postly.util.validation;
 
 import com.jarad.postly.util.dto.UserDto;
 import jakarta.validation.ConstraintValidator;

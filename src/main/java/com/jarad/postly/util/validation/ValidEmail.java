@@ -1,4 +1,4 @@
-package com.jarad.postly.validation;
+package com.jarad.postly.util.validation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
@@ -8,15 +8,16 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
+import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Target({TYPE, ANNOTATION_TYPE})
+@Target({TYPE, FIELD, ANNOTATION_TYPE})
 @Retention(RUNTIME)
-@Constraint(validatedBy = PasswordMatchesValidator.class)
+@Constraint(validatedBy = EmailValidator.class)
 @Documented
-public @interface PasswordMatches {
-    String message() default "Passwords don't match";
+public @interface ValidEmail {
+    String message() default "Invalid email";
 
     Class<?>[] groups() default {};
 

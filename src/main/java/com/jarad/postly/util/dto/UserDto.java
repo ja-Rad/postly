@@ -1,8 +1,8 @@
 package com.jarad.postly.util.dto;
 
 import com.jarad.postly.entity.Role;
-import com.jarad.postly.validation.PasswordMatches;
-import com.jarad.postly.validation.ValidEmail;
+import com.jarad.postly.util.validation.PasswordMatches;
+import com.jarad.postly.util.validation.ValidEmail;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

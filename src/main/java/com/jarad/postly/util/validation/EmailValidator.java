@@ -1,4 +1,4 @@
-package com.jarad.postly.validation;
+package com.jarad.postly.util.validation;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

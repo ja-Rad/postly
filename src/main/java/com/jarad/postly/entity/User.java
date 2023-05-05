@@ -36,15 +36,6 @@ public class User implements Serializable {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "username", nullable = false, unique = true)
-    private String userName;
-
-    @Column(name = "firstName", nullable = false)
-    private String firstName;
-
-    @Column(name = "lastName", nullable = false)
-    private String lastName;
-
     @Column(name = "password", nullable = false)
     private String password;
 

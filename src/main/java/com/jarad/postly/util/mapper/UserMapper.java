@@ -19,21 +19,14 @@ public class UserMapper implements IBasicMapper<User, UserDto> {
     @Override
     public User mapToEntity(UserDto userDto) {
         return User.builder()
-                .userName(userDto.getUserName())
-                .password(passwordEncoder.encode(userDto.getPassword()))
-                .firstName(userDto.getFirstName())
-                .lastName(userDto.getLastName())
                 .email(userDto.getEmail())
+                .password(passwordEncoder.encode(userDto.getPassword()))
                 .build();
     }
 
     @Override
     public UserDto mapToDto(User user) {
         return UserDto.builder()
-                .userName(user.getUserName())
-                .password(user.getPassword())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
                 .email(user.getEmail())
                 .build();
     }

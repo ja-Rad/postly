@@ -3,9 +3,6 @@
     <body>
         <h2>Create a new account</h2>
         <form action="#" method="post" th:action="@{/registration}" th:object="${user}">
-            <p>UserName: <input th:field="*{userName}" type="text" /></p>
-            <p>FirstName: <input th:field="*{firstName}" type="text" /></p>
-            <p>LastName: <input th:field="*{lastName}" type="text" /></p>
             <p>Email: <input th:field="*{email}" type="text" /></p>
             <p>Password: <input th:field="*{password}" type="password" /></p>
             <p>

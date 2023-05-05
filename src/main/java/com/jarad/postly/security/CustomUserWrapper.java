@@ -36,7 +36,7 @@ public class CustomUserWrapper implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getUserName();
+        return null;
     }
 
     @Override

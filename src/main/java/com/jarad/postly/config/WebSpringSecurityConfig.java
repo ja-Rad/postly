@@ -63,7 +63,7 @@ public class WebSpringSecurityConfig {
 
                 // Login Filter
                 .formLogin((form) -> form
-                        .loginPage("/login").permitAll()
+                        .loginPage("/login").usernameParameter("email").permitAll()
                         .defaultSuccessUrl("/", true)
                         .failureUrl("/login?error=true")
                 )

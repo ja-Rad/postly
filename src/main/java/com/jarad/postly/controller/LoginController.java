@@ -7,6 +7,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class LoginController {
 
+    @GetMapping("/")
+    public String showIndexPage() {
+        // if (profileRep.findByUserId) ? posts : create-profile;
+        return "index";
+    }
+
     @GetMapping("/login")
     public String showLoginPage() {
         return "login";

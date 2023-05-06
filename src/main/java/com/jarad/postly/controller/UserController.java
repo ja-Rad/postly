@@ -39,7 +39,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("verify-notification")
+    @GetMapping("/verify-notification")
     public String showVerifyNotificationPage() {
         return "verify-notification";
     }

@@ -2,7 +2,6 @@ package com.jarad.postly.util.mapper;
 
 import com.jarad.postly.entity.User;
 import com.jarad.postly.util.dto.UserDto;
-import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -22,7 +21,6 @@ public class UserMapperImpl implements EntityDtoMapper<User, UserDto> {
         return User.builder()
                 .email(userDto.getEmail())
                 .password(passwordEncoder.encode(userDto.getPassword()))
-                .verificationCode(RandomString.make(64))
                 .build();
     }
 

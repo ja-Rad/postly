@@ -54,7 +54,14 @@ public class WebSpringSecurityConfig {
                 // Authorization Filter
                 .authorizeHttpRequests((requests) -> requests
                         // Public access: registration and login pages
-                        .requestMatchers("/registration", "/verify").permitAll()
+                        .requestMatchers("/registration",
+                                "/verify",
+                                "/verify-notification",
+                                "/forgot-password",
+                                "/forgot-password-verify",
+                                "/forgot-password-verify-notification",
+                                "/forgot-password-verify-success",
+                                "/forgot-password-verify-fail").permitAll()
 
                         // Authenticated access to everything else
                         .anyRequest().authenticated()

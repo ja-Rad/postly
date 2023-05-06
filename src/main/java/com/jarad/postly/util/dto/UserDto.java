@@ -33,5 +33,9 @@ public class UserDto {
 
     private String matchingPassword;
 
+    private String verificationCode;
+
+    private boolean enabled;
+
     private Set<Role> roles = new HashSet<>();
 }

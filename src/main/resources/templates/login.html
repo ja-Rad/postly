@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
-<head>
-    <title>Spring Security Example</title>
-</head>
-<body>
-<form method="post" th:action="@{/login}">
-    <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
-    <p>Email : <input name="email" type="text"/></p>
-    <p>Password: <input name="password" type="password"/></p>
-    <input type="submit" value="Sign In"/>
-</form>
-<p>
-    First time here?
-    <a th:href="@{/registration}">Create a new account</a>
-</p>
-</body>
+    <head>
+        <title>Spring Security Example</title>
+    </head>
+    <body>
+        <form method="post" th:action="@{/login}">
+            <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden" />
+            <p>Email : <input name="email" type="text" /></p>
+            <p>Password: <input name="password" type="password" /></p>
+            <input type="submit" value="Sign In" />
+        </form>
+        <p>
+            First time here?
+            <a th:href="@{/registration}">Create a new account</a>
+        </p>
+    </body>
 </html>

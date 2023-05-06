@@ -42,6 +42,12 @@ public class User implements Serializable {
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
+    @Column(name = "verification_code", length = 64)
+    private String verificationCode;
+
+    @Column(name = "enabled", nullable = false)
+    private boolean enabled;
+
     @ToString.Exclude
     @Fetch(FetchMode.JOIN)
     @ManyToMany

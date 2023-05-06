@@ -8,7 +8,6 @@ import com.jarad.postly.util.dto.UserDto;
 import com.jarad.postly.util.enums.SecurityRole;
 import com.jarad.postly.util.exception.EmailNotFoundException;
 import com.jarad.postly.util.exception.UserAlreadyExistException;
-import com.jarad.postly.util.mapper.UserMapperImpl;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import net.bytebuddy.utility.RandomString;
@@ -31,7 +30,6 @@ public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
     private RoleRepository roleRepository;
-    private UserMapperImpl userMapperImpl;
     private JavaMailSender mailSender;
     private PasswordEncoder passwordEncoder;
 
@@ -39,10 +37,9 @@ public class UserServiceImpl implements UserService {
     private String postlyEmailAddress;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, UserMapperImpl userMapperImpl, JavaMailSender mailSender, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, JavaMailSender mailSender, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
-        this.userMapperImpl = userMapperImpl;
         this.mailSender = mailSender;
         this.passwordEncoder = passwordEncoder;
     }
@@ -57,9 +54,12 @@ public class UserServiceImpl implements UserService {
         Optional<Role> userRole = roleRepository.findByName(SecurityRole.USER_ROLE.toString());
         userRole = getOptionalRole(userRole);
 
-        User user = userMapperImpl.mapToEntity(userDto);
-        user.setVerificationCode(RandomString.make(64));
-        user.setRoles(Stream.of(userRole.get()).collect(toSet()));
+        User user = User.builder()
+                .email(userDto.getEmail())
+                .password(passwordEncoder.encode(userDto.getPassword()))
+                .verificationCode(RandomString.make(64))
+                .roles(Stream.of(userRole.get()).collect(toSet()))
+                .build();
         userRepository.save(user);
 
         sendVerificationEmail(user);
@@ -106,8 +106,8 @@ public class UserServiceImpl implements UserService {
     /**
      * Helper method that checks if ROLE_USER already exists in Database. If not creates it.
      *
-     * @param userRole entity that represents USER_ROLE in table 'roles'
-     * @return USER_ROLE from table 'roles'
+     * @param userRole entity that represents ROLE_USER in table 'roles'
+     * @return ROLE_USER from table 'roles'
      */
     private Optional<Role> getOptionalRole(Optional<Role> userRole) {
         if (userRole.isEmpty()) {

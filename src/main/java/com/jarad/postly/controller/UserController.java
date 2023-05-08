@@ -1,6 +1,6 @@
 package com.jarad.postly.controller;
 
-import com.jarad.postly.service.UserServiceImpl;
+import com.jarad.postly.service.UserService;
 import com.jarad.postly.util.dto.UserDto;
 import com.jarad.postly.util.exception.EmailNotFoundException;
 import com.jarad.postly.util.exception.UserAlreadyExistException;
@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class UserController {
 
-    private UserServiceImpl userServiceImpl;
+    private UserService userService;
 
     @Autowired
-    public UserController(UserServiceImpl userServiceImpl) {
-        this.userServiceImpl = userServiceImpl;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     /**
@@ -31,7 +31,7 @@ public class UserController {
 
     @GetMapping("/verify")
     public String showVerifyPage(@RequestParam String code) {
-        boolean isVerified = userServiceImpl.verifyNewUser(code);
+        boolean isVerified = userService.verifyNewUser(code);
         if (isVerified) {
             return "verify-success";
         } else {
@@ -59,7 +59,7 @@ public class UserController {
     @PostMapping("/forgot-password-verify")
     public String processForgotPasswordVerifyPage(@RequestParam String code,
                                                   @ModelAttribute("user") UserDto userDto) {
-        boolean isVerified = userServiceImpl.verifyForgotPassword(code, userDto);
+        boolean isVerified = userService.verifyForgotPassword(code, userDto);
         if (isVerified) {
             return "redirect:/forgot-password-verify-success";
         } else {
@@ -87,7 +87,7 @@ public class UserController {
     @PostMapping("/forgot-password")
     public String resetPasswordForUserAccount(@ModelAttribute("user") UserDto userDto) {
         try {
-            userServiceImpl.resetPasswordForExistingUser(userDto);
+            userService.resetPasswordForExistingUser(userDto);
         } catch (EmailNotFoundException emailNotFoundException) {
             log.warn(emailNotFoundException.toString());
         }
@@ -113,7 +113,7 @@ public class UserController {
     @PostMapping("/registration")
     public String registerUserAccount(@ModelAttribute("user") @Valid UserDto userDto) {
         try {
-            userServiceImpl.registerNewUserAccount(userDto);
+            userService.registerNewUserAccount(userDto);
         } catch (UserAlreadyExistException userAlreadyExistException) {
             log.warn(userAlreadyExistException.toString());
         }

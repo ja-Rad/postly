@@ -2,8 +2,6 @@ package com.jarad.postly.controller;
 
 import com.jarad.postly.service.UserService;
 import com.jarad.postly.util.dto.UserDto;
-import com.jarad.postly.util.exception.EmailNotFoundException;
-import com.jarad.postly.util.exception.UserAlreadyExistException;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
     @Autowired
     public UserController(UserService userService) {
@@ -28,7 +26,6 @@ public class UserController {
     /**
      * /verify ENDPOINTS
      */
-
     @GetMapping("/verify")
     public String showVerifyPage(@RequestParam String code) {
         boolean isVerified = userService.verifyNewUser(code);
@@ -47,7 +44,6 @@ public class UserController {
     /**
      * /forgot ENDPOINTS
      */
-
     @GetMapping("/forgot-password-verify")
     public String showForgotPasswordVerifyPage(@RequestParam String code, Model model) {
         UserDto userDto = new UserDto();
@@ -86,11 +82,7 @@ public class UserController {
 
     @PostMapping("/forgot-password")
     public String resetPasswordForUserAccount(@ModelAttribute("user") UserDto userDto) {
-        try {
-            userService.resetPasswordForExistingUser(userDto);
-        } catch (EmailNotFoundException emailNotFoundException) {
-            log.warn(emailNotFoundException.toString());
-        }
+        userService.resetPasswordForExistingUser(userDto);
         return "redirect:/forgot-password-verify-notification";
     }
 
@@ -102,7 +94,6 @@ public class UserController {
     /**
      * /registration ENDPOINTS
      */
-
     @GetMapping("/registration")
     public String showRegistrationForm(Model model) {
         UserDto userDto = new UserDto();
@@ -112,11 +103,7 @@ public class UserController {
 
     @PostMapping("/registration")
     public String registerUserAccount(@ModelAttribute("user") @Valid UserDto userDto) {
-        try {
-            userService.registerNewUserAccount(userDto);
-        } catch (UserAlreadyExistException userAlreadyExistException) {
-            log.warn(userAlreadyExistException.toString());
-        }
+        userService.registerNewUserAccount(userDto);
         return "redirect:/verify-notification";
     }
 }

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link th:replace="~{fragments/bootstrap-stylesheet}" />
+        <link th:replace="~{fragments/main-stylesheet}" />
+        <link rel="icon" type="image/x-icon" th:href="@{../static/favicon.ico}" />
+        <meta charset="utf-8" />
+        <title>Profiles</title>
+    </head>
+
+    <body>
+        <header>
+            <div th:insert="~{fragments/navbar}" id="navbar-content"></div>
+        </header>
+
+        <h2>Profiles</h2>
+
+        <div th:each="profile : ${profilePage.content}">
+            <p th:text="${profile.username}"></p>
+            <p th:text="${profile.creationDate}"></p>
+        </div>
+        <div th:if="${profilePage.totalPages > 0}" class="pagination" th:each="pageNumber : ${pageNumbers}">
+            <a th:href="@{/profiles(page=${pageNumber}, size=${profilePage.size})}" th:text="${pageNumber}" th:class="${pageNumber==profilePage.number + 1} ? active"> </a>
+        </div>
+
+        <footer th:insert="~{fragments/footer-content}" id="footer-content" class="bg-primary fixed-bottom"></footer>
+        <link th:insert="~{fragments/bootstrap-js-bundle}" />
+    </body>
+</html>

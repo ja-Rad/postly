@@ -1,16 +1,34 @@
 package com.jarad.postly.controller;
 
+import com.jarad.postly.security.UserDetailsImpl;
+import com.jarad.postly.service.LoginService;
 import jakarta.annotation.security.RolesAllowed;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class LoginController {
 
+    private final LoginService loginService;
+
+    @Autowired
+    public LoginController(LoginService loginService) {
+        this.loginService = loginService;
+    }
+
     @GetMapping("/")
-    public String showIndexPage() {
-        // if (profileRep.findByUserId) ? posts : create-profile;
-        return "index";
+    public String showIndexPage(Authentication authentication, HttpSession session, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        boolean profileExistForUser = loginService.isProfileExistForUser(authentication);
+        if (profileExistForUser) {
+            session.setAttribute("usersActiveProfileId", userDetails.getUserId());
+            return "redirect:/posts";
+        }
+        session.setAttribute("usersActiveProfileId", null);
+        return "redirect:/profiles/form";
     }
 
     @GetMapping("/login")

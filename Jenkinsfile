@@ -5,7 +5,7 @@ pipeline {
     }
     environment {
         JASYPT_ENCRYPTOR_PASSWORD_VALUE = credentials('JASYPT_ENCRYPTOR_PASSWORD')
-        DOCKER_JENKINS_MYSQL_IP = '-DDOCKER_JENKINS_MYSQL_IP=mysql-postly'
+        DOCKER_JENKINS_MYSQL_IP = '-DDOCKER_JENKINS_MYSQL_IP=172.19.0.3'
     }
 
     stages {

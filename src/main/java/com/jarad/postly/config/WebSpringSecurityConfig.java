@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -19,6 +20,22 @@ import org.springframework.security.web.SecurityFilterChain;
 // jsr250Enabled enables RolesAllowed annotation
 @EnableMethodSecurity(jsr250Enabled = true)
 public class WebSpringSecurityConfig {
+
+    public static final String[] ENDPOINTS_WHITELIST = {
+            "/registration",
+            "/verify",
+            "/verify-notification",
+            "/forgot-password",
+            "/forgot-password-verify",
+            "/forgot-password-verify-notification",
+            "/forgot-password-verify-success",
+            "/forgot-password-verify-fail"
+    };
+
+    public static final String[] STATIC_RESOURCES_WHITELIST = {
+            "/images/**",
+            "/styles/**"
+    };
 
     private UserDetailsServiceImpl userDetailsServiceImpl;
 
@@ -53,17 +70,11 @@ public class WebSpringSecurityConfig {
         http
                 // Authorization Filter
                 .authorizeHttpRequests((requests) -> requests
-                        // Public access: registration and login pages
-                        .requestMatchers("/registration",
-                                "/verify",
-                                "/verify-notification",
-                                "/forgot-password",
-                                "/forgot-password-verify",
-                                "/forgot-password-verify-notification",
-                                "/forgot-password-verify-success",
-                                "/forgot-password-verify-fail").permitAll()
-
-                        // Authenticated access to everything else
+                        // Public access
+                        .requestMatchers(ENDPOINTS_WHITELIST).permitAll()
+                        .requestMatchers(STATIC_RESOURCES_WHITELIST).permitAll()
+                        
+                        // Authenticated access
                         .anyRequest().authenticated()
 
                 )
@@ -78,8 +89,25 @@ public class WebSpringSecurityConfig {
                 // Logout Filter
                 .logout((logout) -> logout
                         .logoutUrl("/logout").permitAll()
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
                         .logoutSuccessUrl("/login")
-                );
+                )
+
+                // Session Filter
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                        .invalidSessionUrl("/invalidSession")
+                        .maximumSessions(1)
+                        .maxSessionsPreventsLogin(true)
+                        .expiredUrl("/login")
+
+                )
+
+                // Exception Filter
+                .exceptionHandling()
+                .accessDeniedPage("/403");
+
 
         return http.build();
     }

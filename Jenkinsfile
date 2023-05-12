@@ -5,6 +5,7 @@ pipeline {
     }
     environment {
         JASYPT_ENCRYPTOR_PASSWORD_VALUE = credentials('JASYPT_ENCRYPTOR_PASSWORD')
+        DOCKER_JENKINS_MYSQL_IP = '-DDOCKER_JENKINS_MYSQL_IP=mysql-postly'
     }
 
     stages {
@@ -17,13 +18,13 @@ pipeline {
 
         stage('Compile Project') {
             steps {
-                sh 'mvn clean compile -DargLine=" ${JASYPT_ENCRYPTOR_PASSWORD_VALUE}"'
+                sh 'mvn clean compile -DargLine=" ${JASYPT_ENCRYPTOR_PASSWORD_VALUE} ${DOCKER_JENKINS_MYSQL_IP}"'
             }
         }
 
         stage('Build Project') {
             steps {
-                sh 'mvn clean install -DargLine=" ${JASYPT_ENCRYPTOR_PASSWORD_VALUE}"'
+                sh 'mvn clean package -DskipTests -DargLine=" ${JASYPT_ENCRYPTOR_PASSWORD_VALUE} ${DOCKER_JENKINS_MYSQL_IP}"'
             }
         }
 
@@ -31,13 +32,13 @@ pipeline {
             parallel {
                 stage('Unit Tests') {
                     steps {
-                        sh 'mvn test -DargLine=" ${JASYPT_ENCRYPTOR_PASSWORD_VALUE}"'
+                        sh 'mvn test -DargLine=" ${JASYPT_ENCRYPTOR_PASSWORD_VALUE} ${DOCKER_JENKINS_MYSQL_IP}"'
                     }
                 }
 
                 stage('Integration Tests') {
                     steps {
-                        sh 'mvn failsafe:integration-test@it-tests -DargLine=" ${JASYPT_ENCRYPTOR_PASSWORD_VALUE}"'
+                        sh 'mvn failsafe:integration-test@it-tests -DargLine=" ${JASYPT_ENCRYPTOR_PASSWORD_VALUE} ${DOCKER_JENKINS_MYSQL_IP}"'
                     }
                 }
             }
@@ -46,8 +47,8 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube-Server-localhost-9000') {
-                    sh 'mvn clean install -DargLine=" ${JASYPT_ENCRYPTOR_PASSWORD_VALUE}"'
-                    sh 'mvn sonar:sonar -Dsonar.sources=src/main/java -Dsonar.java.binaries=target/classes -Dsonar.language=java -DargLine=" ${JASYPT_ENCRYPTOR_PASSWORD_VALUE}"'
+                    sh 'mvn clean install -DargLine=" ${JASYPT_ENCRYPTOR_PASSWORD_VALUE} ${DOCKER_JENKINS_MYSQL_IP}"'
+                    sh 'mvn sonar:sonar -Dsonar.sources=src/main/java -Dsonar.java.binaries=target/classes -Dsonar.language=java -DargLine=" ${JASYPT_ENCRYPTOR_PASSWORD_VALUE} ${DOCKER_JENKINS_MYSQL_IP}"'
                 }
                 timeout(time: 2, unit: 'MINUTES') {
                     waitForQualityGate abortPipeline: true

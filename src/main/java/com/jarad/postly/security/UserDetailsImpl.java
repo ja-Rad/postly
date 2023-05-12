@@ -2,7 +2,6 @@ package com.jarad.postly.security;
 
 import com.jarad.postly.entity.Role;
 import com.jarad.postly.entity.User;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -30,14 +29,23 @@ public class UserDetailsImpl implements UserDetails {
         return grantedAuthorities;
     }
 
+    public Long getUserId() {
+        return user.getId();
+    }
+
     @Override
     public String getPassword() {
         return user.getPassword();
     }
 
+    /**
+     * Default realisation of Spring Security uses username as a primary field for identity, but we use email.
+     *
+     * @return String email of User Entity as a primary field for the authentication name.
+     */
     @Override
     public String getUsername() {
-        return StringUtils.EMPTY;
+        return user.getEmail();
     }
 
     @Override
@@ -58,5 +66,9 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public boolean isEnabled() {
         return user.isEnabled();
+    }
+
+    public boolean isActiveProfile() {
+        return user.isActiveProfile();
     }
 }

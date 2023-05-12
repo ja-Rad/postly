@@ -2,15 +2,17 @@ package com.jarad.postly.service;
 
 import com.jarad.postly.entity.User;
 import com.jarad.postly.util.dto.UserDto;
-import com.jarad.postly.util.exception.EmailNotFoundException;
-import com.jarad.postly.util.exception.UserAlreadyExistException;
 
 public interface UserService {
-    void registerNewUserAccount(UserDto userDto) throws UserAlreadyExistException;
+    void registerNewUserAccount(UserDto userDto);
 
-    void resetPasswordForExistingUser(UserDto userDto) throws EmailNotFoundException;
+    void resetPasswordForExistingUser(UserDto userDto);
 
     void sendVerificationEmail(User user);
 
     void sendForgotPasswordEmail(User user);
+
+    boolean verifyNewUser(String code);
+
+    boolean verifyForgotPassword(String code, UserDto userDto);
 }

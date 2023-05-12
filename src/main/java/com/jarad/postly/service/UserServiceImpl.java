@@ -28,10 +28,10 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private UserRepository userRepository;
-    private RoleRepository roleRepository;
-    private JavaMailSender mailSender;
-    private PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final JavaMailSender mailSender;
+    private final PasswordEncoder passwordEncoder;
 
     @Value("spring.mail.username")
     private String postlyEmailAddress;
@@ -45,13 +45,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void registerNewUserAccount(UserDto userDto) throws UserAlreadyExistException {
+    public void registerNewUserAccount(UserDto userDto) {
         String email = userDto.getEmail();
         if (userRepository.existsByEmail(email)) {
             throw new UserAlreadyExistException("There is an account with that email address: " + email);
         }
 
-        Optional<Role> userRole = roleRepository.findByName(SecurityRole.USER_ROLE.toString());
+        Optional<Role> userRole = roleRepository.findByName(SecurityRole.ROLE_USER.toString());
         userRole = getOptionalRole(userRole);
 
         User user = User.builder()
@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void resetPasswordForExistingUser(UserDto userDto) throws EmailNotFoundException {
+    public void resetPasswordForExistingUser(UserDto userDto) {
         String email = userDto.getEmail();
         Optional<User> optionalUser = userRepository.findByEmail(email);
 
@@ -111,10 +111,10 @@ public class UserServiceImpl implements UserService {
      */
     private Optional<Role> getOptionalRole(Optional<Role> userRole) {
         if (userRole.isEmpty()) {
-            Role buildUserRole = Role.builder().name(SecurityRole.USER_ROLE.toString()).build();
+            Role buildUserRole = Role.builder().name(SecurityRole.ROLE_USER.toString()).build();
             roleRepository.save(buildUserRole);
 
-            userRole = roleRepository.findByName(SecurityRole.USER_ROLE.toString());
+            userRole = roleRepository.findByName(SecurityRole.ROLE_USER.toString());
         }
         return userRole;
     }
@@ -193,6 +193,7 @@ public class UserServiceImpl implements UserService {
             User user = userOptional.get();
             user.setVerificationCode(null);
             user.setEnabled(true);
+            user.setActiveProfile(false);
 
             userRepository.save(user);
             return true;

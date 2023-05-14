@@ -5,7 +5,6 @@ import com.jarad.postly.service.LoginService;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,12 +20,15 @@ public class LoginController {
     }
 
     @GetMapping("/")
-    public String showIndexPage(Authentication authentication, HttpSession session, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        boolean profileExistForUser = loginService.isProfileExistForUser(authentication);
+    public String showIndexPage(@AuthenticationPrincipal UserDetailsImpl userDetails, HttpSession session) {
+        Long userId = userDetails.getUserId();
+        boolean profileExistForUser = loginService.isProfileExistForUser(userId);
+
         if (profileExistForUser) {
             session.setAttribute("usersActiveProfileId", userDetails.getUserId());
             return "redirect:/posts";
         }
+
         session.setAttribute("usersActiveProfileId", null);
         return "redirect:/profiles/form";
     }

@@ -1,6 +1,5 @@
 package com.jarad.postly.config;
 
-import com.jarad.postly.security.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +10,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -37,11 +37,11 @@ public class WebSpringSecurityConfig {
             "/styles/**"
     };
 
-    private UserDetailsServiceImpl userDetailsServiceImpl;
+    private final UserDetailsService userDetailsService;
 
     @Autowired
-    public WebSpringSecurityConfig(UserDetailsServiceImpl userDetailsServiceImpl) {
-        this.userDetailsServiceImpl = userDetailsServiceImpl;
+    public WebSpringSecurityConfig(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
     }
 
     @Bean
@@ -52,7 +52,7 @@ public class WebSpringSecurityConfig {
     @Bean
     public DaoAuthenticationProvider authProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsServiceImpl);
+        authProvider.setUserDetailsService(userDetailsService);
         // Encode password when user Authenticates
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
@@ -73,7 +73,7 @@ public class WebSpringSecurityConfig {
                         // Public access
                         .requestMatchers(ENDPOINTS_WHITELIST).permitAll()
                         .requestMatchers(STATIC_RESOURCES_WHITELIST).permitAll()
-                        
+
                         // Authenticated access
                         .anyRequest().authenticated()
 

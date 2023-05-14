@@ -4,22 +4,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link th:replace="~{fragments/bootstrap-stylesheet}" />
         <link th:replace="~{fragments/main-stylesheet}" />
-        <link rel="icon" type="image/x-icon" th:href="@{../static/favicon.ico}" />
+        <link rel="icon" type="image/x-icon" th:href="@{../favicon.ico}" />
         <meta charset="utf-8" />
         <title>Login</title>
     </head>
 
     <body>
-        <h2>Login</h2>
-        <form method="post" th:action="@{/login}">
-            <p>Email : <input name="email" type="text" /></p>
-            <p>Password: <input name="password" type="password" /></p>
-            <input type="submit" value="Sign In" />
-        </form>
-        <p>First time here?<a th:href="@{/registration}">Create a new account</a></p>
-        <p>Forgot your password?<a th:href="@{/forgot-password}">Reset Password</a></p>
-
-        <footer th:insert="~{fragments/footer-content}" id="footer-content" class="bg-primary fixed-bottom"></footer>
+        <main>
+            <h2>Login</h2>
+            <form method="post" th:action="@{/login}">
+                <p>Email : <input name="email" type="text" /></p>
+                <p>Password: <input name="password" type="password" /></p>
+                <input type="submit" value="Sign In" />
+            </form>
+            <p>First time here?<a th:href="@{/registration}">Create a new account</a></p>
+            <p>Forgot your password?<a th:href="@{/forgot-password}">Reset Password</a></p>
+        </main>
+        <footer th:insert="~{fragments/footer-content}" id="footer-content" class="bg-primary"></footer>
         <link th:insert="~{fragments/bootstrap-js-bundle}" />
     </body>
 </html>

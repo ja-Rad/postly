@@ -30,7 +30,7 @@ public class ProfileFollower {
     @EmbeddedId
     private ProfileFollowerKey profileFollowerKey;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("profileId")
     @JoinColumn(name = "author_id")
     private Profile profile;

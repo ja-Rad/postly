@@ -8,19 +8,20 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+
+import static org.apache.commons.lang3.ObjectUtils.notEqual;
 
 @Controller
 public class ProfileController {
@@ -37,10 +38,10 @@ public class ProfileController {
      * READ Mappings
      */
     @GetMapping("/profiles")
-    public String getPaginatedProfiles(@RequestParam(value = "page", defaultValue = "0") int page,
+    public String getPaginatedProfiles(@RequestParam(value = "page", defaultValue = "1") int page,
                                        @RequestParam(value = "size", defaultValue = "10") int size,
                                        Model model) {
-        Page<Profile> profilePage = profileService.returnPaginatedProfilesByCreationDateDescending(page, size);
+        Page<Profile> profilePage = profileService.returnPaginatedProfilesByCreationDateDescending(page - 1, size);
         int totalPages = profilePage.getTotalPages();
 
         if (totalPages > 0) {
@@ -53,47 +54,104 @@ public class ProfileController {
     }
 
     @GetMapping("/profiles/{id}")
-    public String getOneProfileById(@PathVariable long id, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        if (userDetails.getUserId().equals(id)) {
-            model.addAttribute("personalProfile", true);
+    public String getProfileById(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                 @PathVariable Long id,
+                                 Model model) {
+        Long userId = userDetails.getUserId();
+        if (notEqual(id, userId)) {
+            model.addAttribute("personalProfile", false);
         }
+
         Profile profile = profileService.returnProfileById(id);
+        model.addAttribute("personalProfile", true);
         model.addAttribute("profile", profile);
+
         return PROFILE_SUBFOLDER_PREFIX + "profile";
     }
 
+    @GetMapping("/profiles/{id}/authors")
+    public String getProfileAuthors(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                    @PathVariable Long id) {
+        Long userId = userDetails.getUserId();
+        
+        return PROFILE_SUBFOLDER_PREFIX + "profile-authors";
+    }
+
     @GetMapping("/profiles/form")
-    public String getProfileForm(Authentication authentication, Model model) {
-        boolean profileExistForUser = profileService.isProfileExistForUser(authentication);
+    public String getProfileForm(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                 Model model) {
+        Long userId = userDetails.getUserId();
+        boolean profileExistForUser = profileService.isProfileExistForUser(userId);
         if (profileExistForUser) {
             return "redirect:/profiles";
         }
+
         ProfileDto profileDto = new ProfileDto();
         model.addAttribute("profile", profileDto);
+
         return PROFILE_SUBFOLDER_PREFIX + "profile-form";
+    }
+
+    @GetMapping("/profiles/update-fail")
+    public String getUpdateFailPage() {
+        return PROFILE_SUBFOLDER_PREFIX + "update-fail";
+    }
+
+    @GetMapping("/profiles/update-success")
+    public String getUpdateSuccessPage() {
+        return PROFILE_SUBFOLDER_PREFIX + "update-success";
+    }
+
+    @GetMapping("/profiles/delete-fail")
+    public String getDeleteFailPage() {
+        return PROFILE_SUBFOLDER_PREFIX + "delete-fail";
+    }
+
+    @GetMapping("/profiles/delete-success")
+    public String getDeleteSuccessPage() {
+        return PROFILE_SUBFOLDER_PREFIX + "delete-success";
     }
 
     /**
      * WRITE Mappings
      */
     @PostMapping("/profiles")
-    public String createNewProfile(Authentication authentication, @ModelAttribute("profile") @Valid ProfileDto profileDto,
-                                   HttpSession session, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        session.setAttribute("usersActiveProfileId", userDetails.getUserId());
-        Long profileId = profileService.createNewProfileAndReturnProfileId(authentication, profileDto);
+    public String createNewProfile(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                   HttpSession session,
+                                   @ModelAttribute("profile") @Valid ProfileDto profileDto) {
+        Long userId = userDetails.getUserId();
+        session.setAttribute("usersActiveProfileId", userId);
+        Long profileId = profileService.createNewProfileAndReturnProfileId(userId, profileDto);
+
         return "redirect:/profiles/" + profileId;
     }
 
-    @PatchMapping("/profiles")
-    public String updateExistingProfile(Authentication authentication, @ModelAttribute("profile") @Valid ProfileDto profileDto) {
-        Long profileId = profileService.updateExistingProfileAndReturnProfileId(authentication, profileDto);
-        return "redirect:/profiles/" + profileId;
+    @PutMapping("/profiles/{id}")
+    public String updateExistingProfile(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                        @PathVariable("id") Long id,
+                                        @ModelAttribute("profile") @Valid ProfileDto profileDto) {
+        Long userId = userDetails.getUserId();
+        if (notEqual(id, userId)) {
+            return "redirect:/profiles/update-fail";
+        }
+
+        profileService.updateExistingProfile(id, profileDto);
+
+        return "redirect:/profiles/update-success";
     }
 
-    @DeleteMapping("/profiles")
-    public String deleteExistingProfile(Authentication authentication, HttpSession session) {
+    @DeleteMapping("/profiles/{id}")
+    public String deleteExistingProfile(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                        @PathVariable("id") Long id,
+                                        HttpSession session) {
+        Long userId = userDetails.getUserId();
+        if (notEqual(id, userId)) {
+            return "redirect:/profiles/delete-fail";
+        }
+
         session.setAttribute("usersActiveProfileId", null);
-        profileService.deleteExistingProfile(authentication);
-        return "redirect:/profiles";
+        profileService.deleteExistingProfile(id);
+
+        return "redirect:/profiles/delete-success";
     }
 }

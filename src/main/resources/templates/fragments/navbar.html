@@ -23,7 +23,7 @@
                     <a class="nav-link" th:href="@{/profiles/{id}(id=${session.usersActiveProfileId})}">My Profile</a>
                 </li>
                 <li th:if="${session.usersActiveProfileId != null}" class="nav-item">
-                    <a class="nav-link" th:href="@{/posts/{id}(id=${session.usersActiveProfileId})}">My Posts</a>
+                    <a class="nav-link" th:href="@{/profiles/{id}/posts(id=${session.usersActiveProfileId})}">My Posts</a>
                 </li>
                 <li th:if="${session.usersActiveProfileId != null}" class="nav-item">
                     <a class="nav-link" th:href="@{/profiles/{id}/authors(id=${session.usersActiveProfileId})}">My Authors</a>

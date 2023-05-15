@@ -16,9 +16,12 @@
         <main>
             <h2>Posts</h2>
 
-            <div th:each="post : ${postPage.content}">
-                <p th:text="${post.username}"></p>
+            <div th:each="post,iterStat : ${postPage.content}">
+                <p th:text="${post.title}"></p>
+                <p th:text="${post.description}"></p>
                 <p th:text="${post.creationDate}"></p>
+                <p th:text="${profileUsernames[iterStat.index]}"></p>
+                <a class="btn btn-primary" th:href="@{/posts/{id}(id=${post.id})}">Check Post</a>
             </div>
             <div th:if="${postPage.totalPages > 0}" class="pagination" th:each="pageNumber : ${pageNumbers}">
                 <a th:href="@{/posts(page=${pageNumber}, size=${postPage.size})}" th:text="${pageNumber}" th:class="${pageNumber==postPage.number + 1} ? active"> </a>

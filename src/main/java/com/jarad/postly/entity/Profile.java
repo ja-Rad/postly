@@ -15,13 +15,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.List;
-import java.util.Set;
 
 @Builder
 @AllArgsConstructor
@@ -46,16 +43,11 @@ public class Profile implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Post> posts;
 
-    @OneToMany(mappedBy = "profile")
-    private Set<ProfileFollower> followers;
-
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "profile_id")
     private User user;
 
-    @Fetch(FetchMode.JOIN)
-    @OneToOne(mappedBy = "profile")
-    @JoinColumn(name = "user_id")
-    private Follower follower;
+    @OneToMany(mappedBy = "authorId")
+    private List<Follower> followers;
 }

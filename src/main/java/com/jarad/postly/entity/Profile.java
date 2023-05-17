@@ -40,7 +40,7 @@ public class Profile implements Serializable {
     @Column(name = "creation_date", nullable = false)
     private Instant creationDate;
 
-    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "profile", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Post> posts;
 
     @OneToOne(fetch = FetchType.LAZY)

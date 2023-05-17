@@ -24,7 +24,6 @@ import org.hibernate.annotations.FetchMode;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -64,8 +63,8 @@ public class Post implements Serializable {
     @JoinTable(name = "posts_tags",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    private Set<Tag> tags = new LinkedHashSet<>();
+    private Set<Tag> tags;
 
-    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Comment> comments;
 }

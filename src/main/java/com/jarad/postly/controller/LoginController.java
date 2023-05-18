@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class LoginController {
 
     private final LoginService loginService;
+    private final String USER_SUBFOLDER_PREFIX = "login/";
 
     @Autowired
     public LoginController(LoginService loginService) {
@@ -30,12 +31,12 @@ public class LoginController {
         }
 
         session.setAttribute("usersActiveProfileId", null);
-        return "redirect:/profiles/form";
+        return "redirect:/profiles/create-form";
     }
 
     @GetMapping("/login")
     public String showLoginPage() {
-        return "login";
+        return USER_SUBFOLDER_PREFIX + "login";
     }
 
     @RolesAllowed("USER")

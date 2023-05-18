@@ -1,12 +1,12 @@
---users table
-INSERT INTO users (password, email, enabled, active_profile) VALUES ('$10$M1i09dbTWf34HKSsB6kA/esPjn3SiS4xR1udHXfEH0GONHkPwKJR6', 'kalmanjudin2000@gmail.com', 1, 1);
-INSERT INTO users (password, email, enabled, active_profile) VALUES ('$10$M1i09dbTWf34HKSsB6kA/esPjn3SiS4xR1udHXfEH0GONHkPwKJR6', 'test1@gmail.com', 1, 1);
-INSERT INTO users (password, email, enabled, active_profile) VALUES ('$10$M1i09dbTWf34HKSsB6kA/esPjn3SiS4xR1udHXfEH0GONHkPwKJR6', 'test2@gmail.com', 1, 1);
-INSERT INTO users (password, email, enabled, active_profile) VALUES ('$10$M1i09dbTWf34HKSsB6kA/esPjn3SiS4xR1udHXfEH0GONHkPwKJR6', 'test3@gmail.com', 1, 1);
-INSERT INTO users (password, email, enabled, active_profile) VALUES ('$10$M1i09dbTWf34HKSsB6kA/esPjn3SiS4xR1udHXfEH0GONHkPwKJR6', 'test4@gmail.com', 1, 1);
+-- users table
+INSERT INTO users (password, email, enabled, active_profile) VALUES ('$2a$10$3ZEsRHTWSPvpugmHUf/jZ.9wCWSJvHjJgl/PLQfougiimNIV/ihQu', 'kalmanjudin2000@gmail.com', 1, 1);
+INSERT INTO users (password, email, enabled, active_profile) VALUES ('$2a$10$3ZEsRHTWSPvpugmHUf/jZ.9wCWSJvHjJgl/PLQfougiimNIV/ihQu', 'test1@gmail.com', 1, 1);
+INSERT INTO users (password, email, enabled, active_profile) VALUES ('$2a$10$3ZEsRHTWSPvpugmHUf/jZ.9wCWSJvHjJgl/PLQfougiimNIV/ihQu', 'test2@gmail.com', 1, 1);
+INSERT INTO users (password, email, enabled, active_profile) VALUES ('$2a$10$3ZEsRHTWSPvpugmHUf/jZ.9wCWSJvHjJgl/PLQfougiimNIV/ihQu', 'test3@gmail.com', 1, 1);
+INSERT INTO users (password, email, enabled, active_profile) VALUES ('$2a$10$3ZEsRHTWSPvpugmHUf/jZ.9wCWSJvHjJgl/PLQfougiimNIV/ihQu', 'test4@gmail.com', 1, 1);
 
 
---profiles table
+-- profiles table
 INSERT INTO profiles (profile_id, creation_date, username) VALUES (1, NOW(), 'rad');
 INSERT INTO profiles (profile_id, creation_date, username) VALUES (2, NOW(), 'test1-profile');
 INSERT INTO profiles (profile_id, creation_date, username) VALUES (3, NOW(), 'test2-profile');
@@ -30,9 +30,36 @@ INSERT INTO comments (creation_date, `description`, post_id, profile_id) VALUES 
 INSERT INTO comments (creation_date, `description`, post_id, profile_id) VALUES (NOW(), 'Post 5 Profile 4', 5, 4);
 
 
--- posts table
+-- followers table
+INSERT INTO followers (creation_date, author_id, follower_id) VALUES (NOW(), 1, 2);
+INSERT INTO followers (creation_date, author_id, follower_id) VALUES (NOW(), 1, 3);
+INSERT INTO followers (creation_date, author_id, follower_id) VALUES (NOW(), 2, 1);
+INSERT INTO followers (creation_date, author_id, follower_id) VALUES (NOW(), 3, 1);
+INSERT INTO followers (creation_date, author_id, follower_id) VALUES (NOW(), 4, 1);
+
+
+-- tags table
+INSERT INTO tags (name) VALUES ('Food');
+INSERT INTO tags (name) VALUES ('Travel');
+INSERT INTO tags (name) VALUES ('Health');
+INSERT INTO tags (name) VALUES ('DIY');
+INSERT INTO tags (name) VALUES ('Music');
+
+
+-- posts-tags table
+INSERT INTO posts_tags (post_id, tag_id) VALUES (1, 1);
+INSERT INTO posts_tags (post_id, tag_id) VALUES (1, 2);
+INSERT INTO posts_tags (post_id, tag_id) VALUES (1, 3);
+
+
+-- roles table
+INSERT INTO roles (name) VALUES ('ROLE_USER');
+INSERT INTO roles (name) VALUES ('ROLE_ADMIN');
+
+
+-- users-roles table
+INSERT INTO users_roles (role_id, user_id) VALUES (1, 1);
 
 
 
-
-
+INSERT INTO profiles (profile_id, creation_date, username) VALUES (1, NOW(), 'rad');

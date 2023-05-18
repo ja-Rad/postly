@@ -126,7 +126,7 @@ public class UserServiceImpl implements UserService {
      * @param helper MimeMessageHelper instance that provides easy access to the JavaMail API.
      */
     private void createVerifyEmailTemplate(User user, MimeMessageHelper helper) {
-        String verifyURL = "http://localhost:8080" + "/verify?code=" + user.getVerificationCode();
+        String verifyURL = "http://localhost:8080" + "/users/verify?code=" + user.getVerificationCode();
         String userEmail = user.getEmail();
         String senderName = "Postly";
         String toAddress = userEmail;
@@ -155,7 +155,7 @@ public class UserServiceImpl implements UserService {
      * @param helper MimeMessageHelper instance that provides easy access to the JavaMail API.
      */
     private void createForgotPasswordEmailTemplate(User user, MimeMessageHelper helper) {
-        String verifyURL = "http://localhost:8080" + "/forgot-password-verify?code=" + user.getVerificationCode();
+        String verifyURL = "http://localhost:8080" + "/users/forgot-password-verify?code=" + user.getVerificationCode();
         String userEmail = user.getEmail();
         String senderName = "Postly";
         String toAddress = userEmail;

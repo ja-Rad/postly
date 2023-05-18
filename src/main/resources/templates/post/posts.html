@@ -4,7 +4,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link th:replace="~{fragments/bootstrap-stylesheet}" />
         <link th:replace="~{fragments/main-stylesheet}" />
-        <link rel="icon" type="image/x-icon" th:href="@{../favicon.ico}" />
+        <link rel="icon" type="image/x-icon" th:href="@{~/favicon.ico}" />
         <meta charset="utf-8" />
         <title>Posts</title>
     </head>
@@ -16,11 +16,12 @@
         <main>
             <h2>Posts</h2>
 
-            <div th:each="post,iterStat : ${postPage.content}">
+            <div th:each="post: ${postPage.content}">
                 <p th:text="${post.title}"></p>
                 <p th:text="${post.description}"></p>
                 <p th:text="${post.creationDate}"></p>
-                <p th:text="${profileUsernames[iterStat.index]}"></p>
+                <p th:text="${post.profile.username}"></p>
+                <a class="btn btn-primary" th:href="@{/profiles/{id}(id=${post.profile.id})}">Check Profile</a>
                 <a class="btn btn-primary" th:href="@{/posts/{id}(id=${post.id})}">Check Post</a>
             </div>
             <div th:if="${postPage.totalPages > 0}" class="pagination" th:each="pageNumber : ${pageNumbers}">

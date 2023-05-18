@@ -2,10 +2,12 @@
     <div class="container-fluid">
         <!-- Links -->
         <a class="navbar-brand">
-            <img th:src="@{~/images/favicon-32x32.png}" alt="Logo" width="30" height="24" class="d-inline-block align-text-top" />
+            <img alt="Logo" class="d-inline-block align-text-top" height="24" th:src="@{~/images/favicon-32x32.png}"
+                 width="30"/>
             Postly
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
+                data-bs-target="#navbarNav" data-bs-toggle="collapse" type="button">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
@@ -16,47 +18,32 @@
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/profiles}">Our Community</a>
                 </li>
-                <li th:if="${session.usersActiveProfileId == null}" class="nav-item">
-                    <a class="nav-link" th:href="@{/profiles/form}">Create Profile</a>
+                <li class="nav-item" th:if="${session.usersActiveProfileId == null}">
+                    <a class="nav-link" th:href="@{/profiles/create-form}">Create Profile</a>
                 </li>
-                <li th:if="${session.usersActiveProfileId != null}" class="nav-item">
+                <li class="nav-item" th:if="${session.usersActiveProfileId != null}">
                     <a class="nav-link" th:href="@{/profiles/{id}(id=${session.usersActiveProfileId})}">My Profile</a>
                 </li>
-                <li th:if="${session.usersActiveProfileId != null}" class="nav-item">
-                    <a class="nav-link" th:href="@{/profiles/{id}/posts(id=${session.usersActiveProfileId})}">My Posts</a>
+                <li class="nav-item" th:if="${session.usersActiveProfileId != null}">
+                    <a class="nav-link" th:href="@{/profiles/{id}/posts(id=${session.usersActiveProfileId})}">My
+                        Posts</a>
                 </li>
-                <li th:if="${session.usersActiveProfileId != null}" class="nav-item">
-                    <a class="nav-link" th:href="@{/profiles/{id}/authors(id=${session.usersActiveProfileId})}">My Authors</a>
+                <li class="nav-item" th:if="${session.usersActiveProfileId != null}">
+                    <a class="nav-link" th:href="@{/profiles/{id}/authors(id=${session.usersActiveProfileId})}">My
+                        Authors</a>
                 </li>
-                <li th:if="${session.usersActiveProfileId != null}" class="nav-item">
-                    <a class="nav-link" th:href="@{/profiles/{id}/followers(id=${session.usersActiveProfileId})}">My Followers</a>
+                <li class="nav-item" th:if="${session.usersActiveProfileId != null}">
+                    <a class="nav-link" th:href="@{/profiles/{id}/followers(id=${session.usersActiveProfileId})}">My
+                        Followers</a>
                 </li>
-                <form class="d-flex" th:action="@{/logout}" method="post">
+                <li class="nav-item" th:if="${session.usersActiveProfileId != null}">
+                    <a class="nav-link" th:href="@{/profiles/{id}/comments(id=${session.usersActiveProfileId})}">My
+                        Comments</a>
+                </li>
+                <form class="d-flex" th:action="@{/logout}" th:method="post">
                     <button class="btn btn-outline-warning" type="submit">Log out</button>
                 </form>
             </ul>
         </div>
     </div>
-
-    <!-- <a class="navbar-brand" href="#">Logo</a> -->
-
-    <!-- create Your own profile -->
-    <!-- <div class="navbar-nav">
-            <form th:action="@{/profile/form}" method="get">
-                <input type="submit" value="Create profile" />
-            </form>
-        </div> -->
-    <!-- WHEN PROFILE DOESNT EXIST:
-        LINK TO LAST POSTS
-        LINK TO COMMUNITY -->
-    <!-- WHEN PROFILE EXISTS: if check
-        LINK TO USERS PROFILE
-        LINK TO USERS POSTS
-        LINK TO YOUR AUTHORS
-        LINK TO FOLLOWERS -->
-    <!-- <div class="navbar-nav">
-            <form th:action="@{/logout}" method="post">
-                <input type="submit" value="Log out" />
-            </form>
-        </div> -->
 </nav>

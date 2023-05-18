@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link th:replace="~{fragments/bootstrap-stylesheet}" />
+        <link th:replace="~{fragments/main-stylesheet}" />
+        <link rel="icon" type="image/x-icon" th:href="@{~/favicon.ico}" />
+        <meta charset="utf-8" />
+        <title>Post</title>
+    </head>
+
+    <body>
+        <header>
+            <div th:insert="~{fragments/navbar}" id="navbar-content"></div>
+        </header>
+        <h2>Post</h2>
+
+        <div th:if="${personalPost}">
+            <p>MY POST</p>
+            <div>
+                <p th:text="${post.title}"></p>
+                <p th:text="${post.description}"></p>
+                <a class="btn btn-primary" th:href="@{/posts/{id}/comments(id=${post.id})}">Check Comment Section</a>
+            </div>
+            <form th:action="@{/posts/{id}/update-form(id=${postId})}" th:method="get">
+                <p><input type="submit" value="Edit Post" /></p>
+            </form>
+            <form th:action="@{/posts/{id}(id=${postId})}" th:method="delete">
+                <p><input type="submit" value="Delete Post" /></p>
+            </form>
+        </div>
+
+        <div th:unless="${personalPost}">
+            <p th:text="${post.title}"></p>
+            <p th:text="${post.description}"></p>
+            <p th:text="${post.creationDate}"></p>
+            <a class="btn btn-primary" th:href="@{/posts/{id}/comments(id=${post.id})}">Check Comment Section</a>
+        </div>
+
+        <footer th:insert="~{fragments/footer-content}" id="footer-content" class="bg-primary"></footer>
+        <link th:insert="~{fragments/bootstrap-js-bundle}" />
+    </body>
+</html>

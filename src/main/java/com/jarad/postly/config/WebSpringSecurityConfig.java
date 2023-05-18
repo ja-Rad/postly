@@ -22,14 +22,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class WebSpringSecurityConfig {
 
     public static final String[] ENDPOINTS_WHITELIST = {
-            "/registration",
-            "/verify",
-            "/verify-notification",
-            "/forgot-password",
-            "/forgot-password-verify",
-            "/forgot-password-verify-notification",
-            "/forgot-password-verify-success",
-            "/forgot-password-verify-fail"
+            "/users/**"
     };
 
     public static final String[] STATIC_RESOURCES_WHITELIST = {

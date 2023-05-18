@@ -1,5 +1,8 @@
 package com.jarad.postly.controller;
 
+import com.jarad.postly.entity.Comment;
+import com.jarad.postly.entity.Follower;
+import com.jarad.postly.entity.Post;
 import com.jarad.postly.entity.Profile;
 import com.jarad.postly.security.UserDetailsImpl;
 import com.jarad.postly.service.ProfileService;
@@ -20,8 +23,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
-
-import static org.apache.commons.lang3.ObjectUtils.notEqual;
+import java.util.Objects;
 
 @Controller
 public class ProfileController {
@@ -58,26 +60,114 @@ public class ProfileController {
                                  @PathVariable Long id,
                                  Model model) {
         Long userId = userDetails.getUserId();
-        if (notEqual(id, userId)) {
-            model.addAttribute("personalProfile", false);
-        }
-
         Profile profile = profileService.returnProfileById(id);
-        model.addAttribute("personalProfile", true);
+        model.addAttribute("personalProfile", false);
         model.addAttribute("profile", profile);
+
+        if (Objects.equals(id, userId)) {
+            model.addAttribute("personalProfile", true);
+        }
 
         return PROFILE_SUBFOLDER_PREFIX + "profile";
     }
 
+    @GetMapping("/profiles/{id}/posts")
+    public String getProfilePosts(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                  @PathVariable Long id,
+                                  @RequestParam(value = "page", defaultValue = "1") int page,
+                                  @RequestParam(value = "size", defaultValue = "10") int size,
+                                  Model model) {
+        Long userId = userDetails.getUserId();
+        model.addAttribute("profileId", id);
+        model.addAttribute("personalProfile", false);
+        if (Objects.equals(id, userId)) {
+            model.addAttribute("personalProfile", true);
+        }
+
+        Page<Post> postPage = profileService.returnProfilePaginatedPostsByCreationDateDescending(id, page - 1, size);
+        int totalPages = postPage.getTotalPages();
+        model.addAttribute("postPage", postPage);
+        if (totalPages > 0) {
+            List<Integer> pageNumbers = profileService.returnListOfPageNumbers(totalPages);
+            model.addAttribute("pageNumbers", pageNumbers);
+        }
+
+        return PROFILE_SUBFOLDER_PREFIX + "profile-posts";
+    }
+
     @GetMapping("/profiles/{id}/authors")
     public String getProfileAuthors(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                    @PathVariable Long id) {
+                                    @PathVariable Long id,
+                                    @RequestParam(value = "page", defaultValue = "1") int page,
+                                    @RequestParam(value = "size", defaultValue = "10") int size,
+                                    Model model) {
         Long userId = userDetails.getUserId();
-        
+        model.addAttribute("profileId", id);
+        model.addAttribute("personalProfile", false);
+        if (Objects.equals(id, userId)) {
+            model.addAttribute("personalProfile", true);
+        }
+
+        Page<Follower> authorPage = profileService.returnProfilePaginatedAuthorsByCreationDateDescending(id, page - 1, size);
+        int totalPages = authorPage.getTotalPages();
+        model.addAttribute("authorPage", authorPage);
+        if (totalPages > 0) {
+            List<Integer> pageNumbers = profileService.returnListOfPageNumbers(totalPages);
+            model.addAttribute("pageNumbers", pageNumbers);
+        }
+
         return PROFILE_SUBFOLDER_PREFIX + "profile-authors";
     }
 
-    @GetMapping("/profiles/form")
+    @GetMapping("/profiles/{id}/followers")
+    public String getProfileFollowers(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                      @PathVariable Long id,
+                                      @RequestParam(value = "page", defaultValue = "1") int page,
+                                      @RequestParam(value = "size", defaultValue = "10") int size,
+                                      Model model) {
+        Long userId = userDetails.getUserId();
+        model.addAttribute("profileId", id);
+        model.addAttribute("personalProfile", false);
+        if (Objects.equals(id, userId)) {
+            model.addAttribute("personalProfile", true);
+        }
+
+        Page<Follower> followerPage = profileService.returnProfilePaginatedFollowersByCreationDateDescending(id, page - 1, size);
+        int totalPages = followerPage.getTotalPages();
+        model.addAttribute("followerPage", followerPage);
+        if (totalPages > 0) {
+            List<Integer> pageNumbers = profileService.returnListOfPageNumbers(totalPages);
+            model.addAttribute("pageNumbers", pageNumbers);
+        }
+
+        return PROFILE_SUBFOLDER_PREFIX + "profile-followers";
+    }
+
+    @GetMapping("/profiles/{id}/comments")
+    public String getProfileComments(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                     @PathVariable Long id,
+                                     @RequestParam(value = "page", defaultValue = "1") int page,
+                                     @RequestParam(value = "size", defaultValue = "10") int size,
+                                     Model model) {
+        Long userId = userDetails.getUserId();
+        model.addAttribute("profileId", id);
+        model.addAttribute("personalProfile", false);
+        if (Objects.equals(id, userId)) {
+            model.addAttribute("personalProfile", true);
+        }
+
+        Page<Comment> commentPage = profileService.returnProfilePaginatedCommentsByCreationDateDescending(id, page - 1, size);
+        int totalPages = commentPage.getTotalPages();
+        model.addAttribute("commentPage", commentPage);
+        if (totalPages > 0) {
+            List<Integer> pageNumbers = profileService.returnListOfPageNumbers(totalPages);
+            model.addAttribute("pageNumbers", pageNumbers);
+        }
+
+        return PROFILE_SUBFOLDER_PREFIX + "profile-comments";
+    }
+
+    @GetMapping("/profiles/create-form")
     public String getProfileForm(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                  Model model) {
         Long userId = userDetails.getUserId();
@@ -89,22 +179,17 @@ public class ProfileController {
         ProfileDto profileDto = new ProfileDto();
         model.addAttribute("profile", profileDto);
 
-        return PROFILE_SUBFOLDER_PREFIX + "profile-form";
+        return PROFILE_SUBFOLDER_PREFIX + "profile-create-form";
     }
 
-    @GetMapping("/profiles/update-fail")
-    public String getUpdateFailPage() {
-        return PROFILE_SUBFOLDER_PREFIX + "update-fail";
-    }
+    @GetMapping("/profiles/{id}/update-form")
+    public String getProfileUpdateForm(@PathVariable Long id,
+                                       Model model) {
+        Profile profile = profileService.returnProfileById(id);
+        model.addAttribute("profile", profile);
+        model.addAttribute("profileId", id);
 
-    @GetMapping("/profiles/update-success")
-    public String getUpdateSuccessPage() {
-        return PROFILE_SUBFOLDER_PREFIX + "update-success";
-    }
-
-    @GetMapping("/profiles/delete-fail")
-    public String getDeleteFailPage() {
-        return PROFILE_SUBFOLDER_PREFIX + "delete-fail";
+        return PROFILE_SUBFOLDER_PREFIX + "profile-update-form";
     }
 
     @GetMapping("/profiles/delete-success")
@@ -131,13 +216,9 @@ public class ProfileController {
                                         @PathVariable("id") Long id,
                                         @ModelAttribute("profile") @Valid ProfileDto profileDto) {
         Long userId = userDetails.getUserId();
-        if (notEqual(id, userId)) {
-            return "redirect:/profiles/update-fail";
-        }
+        Long profileId = profileService.updateExistingProfile(id, profileDto);
 
-        profileService.updateExistingProfile(id, profileDto);
-
-        return "redirect:/profiles/update-success";
+        return "redirect:/profiles/" + profileId;
     }
 
     @DeleteMapping("/profiles/{id}")
@@ -145,13 +226,9 @@ public class ProfileController {
                                         @PathVariable("id") Long id,
                                         HttpSession session) {
         Long userId = userDetails.getUserId();
-        if (notEqual(id, userId)) {
-            return "redirect:/profiles/delete-fail";
-        }
-
         session.setAttribute("usersActiveProfileId", null);
         profileService.deleteExistingProfile(id);
 
-        return "redirect:/profiles/delete-success";
+        return "redirect:/profiles/create-form";
     }
 }

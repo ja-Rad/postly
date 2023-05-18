@@ -16,7 +16,7 @@
         <main>
             <h2>Create your own profile to share your Posts!</h2>
             <h3>It is not mandatory to create a profile. You can return to this form whenever you like</h3>
-            <form action="#" method="post" th:action="@{/profiles}" th:object="${profile}">
+            <form action="#" th:method="post" th:action="@{/profiles}" th:object="${profile}">
                 <p>Username: <input th:field="*{username}" type="text" /></p>
                 <div><input type="submit" value="Create profile" /></div>
                 <p>Back to <a th:href="@{/logout}">Log out</a></p>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <link th:replace="~{fragments/bootstrap-stylesheet}"/>
+    <link th:replace="~{fragments/main-stylesheet}"/>
+    <link rel="icon" th:href="@{~/favicon.ico}" type="image/x-icon"/>
+    <meta charset="utf-8"/>
+    <title>User registration</title>
+</head>
+
+<body>
+<main>
+    <h2>Registration</h2>
+    <form action="#" th:action="@{/users/registration}" th:method="post" th:object="${user}">
+        <p>Email: <input th:field="*{email}" type="text"/></p>
+        <p>Password: <input th:field="*{password}" type="password"/></p>
+        <p>
+            Confirm password:
+            <input th:field="*{matchingPassword}" type="password"/>
+        </p>
+        <div><input type="submit" value="Create account"/></div>
+        <p>Back to <a th:href="@{/login}">Login</a></p>
+    </form>
+</main>
+<footer class="bg-primary" id="footer-content" th:insert="~{fragments/footer-content}"></footer>
+<link th:insert="~{fragments/bootstrap-js-bundle}"/>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link th:replace="~{fragments/bootstrap-stylesheet}" />
+        <link th:replace="~{fragments/main-stylesheet}" />
+        <link rel="icon" type="image/x-icon" th:href="@{~/favicon.ico}" />
+        <meta charset="utf-8" />
+        <title>Profile Posts</title>
+    </head>
+
+    <body>
+        <header>
+            <div th:insert="~{fragments/navbar}" id="navbar-content"></div>
+        </header>
+        <main>
+            <h2>Profile Followers</h2>
+            <div th:if="${personalProfile}">
+                <div th:each="follower : ${followerPage.content}">
+                    <p th:text="${follower.followerId.username}"></p>
+                    <a class="btn btn-primary" th:href="@{/profiles/{id}(id=${follower.followerId.id})}">Check Follower Profile</a>
+                </div>
+                <div th:if="${followerPage.totalPages > 0}" class="pagination" th:each="pageNumber : ${pageNumbers}">
+                    <a th:href="@{/profiles/{profileId}/followers(profileId=${profileId}, page=${pageNumber}, size=${followerPage.size})}" th:text="${pageNumber}" th:class="${pageNumber==followerPage.number + 1} ? active"> </a>
+                </div>
+            </div>
+
+            <div th:unless="${personalProfile}">
+                <div th:each="follower : ${followerPage.content}">
+                    <p th:text="${follower.followerId.username}"></p>
+                    <a class="btn btn-primary" th:href="@{/profiles/{id}(id=${follower.followerId.id})}">Check Follower Profile</a>
+                </div>
+                <div th:if="${followerPage.totalPages > 0}" class="pagination" th:each="pageNumber : ${pageNumbers}">
+                    <a th:href="@{/profiles/{profileId}/followers(profileId=${profileId}, page=${pageNumber}, size=${followerPage.size})}" th:text="${pageNumber}" th:class="${pageNumber==followerPage.number + 1} ? active"> </a>
+                </div>
+            </div>
+        </main>
+
+        <footer th:insert="~{fragments/footer-content}" id="footer-content" class="bg-primary"></footer>
+        <link th:insert="~{fragments/bootstrap-js-bundle}" />
+    </body>
+</html>

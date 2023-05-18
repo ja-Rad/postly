@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link th:replace="~{fragments/bootstrap-stylesheet}" />
+        <link th:replace="~{fragments/main-stylesheet}" />
+        <link rel="icon" type="image/x-icon" th:href="@{~/favicon.ico}" />
+        <meta charset="utf-8" />
+        <title>Profile Posts</title>
+    </head>
+
+    <body>
+        <header>
+            <div th:insert="~{fragments/navbar}" id="navbar-content"></div>
+        </header>
+        <main>
+            <h2>Profile Authors</h2>
+            <div th:if="${personalProfile}">
+                <div th:each="author : ${authorPage.content}">
+                    <p th:text="${author.authorId.username}"></p>
+                    <a class="btn btn-primary" th:href="@{/profiles/{id}(id=${author.authorId.id})}">Check Author Profile</a>
+                </div>
+                <div th:if="${authorPage.totalPages > 0}" class="pagination" th:each="pageNumber : ${pageNumbers}">
+                    <a th:href="@{/profiles/{profileId}/authors(profileId=${profileId}, page=${pageNumber}, size=${authorPage.size})}" th:text="${pageNumber}" th:class="${pageNumber==authorPage.number + 1} ? active"> </a>
+                </div>
+            </div>
+
+            <div th:unless="${personalProfile}">
+                <div th:each="author : ${authorPage.content}">
+                    <p th:text="${author.authorId.username}"></p>
+                    <a class="btn btn-primary" th:href="@{/profiles/{id}(id=${author.authorId.id})}">Check Author Profile</a>
+                </div>
+                <div th:if="${authorPage.totalPages > 0}" class="pagination" th:each="pageNumber : ${pageNumbers}">
+                    <a th:href="@{/profiles/{profileId}/authors(profileId=${profileId}, page=${pageNumber}, size=${authorPage.size})}" th:text="${pageNumber}" th:class="${pageNumber==authorPage.number + 1} ? active"> </a>
+                </div>
+            </div>
+        </main>
+
+        <footer th:insert="~{fragments/footer-content}" id="footer-content" class="bg-primary"></footer>
+        <link th:insert="~{fragments/bootstrap-js-bundle}" />
+    </body>
+</html>

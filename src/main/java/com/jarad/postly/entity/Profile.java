@@ -40,7 +40,7 @@ public class Profile implements Serializable {
     @Column(name = "creation_date", nullable = false)
     private Instant creationDate;
 
-    @OneToMany(mappedBy = "profile", fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "profile", orphanRemoval = true)
     private List<Post> posts;
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -48,6 +48,12 @@ public class Profile implements Serializable {
     @JoinColumn(name = "profile_id")
     private User user;
 
-    @OneToMany(mappedBy = "authorId")
+    @OneToMany(mappedBy = "authorId", orphanRemoval = true)
+    private List<Follower> authors;
+
+    @OneToMany(mappedBy = "followerId", orphanRemoval = true)
     private List<Follower> followers;
+
+    @OneToMany(mappedBy = "profile", orphanRemoval = true)
+    private List<Comment> comments;
 }

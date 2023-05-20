@@ -1,0 +1,54 @@
+package com.jarad.postly.controller;
+
+import com.jarad.postly.security.UserDetailsImpl;
+import com.jarad.postly.service.FollowerService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+
+@Controller
+public class FollowerController {
+
+    private final FollowerService followerService;
+
+    @Autowired
+    public FollowerController(FollowerService followerService) {
+        this.followerService = followerService;
+    }
+
+    // add + delete follower
+    // post followers (author- users profileId, follower-other profileId, creationDate)
+    // delete followers/id (author-profileId, id, creationDate)
+
+
+    /**
+     * READ Mappings
+     */
+
+
+    /**
+     * WRITE Mappings
+     */
+    @PostMapping("/followers/{id}")
+    public String addFollower(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                              @PathVariable("id") Long authorId) {
+        Long userId = userDetails.getUserId();
+        followerService.addFollowerToAuthor(userId, authorId);
+
+        return "redirect:/posts";
+    }
+
+    @DeleteMapping("/followers/{id}")
+    public String deleteFollower(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                 @PathVariable("id") Long authorId) {
+        Long userId = userDetails.getUserId();
+        followerService.deleteFollowerFromAuthor(userId, authorId);
+
+        return "redirect:/posts";
+    }
+
+
+}

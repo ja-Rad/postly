@@ -34,9 +34,9 @@ public class Follower implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", insertable = false, updatable = false)
-    private Profile authorId;
+    private Profile author;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "follower_id", insertable = false, updatable = false)
-    private Profile followerId;
+    private Profile follower;
 }

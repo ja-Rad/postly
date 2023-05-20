@@ -7,11 +7,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface FollowerRepository extends JpaRepository<Follower, FollowerId> {
-    
+
     Page<Follower> findAuthorPageById_FollowerId(Long followerId, Pageable pageable);
 
     Page<Follower> findFollowerPageById_AuthorId(Long authorId, Pageable pageable);
+
+    Optional<Follower> findById_AuthorId(Long authorId);
+
+    void deleteById_AuthorIdAndId_FollowerId(Long authorId, Long followerId);
+
 
 }

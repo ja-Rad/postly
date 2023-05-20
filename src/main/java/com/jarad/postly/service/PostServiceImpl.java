@@ -21,9 +21,11 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.lang3.ObjectUtils.notEqual;
 
 @Service
@@ -141,5 +143,20 @@ public class PostServiceImpl implements PostService {
         Comment savedComment = commentRepository.save(comment);
 
         return savedComment.getId();
+    }
+
+    @Override
+    public Set<Long> returnAuthorsByUserId(Long userId) {
+        Optional<Profile> optionalProfile = profileRepository.findById(userId);
+        if (optionalProfile.isEmpty()) {
+            throw new ProfileNotFoundException("Profile with id: " + userId + " doesn`t exist");
+        }
+
+        Profile profile = optionalProfile.get();
+        Set<Long> authorsIds = profile.getFollowers().stream()
+                .map(follower -> follower.getId().getAuthorId())
+                .collect(toSet());
+
+        return authorsIds;
     }
 }

@@ -7,6 +7,7 @@ import com.jarad.postly.util.dto.PostDto;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.Set;
 
 public interface PostService {
     List<Integer> returnListOfPageNumbers(int totalPages);
@@ -14,6 +15,8 @@ public interface PostService {
     Page<Post> returnPaginatedPostsByCreationDateDescending(int page, int size);
 
     Page<Comment> returnPaginatedCommentsByCreationDateDescending(Long id, int page, int size);
+
+    Set<Long> returnAuthorsByUserId(Long userId);
 
     Post returnPostById(Long id);
 

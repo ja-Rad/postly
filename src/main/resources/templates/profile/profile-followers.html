@@ -17,8 +17,8 @@
             <h2>Profile Followers</h2>
             <div th:if="${personalProfile}">
                 <div th:each="follower : ${followerPage.content}">
-                    <p th:text="${follower.followerId.username}"></p>
-                    <a class="btn btn-primary" th:href="@{/profiles/{id}(id=${follower.followerId.id})}">Check Follower Profile</a>
+                    <p th:text="${follower.follower.username}"></p>
+                    <a class="btn btn-primary" th:href="@{/profiles/{id}(id=${follower.follower.id})}">Check Follower Profile</a>
                 </div>
                 <div th:if="${followerPage.totalPages > 0}" class="pagination" th:each="pageNumber : ${pageNumbers}">
                     <a th:href="@{/profiles/{profileId}/followers(profileId=${profileId}, page=${pageNumber}, size=${followerPage.size})}" th:text="${pageNumber}" th:class="${pageNumber==followerPage.number + 1} ? active"> </a>
@@ -27,8 +27,8 @@
 
             <div th:unless="${personalProfile}">
                 <div th:each="follower : ${followerPage.content}">
-                    <p th:text="${follower.followerId.username}"></p>
-                    <a class="btn btn-primary" th:href="@{/profiles/{id}(id=${follower.followerId.id})}">Check Follower Profile</a>
+                    <p th:text="${follower.follower.username}"></p>
+                    <a class="btn btn-primary" th:href="@{/profiles/{id}(id=${follower.follower.id})}">Check Follower Profile</a>
                 </div>
                 <div th:if="${followerPage.totalPages > 0}" class="pagination" th:each="pageNumber : ${pageNumbers}">
                     <a th:href="@{/profiles/{profileId}/followers(profileId=${profileId}, page=${pageNumber}, size=${followerPage.size})}" th:text="${pageNumber}" th:class="${pageNumber==followerPage.number + 1} ? active"> </a>

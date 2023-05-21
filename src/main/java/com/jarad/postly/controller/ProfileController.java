@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Controller
 public class ProfileController {
@@ -40,9 +41,16 @@ public class ProfileController {
      * READ Mappings
      */
     @GetMapping("/profiles")
-    public String getPaginatedProfiles(@RequestParam(value = "page", defaultValue = "1") int page,
+    public String getPaginatedProfiles(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                       @RequestParam(value = "page", defaultValue = "1") int page,
                                        @RequestParam(value = "size", defaultValue = "10") int size,
                                        Model model) {
+        Long userId = userDetails.getUserId();
+        model.addAttribute("userId", userId);
+
+        Set<Long> authorsByUserId = profileService.returnAuthorsByUserId(userId);
+        model.addAttribute("authorsByUserId", authorsByUserId);
+
         Page<Profile> profilePage = profileService.returnPaginatedProfilesByCreationDateDescending(page - 1, size);
         int totalPages = profilePage.getTotalPages();
 
@@ -60,6 +68,10 @@ public class ProfileController {
                                  @PathVariable Long id,
                                  Model model) {
         Long userId = userDetails.getUserId();
+
+        Set<Long> authorsByUserId = profileService.returnAuthorsByUserId(userId);
+        model.addAttribute("authorsByUserId", authorsByUserId);
+        
         Profile profile = profileService.returnProfileById(id);
         model.addAttribute("personalProfile", false);
         model.addAttribute("profile", profile);
@@ -226,8 +238,10 @@ public class ProfileController {
                                         @PathVariable("id") Long id,
                                         HttpSession session) {
         Long userId = userDetails.getUserId();
-        session.setAttribute("usersActiveProfileId", null);
-        profileService.deleteExistingProfile(id);
+        if (Objects.equals(userId, id)) {
+            session.setAttribute("usersActiveProfileId", null);
+            profileService.deleteExistingProfile(id);
+        }
 
         return "redirect:/profiles/create-form";
     }

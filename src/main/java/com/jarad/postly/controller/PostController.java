@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Controller
 public class PostController {
@@ -37,9 +38,16 @@ public class PostController {
      * READ Mappings
      */
     @GetMapping("/posts")
-    public String getPaginatedPosts(@RequestParam(value = "page", defaultValue = "1") int page,
+    public String getPaginatedPosts(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                    @RequestParam(value = "page", defaultValue = "1") int page,
                                     @RequestParam(value = "size", defaultValue = "10") int size,
                                     Model model) {
+        Long userId = userDetails.getUserId();
+        model.addAttribute("userId", userId);
+
+        Set<Long> authorsByUserId = postService.returnAuthorsByUserId(userId);
+        model.addAttribute("authorsByUserId", authorsByUserId);
+
         Page<Post> postPage = postService.returnPaginatedPostsByCreationDateDescending(page - 1, size);
         int totalPages = postPage.getTotalPages();
 
@@ -91,10 +99,18 @@ public class PostController {
     }
 
     @GetMapping("/posts/{id}/comments")
-    public String getPostCommentsById(@PathVariable Long id,
+    public String getPostCommentsById(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                      @PathVariable Long id,
                                       Model model,
                                       @RequestParam(value = "page", defaultValue = "1") int page,
                                       @RequestParam(value = "size", defaultValue = "10") int size) {
+
+        Long userId = userDetails.getUserId();
+        model.addAttribute("userId", userId);
+        
+        Set<Long> authorsByUserId = postService.returnAuthorsByUserId(userId);
+        model.addAttribute("authorsByUserId", authorsByUserId);
+
         Page<Comment> commentPage = postService.returnPaginatedCommentsByCreationDateDescending(id, page - 1, size);
         int totalPages = commentPage.getTotalPages();
 
@@ -123,8 +139,8 @@ public class PostController {
      * WRITE Mappings
      */
     @PostMapping("posts")
-    public String addPostById(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                              @ModelAttribute("post") @Valid PostDto postDto) {
+    public String addPost(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                          @ModelAttribute("post") @Valid PostDto postDto) {
         Long userId = userDetails.getUserId();
         Long postId = postService.createNewPostAndReturnPostId(userId, postDto);
 

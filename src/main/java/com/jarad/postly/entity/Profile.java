@@ -48,10 +48,10 @@ public class Profile implements Serializable {
     @JoinColumn(name = "profile_id")
     private User user;
 
-    @OneToMany(mappedBy = "authorId", orphanRemoval = true)
+    @OneToMany(mappedBy = "author", orphanRemoval = true)
     private List<Follower> authors;
 
-    @OneToMany(mappedBy = "followerId", orphanRemoval = true)
+    @OneToMany(mappedBy = "follower", orphanRemoval = true)
     private List<Follower> followers;
 
     @OneToMany(mappedBy = "profile", orphanRemoval = true)

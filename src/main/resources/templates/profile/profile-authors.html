@@ -17,8 +17,8 @@
             <h2>Profile Authors</h2>
             <div th:if="${personalProfile}">
                 <div th:each="author : ${authorPage.content}">
-                    <p th:text="${author.authorId.username}"></p>
-                    <a class="btn btn-primary" th:href="@{/profiles/{id}(id=${author.authorId.id})}">Check Author Profile</a>
+                    <p th:text="${author.author.username}"></p>
+                    <a class="btn btn-primary" th:href="@{/profiles/{id}(id=${author.author.id})}">Check Author Profile</a>
                 </div>
                 <div th:if="${authorPage.totalPages > 0}" class="pagination" th:each="pageNumber : ${pageNumbers}">
                     <a th:href="@{/profiles/{profileId}/authors(profileId=${profileId}, page=${pageNumber}, size=${authorPage.size})}" th:text="${pageNumber}" th:class="${pageNumber==authorPage.number + 1} ? active"> </a>
@@ -27,8 +27,8 @@
 
             <div th:unless="${personalProfile}">
                 <div th:each="author : ${authorPage.content}">
-                    <p th:text="${author.authorId.username}"></p>
-                    <a class="btn btn-primary" th:href="@{/profiles/{id}(id=${author.authorId.id})}">Check Author Profile</a>
+                    <p th:text="${author.author.username}"></p>
+                    <a class="btn btn-primary" th:href="@{/profiles/{id}(id=${author.author.id})}">Check Author Profile</a>
                 </div>
                 <div th:if="${authorPage.totalPages > 0}" class="pagination" th:each="pageNumber : ${pageNumbers}">
                     <a th:href="@{/profiles/{profileId}/authors(profileId=${profileId}, page=${pageNumber}, size=${authorPage.size})}" th:text="${pageNumber}" th:class="${pageNumber==authorPage.number + 1} ? active"> </a>

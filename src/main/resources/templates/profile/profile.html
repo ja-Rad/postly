@@ -29,6 +29,24 @@
             <div th:unless="${personalProfile}">
                 <p th:text="${profile.username}"></p>
                 <p th:text="${profile.creationDate}"></p>
+                <div th:if="${#lists.contains(authorsByUserId, profile.id)}">
+                    Unfollow
+                    <!-- delete mapping -->
+                    <form action="#" th:method="delete" th:action="@{/followers/{id}(id=${profile.id})}">
+                        <div>
+                            <input type="submit" value="Unfollow Author" />
+                        </div>
+                    </form>
+                </div>
+                <div th:unless="${#lists.contains(authorsByUserId, profile.id)}">
+                    Follow
+                    <!-- add mapping -->
+                    <form action="#" th:method="post" th:action="@{/followers/{id}(id=${profile.id})}">
+                        <div>
+                            <input type="submit" value="Follow Author" />
+                        </div>
+                    </form>
+                </div>
             </div>
         </main>
         <footer th:insert="~{fragments/footer-content}" id="footer-content" class="bg-primary"></footer>

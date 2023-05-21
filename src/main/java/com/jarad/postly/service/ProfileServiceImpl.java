@@ -24,9 +24,11 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 @Service
 public class ProfileServiceImpl implements ProfileService {
@@ -153,5 +155,18 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public boolean isProfileExistForUser(Long id) {
         return profileRepository.existsByUser_Id(id);
+    }
+
+    @Override
+    public Set<Long> returnAuthorsByUserId(Long userId) {
+        Optional<Profile> optionalProfile = profileRepository.findById(userId);
+        if (optionalProfile.isEmpty()) {
+            throw new ProfileNotFoundException("Profile with id: " + userId + " doesn`t exist");
+        }
+
+        Profile profile = optionalProfile.get();
+        return profile.getFollowers().stream()
+                .map(follower -> follower.getId().getAuthorId())
+                .collect(toSet());
     }
 }

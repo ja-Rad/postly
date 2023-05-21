@@ -153,10 +153,8 @@ public class PostServiceImpl implements PostService {
         }
 
         Profile profile = optionalProfile.get();
-        Set<Long> authorsIds = profile.getFollowers().stream()
+        return profile.getFollowers().stream()
                 .map(follower -> follower.getId().getAuthorId())
                 .collect(toSet());
-
-        return authorsIds;
     }
 }

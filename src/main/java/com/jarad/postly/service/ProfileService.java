@@ -8,6 +8,7 @@ import com.jarad.postly.util.dto.ProfileDto;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.Set;
 
 public interface ProfileService {
     Page<Profile> returnPaginatedProfilesByCreationDateDescending(int page, int size);
@@ -21,6 +22,8 @@ public interface ProfileService {
     Page<Comment> returnProfilePaginatedCommentsByCreationDateDescending(Long id, int page, int size);
 
     List<Integer> returnListOfPageNumbers(int totalPages);
+
+    Set<Long> returnAuthorsByUserId(Long userId);
 
     Profile returnProfileById(Long id);
 

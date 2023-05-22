@@ -9,7 +9,9 @@ import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,7 +34,8 @@ public class Profile implements Serializable {
     @Column(name = "profile_id")
     private Long id;
 
-    @NotNull
+    @NotBlank(message = "Username may not be blank")
+    @Size(min = 3, max = 255, message = "Username must be between 3 and 36 characters long")
     @Column(name = "username")
     private String username;
 

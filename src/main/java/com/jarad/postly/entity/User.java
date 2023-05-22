@@ -12,7 +12,8 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,13 +41,15 @@ public class User implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @NotNull
-    @Column(name = "password")
-    private String password;
-
-    @NotNull
+    @NotBlank(message = "Email may not be blank")
+    @Size(min = 3, max = 255, message = "Email must be between 3 and 255 characters long")
     @Column(name = "email", unique = true)
     private String email;
+
+    @NotBlank(message = "Password may not be blank")
+    @Size(min = 8, max = 255, message = "Password must be between 8 and 255 characters long")
+    @Column(name = "password")
+    private String password;
 
     @Column(name = "verification_code", length = 64)
     private String verificationCode;

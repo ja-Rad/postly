@@ -3,8 +3,8 @@ package com.jarad.postly.util.dto;
 import com.jarad.postly.entity.Role;
 import com.jarad.postly.util.validation.PasswordMatches;
 import com.jarad.postly.util.validation.ValidEmail;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,21 +16,23 @@ import java.util.Set;
 
 @Getter
 @Setter
-@PasswordMatches
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@PasswordMatches
 public class UserDto {
 
-    @NotNull
-    @NotEmpty
+    @NotBlank(message = "Email may not be blank")
+    @Size(min = 3, max = 255, message = "Email must be between 3 and 255 characters long")
     @ValidEmail
     private String email;
 
-    @NotNull
-    @NotEmpty
+    @NotBlank(message = "Password may not be blank")
+    @Size(min = 8, max = 255, message = "Password must be between 8 and 255 characters long")
     private String password;
 
+    @NotBlank(message = "Matching Password may not be blank")
+    @Size(min = 8, max = 255, message = "Password must be between 8 and 255 characters long")
     private String matchingPassword;
 
     private String verificationCode;

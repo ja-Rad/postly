@@ -9,8 +9,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,9 +34,9 @@ public class Comment implements Serializable {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @NotNull
-    @NotEmpty
-    @Column(name = "description", length = 200)
+    @NotBlank(message = "Description may not be blank")
+    @Size(min = 3, max = 2000, message = "Description must be between 3 and 2000 characters long")
+    @Column(name = "description", length = 2000)
     private String description;
 
     @NotNull

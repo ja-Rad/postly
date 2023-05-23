@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -84,7 +85,14 @@ public class UserController {
      */
     @PostMapping("/users/forgot-password-verify")
     public String processForgotPasswordVerifyPage(@RequestParam String code,
-                                                  @ModelAttribute("user") UserDto userDto) {
+                                                  @ModelAttribute("user") @Valid UserDto userDto,
+                                                  BindingResult bindingResult,
+                                                  Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("code", code);
+            return USER_SUBFOLDER_PREFIX + "forgot-password-form";
+        }
+
         boolean isVerified = userService.verifyForgotPassword(code, userDto);
         if (isVerified) {
             return "redirect:/users/forgot-password-verify-success";
@@ -94,13 +102,23 @@ public class UserController {
     }
 
     @PostMapping("/users/forgot-password")
-    public String resetPasswordForUserAccount(@ModelAttribute("user") UserDto userDto) {
+    public String resetPasswordForUserAccount(@ModelAttribute("user") @Valid UserDto userDto,
+                                              BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return USER_SUBFOLDER_PREFIX + "forgot-password";
+        }
+
         userService.resetPasswordForExistingUser(userDto);
         return "redirect:/users/forgot-password-verify-notification";
     }
 
     @PostMapping("/users/registration")
-    public String registerUserAccount(@ModelAttribute("user") @Valid UserDto userDto) {
+    public String registerUserAccount(@ModelAttribute("user") @Valid UserDto userDto,
+                                      BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return USER_SUBFOLDER_PREFIX + "registration";
+        }
+
         userService.registerNewUserAccount(userDto);
         return "redirect:/users/verify-notification";
     }

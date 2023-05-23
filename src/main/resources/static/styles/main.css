@@ -8,6 +8,10 @@ footer {
     margin-top: auto !important;
 }
 
+p {
+    white-space: break-spaces !important;
+}
+
 .nav-link {
     color: white !important;
 }

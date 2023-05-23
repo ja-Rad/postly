@@ -7,7 +7,7 @@ public interface CommentService {
 
     Comment returnCommentById(Long id);
 
-    Long updateExistingComment(Long profileId, Long commentId, CommentDto commentDto);
+    void updateExistingComment(Long profileId, Long commentId, CommentDto commentDto);
 
     void deleteExistingComment(Long profileId, Long commentId);
 }

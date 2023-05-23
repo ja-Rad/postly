@@ -90,7 +90,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Long updateExistingPost(Long profileId, Long postId, PostDto postDto) {
+    public void updateExistingPost(Long profileId, Long postId, PostDto postDto) {
         Optional<Post> optionalPost = postRepository.findById(postId);
         if (optionalPost.isEmpty()) {
             throw new PostNotFoundException("Post for user with id: " + postId + " doesn`t exist");
@@ -103,9 +103,7 @@ public class PostServiceImpl implements PostService {
         post.setTitle(postDto.getTitle());
         post.setDescription(postDto.getDescription());
 
-        Post savedPost = postRepository.save(post);
-
-        return savedPost.getId();
+        postRepository.save(post);
     }
 
     @Override

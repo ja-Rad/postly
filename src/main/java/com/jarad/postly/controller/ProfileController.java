@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -71,7 +72,7 @@ public class ProfileController {
 
         Set<Long> authorsByUserId = profileService.returnAuthorsByUserId(userId);
         model.addAttribute("authorsByUserId", authorsByUserId);
-        
+
         Profile profile = profileService.returnProfileById(id);
         model.addAttribute("personalProfile", false);
         model.addAttribute("profile", profile);
@@ -215,7 +216,12 @@ public class ProfileController {
     @PostMapping("/profiles")
     public String createNewProfile(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                    HttpSession session,
-                                   @ModelAttribute("profile") @Valid ProfileDto profileDto) {
+                                   @ModelAttribute("profile") @Valid ProfileDto profileDto,
+                                   BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return PROFILE_SUBFOLDER_PREFIX + "profile-create-form";
+        }
+
         Long userId = userDetails.getUserId();
         session.setAttribute("usersActiveProfileId", userId);
         Long profileId = profileService.createNewProfileAndReturnProfileId(userId, profileDto);
@@ -224,10 +230,15 @@ public class ProfileController {
     }
 
     @PutMapping("/profiles/{id}")
-    public String updateExistingProfile(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                        @PathVariable("id") Long id,
-                                        @ModelAttribute("profile") @Valid ProfileDto profileDto) {
-        Long userId = userDetails.getUserId();
+    public String updateExistingProfile(@PathVariable("id") Long id,
+                                        @ModelAttribute("profile") @Valid ProfileDto profileDto,
+                                        BindingResult bindingResult,
+                                        Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("profileId", id);
+            return PROFILE_SUBFOLDER_PREFIX + "profile-update-form";
+        }
+
         Long profileId = profileService.updateExistingProfile(id, profileDto);
 
         return "redirect:/profiles/" + profileId;

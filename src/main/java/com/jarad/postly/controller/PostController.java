@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -107,7 +108,7 @@ public class PostController {
 
         Long userId = userDetails.getUserId();
         model.addAttribute("userId", userId);
-        
+
         Set<Long> authorsByUserId = postService.returnAuthorsByUserId(userId);
         model.addAttribute("authorsByUserId", authorsByUserId);
 
@@ -140,29 +141,31 @@ public class PostController {
      */
     @PostMapping("posts")
     public String addPost(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                          @ModelAttribute("post") @Valid PostDto postDto) {
+                          @ModelAttribute("post") @Valid PostDto postDto,
+                          BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return POST_SUBFOLDER_PREFIX + "post-create-form";
+        }
+
         Long userId = userDetails.getUserId();
         Long postId = postService.createNewPostAndReturnPostId(userId, postDto);
 
         return "redirect:/posts/" + postId;
     }
 
-    @PostMapping("/posts/{id}/comments/create-form")
-    public String addPostCommentById(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                     @ModelAttribute("comment") @Valid CommentDto commentDto,
-                                     @PathVariable("id") Long postId) {
-        Long userId = userDetails.getUserId();
-        Long commentId = postService.createNewCommentAndReturnCommentId(postId, userId, commentDto);
-
-        return "redirect:/comments/" + commentId;
-    }
-
     @PutMapping("posts/{id}")
     public String updatePostById(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                 @PathVariable("id") Long id,
-                                 @ModelAttribute("post") @Valid PostDto postDto) {
+                                 @PathVariable("id") Long postId,
+                                 @ModelAttribute("post") @Valid PostDto postDto,
+                                 BindingResult bindingResult,
+                                 Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("postId", postId);
+            return POST_SUBFOLDER_PREFIX + "post-update-form";
+        }
+
         Long userId = userDetails.getUserId();
-        Long postId = postService.updateExistingPost(userId, id, postDto);
+        postService.updateExistingPost(userId, postId, postDto);
 
         return "redirect:/posts/" + postId;
     }
@@ -174,5 +177,22 @@ public class PostController {
         Long userId = userDetails.getUserId();
         postService.deleteExistingPost(userId, id);
         return "redirect:/profiles/%s/posts".formatted(userId);
+    }
+
+    @PostMapping("/posts/{id}/comments/create-form")
+    public String addPostCommentById(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                     @PathVariable("id") Long postId,
+                                     @ModelAttribute("comment") @Valid CommentDto commentDto,
+                                     BindingResult bindingResult,
+                                     Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("postId", postId);
+            return POST_SUBFOLDER_PREFIX + "post-comment-create-form";
+        }
+
+        Long userId = userDetails.getUserId();
+        Long commentId = postService.createNewCommentAndReturnCommentId(postId, userId, commentDto);
+
+        return "redirect:/comments/" + commentId;
     }
 }

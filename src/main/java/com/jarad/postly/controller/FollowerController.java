@@ -20,17 +20,7 @@ public class FollowerController {
     public FollowerController(FollowerService followerService) {
         this.followerService = followerService;
     }
-
-    // add + delete follower
-    // post followers (author- users profileId, follower-other profileId, creationDate)
-    // delete followers/id (author-profileId, id, creationDate)
-
-
-    /**
-     * READ Mappings
-     */
-
-
+    
     /**
      * WRITE Mappings
      */

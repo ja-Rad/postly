@@ -22,7 +22,7 @@ public interface PostService {
 
     Long createNewPostAndReturnPostId(Long id, PostDto postDto);
 
-    Long updateExistingPost(Long profileId, Long postId, PostDto postDto);
+    void updateExistingPost(Long profileId, Long postId, PostDto postDto);
 
     Long createNewCommentAndReturnCommentId(Long postId, Long id, CommentDto commentDto);
 

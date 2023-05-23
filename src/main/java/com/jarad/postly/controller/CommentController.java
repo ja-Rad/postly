@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -66,10 +67,17 @@ public class CommentController {
      */
     @PutMapping("comments/{id}")
     public String updateCommentById(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                    @PathVariable("id") Long id,
-                                    @ModelAttribute("comment") @Valid CommentDto commentDto) {
+                                    @PathVariable("id") Long commentId,
+                                    @ModelAttribute("comment") @Valid CommentDto commentDto,
+                                    BindingResult bindingResult,
+                                    Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("commentId", commentId);
+            return COMMENT_SUBFOLDER_PREFIX + "comment-update-form";
+        }
+
         Long userId = userDetails.getUserId();
-        Long commentId = commentService.updateExistingComment(userId, id, commentDto);
+        commentService.updateExistingComment(userId, commentId, commentDto);
 
         return "redirect:/comments/" + commentId;
     }

@@ -15,11 +15,21 @@
         </header>
         <main>
             <h2>Update Profile:</h2>
-            <form action="#" th:method="put" th:action="@{/profiles/{id}(id=${profileId})}" th:object="${profile}">
+            <!-- <form action="#" th:method="put" th:action="@{/profiles/{id}(id=${profileId})}" th:object="${profile}">
                 <p>Username: <input th:field="*{username}" type="text" /></p>
                 <div>
                     <input type="submit" value="Update Profile" />
                 </div>
+            </form> -->
+
+            <form th:action="@{/profiles/{id}(id=${profileId})}" th:object="${profile}" th:method="put" class="form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input class="form-control" type="text" th:field="*{username}" id="username" placeholder="Type username here:" />
+                    <div class="alert alert-warning" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username Error</div>
+                </div>
+                <input type="submit" class="btn btn-success" value="Update profile" />
+                <!-- <a class="btn btn-primary" th:href="@{/logout}" role="button">Log out</a> -->
             </form>
         </main>
         <footer th:insert="~{fragments/footer-content}" id="footer-content" class="bg-primary"></footer>

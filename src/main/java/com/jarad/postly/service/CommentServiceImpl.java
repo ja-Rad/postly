@@ -30,7 +30,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Long updateExistingComment(Long profileId, Long commentId, CommentDto commentDto) {
+    public void updateExistingComment(Long profileId, Long commentId, CommentDto commentDto) {
         Optional<Comment> optionalComment = commentRepository.findByProfile_IdAndId(profileId, commentId);
         if (optionalComment.isEmpty()) {
             throw new CommentNotFoundException("Comment with id: " + commentId + " for profile with id: " + profileId + " doesn`t exist");
@@ -39,8 +39,6 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = optionalComment.get();
         comment.setDescription(commentDto.getDescription());
         Comment savedComment = commentRepository.save(comment);
-
-        return savedComment.getId();
     }
 
     @Override

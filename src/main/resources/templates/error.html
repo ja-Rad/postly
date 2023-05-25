@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <meta content="width=device-width, initial-scale=1" name="viewport" />
+        <link th:replace="~{fragments/bootstrap-stylesheet}" />
+        <link th:replace="~{fragments/main-stylesheet}" />
+        <link rel="icon" th:href="@{~/favicon.ico}" type="image/x-icon" />
+        <meta charset="utf-8" />
+        <title>Login</title>
+    </head>
+
+    <body>
+        <main>
+            <div class="d-flex align-items-center justify-content-center vh-100">
+                <div class="text-center">
+                    <h1 th:text="${status}" class="display-1 fw-bold"></h1>
+                    <p class="fs-3"><span class="text-danger">Opps!</span> Something went wrong.</p>
+                    <p class="lead">You have tried to access url: <span th:text="${url}" class="text-danger"></span></p>
+                    <p class="lead">The error message: <span th:text="${message}" class="text-danger"></span></p>
+                    <a th:href="@{/posts}" class="btn btn-primary">Go to Posts</a>
+                </div>
+            </div>
+        </main>
+        <footer class="bg-primary" id="footer-content" th:insert="~{fragments/footer-content}"></footer>
+        <link th:insert="~{fragments/bootstrap-js-bundle}" />
+    </body>
+</html>

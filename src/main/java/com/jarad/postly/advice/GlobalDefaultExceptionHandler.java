@@ -3,6 +3,7 @@ package com.jarad.postly.advice;
 import com.jarad.postly.util.exception.AuthorNotFoundException;
 import com.jarad.postly.util.exception.CommentNotFoundException;
 import com.jarad.postly.util.exception.EmailNotFoundException;
+import com.jarad.postly.util.exception.FollowerNotFoundException;
 import com.jarad.postly.util.exception.PostNotFoundException;
 import com.jarad.postly.util.exception.ProfileNotFoundException;
 import com.jarad.postly.util.exception.UserNotFoundException;
@@ -19,7 +20,7 @@ class GlobalDefaultExceptionHandler {
     public static final String DEFAULT_ERROR_VIEW = "error";
 
     /**
-     * Error Handler for status code: 404
+     * Error Handler for status code: 404 - Not Found
      *
      * @return error page located at templates/error.html
      */
@@ -28,6 +29,7 @@ class GlobalDefaultExceptionHandler {
             AuthorNotFoundException.class,
             CommentNotFoundException.class,
             EmailNotFoundException.class,
+            FollowerNotFoundException.class,
             PostNotFoundException.class,
             ProfileNotFoundException.class,
             UserNotFoundException.class

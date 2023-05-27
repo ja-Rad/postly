@@ -5,6 +5,8 @@ import com.jarad.postly.entity.User;
 import com.jarad.postly.repository.RoleRepository;
 import com.jarad.postly.repository.UserRepository;
 import com.jarad.postly.util.dto.UserDto;
+import com.jarad.postly.util.dto.UserDtoOnlyEmail;
+import com.jarad.postly.util.dto.UserDtoOnlyPassword;
 import com.jarad.postly.util.enums.SecurityRole;
 import com.jarad.postly.util.exception.EmailTemplateException;
 import com.jarad.postly.util.exception.UserAlreadyExistException;
@@ -81,7 +83,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void resetPasswordForExistingUser(UserDto userDto) {
+    public void resetPasswordForExistingUser(UserDtoOnlyEmail userDto) {
         String userEmail = userDto.getEmail();
         Optional<User> optionalUser = userRepository.findByEmail(userEmail);
         if (optionalUser.isEmpty()) {
@@ -121,7 +123,8 @@ public class UserServiceImpl implements UserService {
      *
      * @return ROLE_USER from table 'roles'
      */
-    private Role getRoleUser() {
+    @Override
+    public Role getRoleUser() {
         Optional<Role> optionalRoleUser = roleRepository.findByName(SecurityRole.ROLE_USER.toString());
 
         if (optionalRoleUser.isEmpty()) {
@@ -141,7 +144,8 @@ public class UserServiceImpl implements UserService {
      * @param user   entity that's representing the client
      * @param helper MimeMessageHelper instance that provides easy access to the JavaMail API
      */
-    private void createVerifyEmailTemplate(User user, MimeMessageHelper helper) {
+    @Override
+    public void createVerifyEmailTemplate(User user, MimeMessageHelper helper) {
         String verifyURL = "http://localhost:8080" + "/users/verify?code=" + user.getVerificationCode();
         String userEmail = user.getEmail();
         String senderName = "Postly";
@@ -170,7 +174,8 @@ public class UserServiceImpl implements UserService {
      * @param user   entity that's representing the client
      * @param helper MimeMessageHelper instance that provides easy access to the JavaMail API
      */
-    private void createForgotPasswordEmailTemplate(User user, MimeMessageHelper helper) {
+    @Override
+    public void createForgotPasswordEmailTemplate(User user, MimeMessageHelper helper) {
         String verifyURL = "http://localhost:8080" + "/users/forgot-password-verify?code=" + user.getVerificationCode();
         String userEmail = user.getEmail();
         String senderName = "Postly";
@@ -200,6 +205,7 @@ public class UserServiceImpl implements UserService {
      * @param verificationCode that provided in /verify?code=
      * @return true if verification code is in database, user is present and user is not enabled, false if otherwise
      */
+    @Override
     public boolean verifyNewUser(String verificationCode) {
         if (isNotEmpty(verificationCode)) {
             Optional<User> optionalUser = userRepository.findByVerificationCode(verificationCode);
@@ -214,9 +220,9 @@ public class UserServiceImpl implements UserService {
                 user.setEnabled(true);
                 user.setActiveProfile(false);
                 userRepository.save(user);
+
                 return true;
             }
-
         }
         return false;
     }
@@ -228,7 +234,8 @@ public class UserServiceImpl implements UserService {
      * @param verificationCode is provided in /verify?code=
      * @return true if verification code is in database, user is present and user is enabled, false if otherwise
      */
-    public boolean verifyForgotPassword(String verificationCode, UserDto userDto) {
+    @Override
+    public boolean verifyForgotPassword(String verificationCode, UserDtoOnlyPassword userDto) {
         if (isNotEmpty(verificationCode)) {
             Optional<User> optionalUser = userRepository.findByVerificationCode(verificationCode);
 

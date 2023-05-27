@@ -2,6 +2,8 @@ package com.jarad.postly.controller;
 
 import com.jarad.postly.service.UserService;
 import com.jarad.postly.util.dto.UserDto;
+import com.jarad.postly.util.dto.UserDtoOnlyEmail;
+import com.jarad.postly.util.dto.UserDtoOnlyPassword;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,7 +47,7 @@ public class UserController {
 
     @GetMapping("/users/forgot-password-verify")
     public String showForgotPasswordVerifyPage(@RequestParam String code, Model model) {
-        UserDto userDto = new UserDto();
+        UserDtoOnlyPassword userDto = new UserDtoOnlyPassword();
         model.addAttribute("user", userDto);
         model.addAttribute("code", code);
 
@@ -64,7 +66,7 @@ public class UserController {
 
     @GetMapping("/users/forgot-password")
     public String showForgotPasswordPage(Model model) {
-        UserDto userDto = new UserDto();
+        UserDtoOnlyEmail userDto = new UserDtoOnlyEmail();
         model.addAttribute("user", userDto);
 
         return USER_SUBFOLDER_PREFIX + "forgot-password";
@@ -88,7 +90,7 @@ public class UserController {
      */
     @PostMapping("/users/forgot-password-verify")
     public String processForgotPasswordVerifyPage(@RequestParam String code,
-                                                  @ModelAttribute("user") @Valid UserDto userDto,
+                                                  @ModelAttribute("user") @Valid UserDtoOnlyPassword userDto,
                                                   BindingResult bindingResult,
                                                   Model model) {
         if (bindingResult.hasErrors()) {
@@ -105,7 +107,7 @@ public class UserController {
     }
 
     @PostMapping("/users/forgot-password")
-    public String resetPasswordForUserAccount(@ModelAttribute("user") @Valid UserDto userDto,
+    public String resetPasswordForUserAccount(@ModelAttribute("user") @Valid UserDtoOnlyEmail userDto,
                                               BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return USER_SUBFOLDER_PREFIX + "forgot-password";

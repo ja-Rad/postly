@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 
-import java.util.Objects;
-
 @Controller
 public class CommentController {
 
@@ -35,29 +33,25 @@ public class CommentController {
      */
     @GetMapping("/comments/{id}")
     public String getCommentById(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                 @PathVariable Long id,
+                                 @PathVariable("id") Long commentId,
                                  Model model) {
-
         Long userId = userDetails.getUserId();
-        Comment comment = commentService.returnCommentById(id);
-        Long commentProfileId = comment.getProfile().getId();
-        model.addAttribute("personalComment", false);
+        Comment comment = commentService.returnCommentById(commentId);
 
-        if (Objects.equals(userId, commentProfileId)) {
+        if (commentService.isCommentOwnedByUser(userId, commentId)) {
             model.addAttribute("personalComment", true);
         }
-
         model.addAttribute("comment", comment);
 
         return COMMENT_SUBFOLDER_PREFIX + "comment";
     }
 
     @GetMapping("/comments/{id}/update-form")
-    public String getPostUpdateForm(@PathVariable Long id,
+    public String getPostUpdateForm(@PathVariable("id") Long commentId,
                                     Model model) {
-        Comment comment = commentService.returnCommentById(id);
+        Comment comment = commentService.returnCommentById(commentId);
         model.addAttribute("comment", comment);
-        model.addAttribute("commentId", id);
+        model.addAttribute("commentId", commentId);
 
         return COMMENT_SUBFOLDER_PREFIX + "comment-update-form";
     }
@@ -84,10 +78,10 @@ public class CommentController {
 
     @DeleteMapping("comments/{id}")
     public String deleteCommentById(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                    @PathVariable("id") Long id) {
-
+                                    @PathVariable("id") Long commentId) {
         Long userId = userDetails.getUserId();
-        commentService.deleteExistingComment(userId, id);
-        return "redirect:/profiles/%s/comments".formatted(userId);
+        commentService.deleteExistingComment(userId, commentId);
+
+        return "redirect:/profiles/" + userId + "/comments";
     }
 }

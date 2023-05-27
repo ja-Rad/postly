@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 @Controller
@@ -63,19 +62,15 @@ public class PostController {
 
     @GetMapping("/posts/{id}")
     public String getPostById(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                              @PathVariable Long id,
+                              @PathVariable("id") Long postId,
                               Model model) {
 
         Long userId = userDetails.getUserId();
-        Post post = postService.returnPostById(id);
-        Long postProfileId = post.getProfile().getId();
-        model.addAttribute("personalPost", false);
+        Post post = postService.returnPostById(postId);
 
-        if (Objects.equals(userId, postProfileId)) {
+        if (postService.isPostOwnedByUser(userId, postId)) {
             model.addAttribute("personalPost", true);
-            model.addAttribute("postId", id);
         }
-
         model.addAttribute("post", post);
 
         return POST_SUBFOLDER_PREFIX + "post";
@@ -90,18 +85,17 @@ public class PostController {
     }
 
     @GetMapping("/posts/{id}/update-form")
-    public String getPostUpdateForm(@PathVariable Long id,
+    public String getPostUpdateForm(@PathVariable("id") Long postId,
                                     Model model) {
-        Post post = postService.returnPostById(id);
+        Post post = postService.returnPostById(postId);
         model.addAttribute("post", post);
-        model.addAttribute("postId", id);
 
         return POST_SUBFOLDER_PREFIX + "post-update-form";
     }
 
     @GetMapping("/posts/{id}/comments")
     public String getPostCommentsById(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                      @PathVariable Long id,
+                                      @PathVariable("id") Long postId,
                                       Model model,
                                       @RequestParam(value = "page", defaultValue = "1") int page,
                                       @RequestParam(value = "size", defaultValue = "10") int size) {
@@ -112,7 +106,7 @@ public class PostController {
         Set<Long> authorsByUserId = postService.returnAuthorsByUserId(userId);
         model.addAttribute("authorsByUserId", authorsByUserId);
 
-        Page<Comment> commentPage = postService.returnPaginatedCommentsByCreationDateDescending(id, page - 1, size);
+        Page<Comment> commentPage = postService.returnPaginatedCommentsByCreationDateDescending(postId, page - 1, size);
         int totalPages = commentPage.getTotalPages();
 
         if (totalPages > 0) {
@@ -120,18 +114,17 @@ public class PostController {
             model.addAttribute("pageNumbers", pageNumbers);
         }
         model.addAttribute("commentPage", commentPage);
-        model.addAttribute("postId", id);
-        // attribute comment.profile.username.id == profileId then edit/delete
+        model.addAttribute("postId", postId);
 
         return POST_SUBFOLDER_PREFIX + "post-comments";
     }
 
     @GetMapping("/posts/{id}/comments/create-form")
-    public String getPostCommentsById(@PathVariable Long id,
+    public String getPostCommentsById(@PathVariable("id") Long postId,
                                       Model model) {
         CommentDto commentDto = new CommentDto();
         model.addAttribute("comment", commentDto);
-        model.addAttribute("postId", id);
+        model.addAttribute("postId", postId);
 
         return POST_SUBFOLDER_PREFIX + "post-comment-create-form";
     }
@@ -172,11 +165,11 @@ public class PostController {
 
     @DeleteMapping("posts/{id}")
     public String deletePostById(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                 @PathVariable("id") Long id) {
+                                 @PathVariable("id") Long postId) {
 
         Long userId = userDetails.getUserId();
-        postService.deleteExistingPost(userId, id);
-        return "redirect:/profiles/%s/posts".formatted(userId);
+        postService.deleteExistingPost(userId, postId);
+        return "redirect:/profiles/" + postId + "/posts";
     }
 
     @PostMapping("/posts/{id}/comments/create-form")

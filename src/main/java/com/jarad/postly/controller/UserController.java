@@ -24,7 +24,6 @@ public class UserController {
         this.userService = userService;
     }
 
-
     /**
      * READ Mappings
      */
@@ -33,6 +32,7 @@ public class UserController {
         boolean isVerified = userService.verifyNewUser(code);
         if (isVerified) {
             return USER_SUBFOLDER_PREFIX + "verify-success";
+
         } else {
             return USER_SUBFOLDER_PREFIX + "verify-fail";
         }
@@ -48,6 +48,7 @@ public class UserController {
         UserDto userDto = new UserDto();
         model.addAttribute("user", userDto);
         model.addAttribute("code", code);
+
         return USER_SUBFOLDER_PREFIX + "forgot-password-form";
     }
 
@@ -65,6 +66,7 @@ public class UserController {
     public String showForgotPasswordPage(Model model) {
         UserDto userDto = new UserDto();
         model.addAttribute("user", userDto);
+
         return USER_SUBFOLDER_PREFIX + "forgot-password";
     }
 
@@ -77,6 +79,7 @@ public class UserController {
     public String showRegistrationForm(Model model) {
         UserDto userDto = new UserDto();
         model.addAttribute("user", userDto);
+
         return USER_SUBFOLDER_PREFIX + "registration";
     }
 
@@ -93,9 +96,9 @@ public class UserController {
             return USER_SUBFOLDER_PREFIX + "forgot-password-form";
         }
 
-        boolean isVerified = userService.verifyForgotPassword(code, userDto);
-        if (isVerified) {
+        if (userService.verifyForgotPassword(code, userDto)) {
             return "redirect:/users/forgot-password-verify-success";
+
         } else {
             return "redirect:/users/forgot-password-verify-fail";
         }
@@ -107,8 +110,8 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             return USER_SUBFOLDER_PREFIX + "forgot-password";
         }
-
         userService.resetPasswordForExistingUser(userDto);
+
         return "redirect:/users/forgot-password-verify-notification";
     }
 
@@ -120,6 +123,7 @@ public class UserController {
         }
 
         userService.registerNewUserAccount(userDto);
+
         return "redirect:/users/verify-notification";
     }
 }

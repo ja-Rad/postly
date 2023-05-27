@@ -20,7 +20,17 @@ public class FollowerController {
     public FollowerController(FollowerService followerService) {
         this.followerService = followerService;
     }
-    
+
+    /**
+     * Helper method to trim URL, so that only Path/Page is left
+     *
+     * @param referer is a complete URL
+     * @return partial URL with only a Path/Page part left
+     */
+    private static String getTrimmedRefererPath(String referer) {
+        return referer.replaceAll("(.*\\/{2})(.*?\\/)", "");
+    }
+
     /**
      * WRITE Mappings
      */
@@ -30,7 +40,7 @@ public class FollowerController {
                               @RequestHeader(HttpHeaders.REFERER) String referer) {
         Long userId = userDetails.getUserId();
         followerService.addFollowerToAuthor(userId, authorId);
-        String trimmedRefererPath = referer.replaceAll("(.*\\/{2})(.*?\\/)", "");
+        String trimmedRefererPath = getTrimmedRefererPath(referer);
 
         return "redirect:/" + trimmedRefererPath;
     }
@@ -41,7 +51,7 @@ public class FollowerController {
                                  @RequestHeader(HttpHeaders.REFERER) String referer) {
         Long userId = userDetails.getUserId();
         followerService.deleteFollowerFromAuthor(userId, authorId);
-        String trimmedRefererPath = referer.replaceAll("(.*\\/{2})(.*?\\/)", "");
+        String trimmedRefererPath = getTrimmedRefererPath(referer);
 
         return "redirect:/" + trimmedRefererPath;
     }

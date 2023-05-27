@@ -11,27 +11,27 @@ import java.util.List;
 import java.util.Set;
 
 public interface ProfileService {
-    Page<Profile> returnPaginatedProfilesByCreationDateDescending(int page, int size);
+    Page<Profile> returnPaginatedProfilesByCreationDateDescending(int page);
 
-    Page<Post> returnProfilePaginatedPostsByCreationDateDescending(Long id, int page, int size);
+    Page<Post> returnProfilePaginatedPostsByCreationDateDescending(Long profileId, int page);
 
-    Page<Follower> returnProfilePaginatedAuthorsByCreationDateDescending(Long id, int page, int size);
+    Page<Follower> returnProfilePaginatedAuthorsByCreationDateDescending(Long profileId, int page);
 
-    Page<Follower> returnProfilePaginatedFollowersByCreationDateDescending(Long id, int page, int size);
+    Page<Follower> returnProfilePaginatedFollowersByCreationDateDescending(Long profileId, int page);
 
-    Page<Comment> returnProfilePaginatedCommentsByCreationDateDescending(Long id, int page, int size);
+    Page<Comment> returnProfilePaginatedCommentsByCreationDateDescending(Long profileId, int page);
 
     List<Integer> returnListOfPageNumbers(int totalPages);
 
     Set<Long> returnAuthorsByUserId(Long userId);
 
-    Profile returnProfileById(Long id);
+    Profile returnProfileById(Long profileId);
 
-    Long createNewProfileAndReturnProfileId(Long id, ProfileDto profileDto);
+    Long createNewProfileAndReturnProfileId(Long userId, ProfileDto profileDto);
 
-    Long updateExistingProfile(Long id, ProfileDto profileDto);
+    Long updateExistingProfile(Long profileId, ProfileDto profileDto);
 
-    void deleteExistingProfile(Long id);
+    void deleteExistingProfile(Long userId, Long profileId);
 
-    boolean isProfileExistForUser(Long id);
+    boolean isProfileExistForUser(Long userId);
 }

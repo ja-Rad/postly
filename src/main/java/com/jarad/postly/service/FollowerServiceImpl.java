@@ -27,22 +27,23 @@ public class FollowerServiceImpl implements FollowerService {
     }
 
     @Override
-    public void addFollowerToAuthor(Long userId, Long authorId) {
+    public void addFollowerToAuthor(Long followerId, Long authorId) {
         Optional<Profile> optionalAuthorsProfile = profileRepository.findById(authorId);
         if (optionalAuthorsProfile.isEmpty()) {
             throw new AuthorNotFoundException("Authors Profile with id: " + authorId + " doesn`t exist");
         }
-        Optional<Profile> optionalFollowersProfile = profileRepository.findById(userId);
+        Optional<Profile> optionalFollowersProfile = profileRepository.findById(followerId);
         if (optionalFollowersProfile.isEmpty()) {
-            throw new ProfileNotFoundException("Followers Profile with id: " + userId + " doesn`t exist");
+            throw new ProfileNotFoundException("Followers Profile with id: " + followerId + " doesn`t exist");
         }
 
-        FollowerId followerId = FollowerId.builder()
+        FollowerId followerPrimaryKey = FollowerId.builder()
                 .authorId(authorId)
-                .followerId(userId)
+                .followerId(followerId)
                 .build();
+
         Follower follower = Follower.builder()
-                .id(followerId)
+                .id(followerPrimaryKey)
                 .creationDate(Instant.now())
                 .build();
 
@@ -51,16 +52,16 @@ public class FollowerServiceImpl implements FollowerService {
 
     @Transactional
     @Override
-    public void deleteFollowerFromAuthor(Long userId, Long authorId) {
+    public void deleteFollowerFromAuthor(Long followerId, Long authorId) {
         Optional<Profile> optionalAuthorsProfile = profileRepository.findById(authorId);
         if (optionalAuthorsProfile.isEmpty()) {
             throw new AuthorNotFoundException("Authors Profile with id: " + authorId + " doesn`t exist");
         }
-        Optional<Profile> optionalFollowersProfile = profileRepository.findById(userId);
+        Optional<Profile> optionalFollowersProfile = profileRepository.findById(followerId);
         if (optionalFollowersProfile.isEmpty()) {
-            throw new ProfileNotFoundException("Followers Profile with id: " + userId + " doesn`t exist");
+            throw new ProfileNotFoundException("Followers Profile with id: " + followerId + " doesn`t exist");
         }
 
-        followerRepository.deleteById_AuthorIdAndId_FollowerId(authorId, userId);
+        followerRepository.deleteById_AuthorIdAndId_FollowerId(authorId, followerId);
     }
 }

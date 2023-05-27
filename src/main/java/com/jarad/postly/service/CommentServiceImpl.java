@@ -20,30 +20,30 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment returnCommentById(Long id) {
-        Optional<Comment> optionalComment = commentRepository.findById(id);
+    public Comment returnCommentById(Long commentId) {
+        Optional<Comment> optionalComment = commentRepository.findById(commentId);
         if (optionalComment.isEmpty()) {
-            throw new CommentNotFoundException("Comment with this id: " + id + " doesn`t exist");
+            throw new CommentNotFoundException("Comment with this id: " + commentId + " doesn`t exist");
         }
 
         return optionalComment.get();
     }
 
     @Override
-    public void updateExistingComment(Long profileId, Long commentId, CommentDto commentDto) {
-        Optional<Comment> optionalComment = commentRepository.findByProfile_IdAndId(profileId, commentId);
+    public void updateExistingComment(Long userId, Long commentId, CommentDto commentDto) {
+        Optional<Comment> optionalComment = commentRepository.findByProfile_User_IdAndId(userId, commentId);
         if (optionalComment.isEmpty()) {
-            throw new CommentNotFoundException("Comment with id: " + commentId + " for profile with id: " + profileId + " doesn`t exist");
+            throw new CommentNotFoundException("Comment with id: " + commentId + " for profile with id: " + userId + " doesn`t exist");
         }
 
         Comment comment = optionalComment.get();
         comment.setDescription(commentDto.getDescription());
-        Comment savedComment = commentRepository.save(comment);
+        commentRepository.save(comment);
     }
 
     @Override
     public void deleteExistingComment(Long profileId, Long commentId) {
-        Optional<Comment> optionalComment = commentRepository.findByProfile_IdAndId(profileId, commentId);
+        Optional<Comment> optionalComment = commentRepository.findByProfile_User_IdAndId(profileId, commentId);
         if (optionalComment.isEmpty()) {
             throw new CommentNotFoundException("Comment with id: " + commentId + " for profile with id: " + profileId + " doesn`t exist");
         }
@@ -51,6 +51,11 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = optionalComment.get();
 
         commentRepository.delete(comment);
+    }
+
+    @Override
+    public boolean isCommentOwnedByUser(Long userId, Long commentId) {
+        return commentRepository.existsByProfile_User_IdAndId(userId, commentId);
     }
 }
 

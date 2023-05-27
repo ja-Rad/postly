@@ -2,12 +2,10 @@
     <div class="container-fluid">
         <!-- Links -->
         <a class="navbar-brand">
-            <img alt="Logo" class="d-inline-block align-text-top" height="24" th:src="@{~/images/favicon-32x32.png}"
-                 width="30"/>
+            <img alt="Logo" class="d-inline-block align-text-top" height="24" th:src="@{~/images/favicon-32x32.png}" width="30" />
             Postly
         </a>
-        <button aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
-                data-bs-target="#navbarNav" data-bs-toggle="collapse" type="button">
+        <button aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbarNav" data-bs-toggle="collapse" type="button">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
@@ -25,20 +23,16 @@
                     <a class="nav-link" th:href="@{/profiles/{id}(id=${session.usersActiveProfileId})}">My Profile</a>
                 </li>
                 <li class="nav-item" th:if="${session.usersActiveProfileId != null}">
-                    <a class="nav-link" th:href="@{/profiles/{id}/posts(id=${session.usersActiveProfileId})}">My
-                        Posts</a>
+                    <a class="nav-link" th:href="@{/profiles/{id}/posts(id=${session.usersActiveProfileId})}">My Posts</a>
                 </li>
                 <li class="nav-item" th:if="${session.usersActiveProfileId != null}">
-                    <a class="nav-link" th:href="@{/profiles/{id}/authors(id=${session.usersActiveProfileId})}">My
-                        Authors</a>
+                    <a class="nav-link" th:href="@{/profiles/{id}/authors(id=${session.usersActiveProfileId})}">My Authors</a>
                 </li>
                 <li class="nav-item" th:if="${session.usersActiveProfileId != null}">
-                    <a class="nav-link" th:href="@{/profiles/{id}/followers(id=${session.usersActiveProfileId})}">My
-                        Followers</a>
+                    <a class="nav-link" th:href="@{/profiles/{id}/followers(id=${session.usersActiveProfileId})}">My Followers</a>
                 </li>
                 <li class="nav-item" th:if="${session.usersActiveProfileId != null}">
-                    <a class="nav-link" th:href="@{/profiles/{id}/comments(id=${session.usersActiveProfileId})}">My
-                        Comments</a>
+                    <a class="nav-link" th:href="@{/profiles/{id}/comments(id=${session.usersActiveProfileId})}">My Comments</a>
                 </li>
                 <form class="d-flex" th:action="@{/logout}" th:method="post">
                     <button class="btn btn-outline-warning" type="submit">Log out</button>

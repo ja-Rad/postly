@@ -2,7 +2,6 @@ package com.jarad.postly.controller;
 
 import com.jarad.postly.security.UserDetailsImpl;
 import com.jarad.postly.service.LoginService;
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class LoginController {
 
     private final LoginService loginService;
-    private final String USER_SUBFOLDER_PREFIX = "login/";
+    private final String LOGIN_SUBFOLDER_PREFIX = "login/";
 
     @Autowired
     public LoginController(LoginService loginService) {
@@ -26,7 +25,7 @@ public class LoginController {
         boolean profileExistForUser = loginService.isProfileExistForUser(userId);
 
         if (profileExistForUser) {
-            session.setAttribute("usersActiveProfileId", userDetails.getUserId());
+            session.setAttribute("usersActiveProfileId", userId);
             return "redirect:/posts";
         }
 
@@ -36,18 +35,6 @@ public class LoginController {
 
     @GetMapping("/login")
     public String showLoginPage() {
-        return USER_SUBFOLDER_PREFIX + "login";
-    }
-
-    @RolesAllowed("USER")
-    @GetMapping("/user")
-    public String showUserPage() {
-        return "user";
-    }
-
-    @RolesAllowed("ADMIN")
-    @GetMapping("/admin")
-    public String showAdminPage() {
-        return "admin";
+        return LOGIN_SUBFOLDER_PREFIX + "login";
     }
 }

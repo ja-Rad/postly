@@ -2,6 +2,6 @@ package com.jarad.postly.service;
 
 public interface LoginService {
 
-    boolean isProfileExistForUser(Long id);
+    boolean isProfileExistForUser(Long userId);
 
 }

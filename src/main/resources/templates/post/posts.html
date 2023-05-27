@@ -44,7 +44,7 @@
                 </div>
             </div>
             <div th:if="${postPage.totalPages > 0}" class="pagination" th:each="pageNumber : ${pageNumbers}">
-                <a th:href="@{/posts(page=${pageNumber}, size=${postPage.size})}" th:text="${pageNumber}" th:class="${pageNumber==postPage.number + 1} ? active"> </a>
+                <a th:href="@{/posts(page=${pageNumber})}" th:text="${pageNumber}" class="btn" th:classappend="${pageNumber==postPage.number + 1} ? disabled"> </a>
             </div>
         </main>
         <footer th:insert="~{fragments/footer-content}" id="footer-content" class="bg-primary"></footer>

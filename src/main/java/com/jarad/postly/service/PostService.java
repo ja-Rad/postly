@@ -18,13 +18,15 @@ public interface PostService {
 
     Set<Long> returnAuthorsByUserId(Long userId);
 
-    Post returnPostById(Long id);
+    Post returnPostById(Long postId);
 
-    Long createNewPostAndReturnPostId(Long id, PostDto postDto);
+    Long createNewPostAndReturnPostId(Long userId, PostDto postDto);
 
     void updateExistingPost(Long profileId, Long postId, PostDto postDto);
 
-    Long createNewCommentAndReturnCommentId(Long postId, Long id, CommentDto commentDto);
+    Long createNewCommentAndReturnCommentId(Long postId, Long userId, CommentDto commentDto);
 
     void deleteExistingPost(Long profileId, Long postId);
+
+    boolean isPostOwnedByUser(Long userId, Long postId);
 }

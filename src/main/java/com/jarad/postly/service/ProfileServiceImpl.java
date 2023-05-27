@@ -11,6 +11,10 @@ import com.jarad.postly.repository.PostRepository;
 import com.jarad.postly.repository.ProfileRepository;
 import com.jarad.postly.repository.UserRepository;
 import com.jarad.postly.util.dto.ProfileDto;
+import com.jarad.postly.util.exception.AuthorNotFoundException;
+import com.jarad.postly.util.exception.CommentNotFoundException;
+import com.jarad.postly.util.exception.FollowerNotFoundException;
+import com.jarad.postly.util.exception.PostNotFoundException;
 import com.jarad.postly.util.exception.ProfileForUserAlreadyExistException;
 import com.jarad.postly.util.exception.ProfileNotFoundException;
 import com.jarad.postly.util.exception.UserNotFoundException;
@@ -50,33 +54,58 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public Page<Profile> returnPaginatedProfilesByCreationDateDescending(int page, int size) {
+    public Page<Profile> returnPaginatedProfilesByCreationDateDescending(int page) {
         Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by("creationDate").descending());
-        return profileRepository.findAll(pageable);
+        Page<Profile> pageProfile = profileRepository.findAll(pageable);
+        if (pageProfile.getContent().isEmpty()) {
+            throw new ProfileNotFoundException("Profiles on page: " + (page + 1) + " not found");
+        }
+
+        return pageProfile;
     }
 
     @Override
-    public Page<Post> returnProfilePaginatedPostsByCreationDateDescending(Long id, int page, int size) {
+    public Page<Post> returnProfilePaginatedPostsByCreationDateDescending(Long profileId, int page) {
         Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by("creationDate").descending());
-        return postRepository.findPostPageByProfile_Id(id, pageable);
+        Page<Post> pageProfilePosts = postRepository.findPostPageByProfile_Id(profileId, pageable);
+        if (pageProfilePosts.getContent().isEmpty()) {
+            throw new PostNotFoundException("Posts for profile with id: " + profileId + " on page: " + (page + 1) + " not found");
+        }
+
+        return pageProfilePosts;
     }
 
     @Override
-    public Page<Follower> returnProfilePaginatedAuthorsByCreationDateDescending(Long id, int page, int size) {
+    public Page<Follower> returnProfilePaginatedAuthorsByCreationDateDescending(Long profileId, int page) {
         Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by("creationDate").descending());
-        return followerRepository.findAuthorPageById_FollowerId(id, pageable);
+        Page<Follower> pageProfileAuthors = followerRepository.findAuthorPageById_FollowerId(profileId, pageable);
+        if (pageProfileAuthors.getContent().isEmpty()) {
+            throw new AuthorNotFoundException("Authors for profile with id: " + profileId + " on page: " + (page + 1) + " not found");
+        }
+
+        return pageProfileAuthors;
     }
 
     @Override
-    public Page<Follower> returnProfilePaginatedFollowersByCreationDateDescending(Long id, int page, int size) {
+    public Page<Follower> returnProfilePaginatedFollowersByCreationDateDescending(Long profileId, int page) {
         Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by("creationDate").descending());
-        return followerRepository.findFollowerPageById_AuthorId(id, pageable);
+        Page<Follower> pageProfileFollowers = followerRepository.findFollowerPageById_AuthorId(profileId, pageable);
+        if (pageProfileFollowers.getContent().isEmpty()) {
+            throw new FollowerNotFoundException("Followers for profile with id: " + profileId + " on page: " + (page + 1) + " not found");
+        }
+
+        return pageProfileFollowers;
     }
 
     @Override
-    public Page<Comment> returnProfilePaginatedCommentsByCreationDateDescending(Long id, int page, int size) {
+    public Page<Comment> returnProfilePaginatedCommentsByCreationDateDescending(Long profileId, int page) {
         Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by("creationDate").descending());
-        return commentRepository.findCommentPageByProfile_Id(id, pageable);
+        Page<Comment> pageProfileComments = commentRepository.findCommentPageByProfile_Id(profileId, pageable);
+        if (pageProfileComments.getContent().isEmpty()) {
+            throw new CommentNotFoundException("Comments for profile with id: " + profileId + " on page: " + (page + 1) + " not found");
+        }
+
+        return pageProfileComments;
     }
 
     @Override
@@ -87,24 +116,24 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public Profile returnProfileById(Long id) {
-        Optional<Profile> optionalProfile = profileRepository.findById(id);
+    public Profile returnProfileById(Long profileId) {
+        Optional<Profile> optionalProfile = profileRepository.findById(profileId);
         if (optionalProfile.isEmpty()) {
-            throw new ProfileNotFoundException("Profile with this id: " + id + " doesn`t exist");
+            throw new ProfileNotFoundException("Profile with this id: " + profileId + " doesn`t exist");
         }
 
         return optionalProfile.get();
     }
 
     @Override
-    public Long createNewProfileAndReturnProfileId(Long id, ProfileDto profileDto) {
-        Optional<User> optionalUser = userRepository.findById(id);
+    public Long createNewProfileAndReturnProfileId(Long userId, ProfileDto profileDto) {
+        Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isEmpty()) {
-            throw new UserNotFoundException("User with id: " + id + " doesn`t exist");
+            throw new UserNotFoundException("User with id: " + userId + " doesn`t exist");
         }
-        Optional<Profile> optionalProfile = profileRepository.findByUser_Id(id);
+        Optional<Profile> optionalProfile = profileRepository.findByUser_Id(userId);
         if (optionalProfile.isPresent()) {
-            throw new ProfileForUserAlreadyExistException("Profile for user: " + id + " already exist");
+            throw new ProfileForUserAlreadyExistException("Profile for user: " + userId + " already exist");
         }
 
         User user = optionalUser.get();
@@ -120,10 +149,10 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public Long updateExistingProfile(Long id, ProfileDto profileDto) {
-        Optional<Profile> optionalProfile = profileRepository.findByUser_Id(id);
+    public Long updateExistingProfile(Long profileId, ProfileDto profileDto) {
+        Optional<Profile> optionalProfile = profileRepository.findById(profileId);
         if (optionalProfile.isEmpty()) {
-            throw new ProfileNotFoundException("Profile for user with id: " + id + " doesn`t exist");
+            throw new ProfileNotFoundException("Profile for user with id: " + profileId + " doesn`t exist");
         }
 
         Profile profile = optionalProfile.get();
@@ -134,27 +163,25 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public void deleteExistingProfile(Long id) {
-        Optional<User> optionalUser = userRepository.findById(id);
+    public void deleteExistingProfile(Long userId, Long profileId) {
+        Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isEmpty()) {
-            throw new UserNotFoundException("User with id: " + id + " doesn`t exist");
+            throw new UserNotFoundException("User with id: " + userId + " doesn`t exist");
         }
-        Optional<Profile> optionalProfile = profileRepository.findByUser_Id(id);
+        Optional<Profile> optionalProfile = profileRepository.findByUser_Id(profileId);
         if (optionalProfile.isEmpty()) {
-            throw new ProfileNotFoundException("Profile for user with id: " + id + " doesn`t exist");
+            throw new ProfileNotFoundException("Profile for user with id: " + profileId + " doesn`t exist");
         }
 
         User user = optionalUser.get();
         user.setActiveProfile(false);
-        Profile profile = optionalProfile.get();
-        profile.setUser(user);
 
-        profileRepository.delete(profile);
+        profileRepository.deleteByUserAndId(user, profileId);
     }
 
     @Override
-    public boolean isProfileExistForUser(Long id) {
-        return profileRepository.existsByUser_Id(id);
+    public boolean isProfileExistForUser(Long userId) {
+        return profileRepository.existsByUser_Id(userId);
     }
 
     @Override

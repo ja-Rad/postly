@@ -1,17 +1,17 @@
 package com.jarad.postly.repository;
 
 import com.jarad.postly.entity.Profile;
+import com.jarad.postly.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
-import java.util.Set;
 
 @Repository
 public interface ProfileRepository extends JpaRepository<Profile, Long> {
-    Optional<Profile> findByUser_Id(Long id);
+    Optional<Profile> findByUser_Id(Long userId);
 
-    boolean existsByUser_Id(Long id);
+    boolean existsByUser_Id(Long userId);
 
-    Set<Profile> findByFollowers_FollowerId(Profile followerId);
+    void deleteByUserAndId(User user, Long profileId);
 }

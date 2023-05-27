@@ -56,26 +56,26 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Page<Comment> returnPaginatedCommentsByCreationDateDescending(Long id, int page, int size) {
+    public Page<Comment> returnPaginatedCommentsByCreationDateDescending(Long postId, int page, int size) {
         Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by("creationDate").descending());
-        return commentRepository.findByPost_Id(id, pageable);
+        return commentRepository.findByPost_Id(postId, pageable);
     }
 
     @Override
-    public Post returnPostById(Long id) {
-        Optional<Post> optionalPost = postRepository.findById(id);
+    public Post returnPostById(Long postId) {
+        Optional<Post> optionalPost = postRepository.findById(postId);
         if (optionalPost.isEmpty()) {
-            throw new PostNotFoundException("Post with this id: " + id + " doesn`t exist");
+            throw new PostNotFoundException("Post with this id: " + postId + " doesn`t exist");
         }
 
         return optionalPost.get();
     }
 
     @Override
-    public Long createNewPostAndReturnPostId(Long id, PostDto postDto) {
-        Optional<Profile> optionalProfile = profileRepository.findById(id);
+    public Long createNewPostAndReturnPostId(Long userId, PostDto postDto) {
+        Optional<Profile> optionalProfile = profileRepository.findByUser_Id(userId);
         if (optionalProfile.isEmpty()) {
-            throw new ProfileNotFoundException("Profile with id: " + id + " doesn`t exist");
+            throw new ProfileNotFoundException("Profile with id: " + userId + " doesn`t exist");
         }
 
         Post post = Post.builder()
@@ -95,6 +95,7 @@ public class PostServiceImpl implements PostService {
         if (optionalPost.isEmpty()) {
             throw new PostNotFoundException("Post for user with id: " + postId + " doesn`t exist");
         }
+
         Post post = optionalPost.get();
         if (notEqual(profileId, post.getProfile().getId())) {
             throw new ProfileNotAllowedToUpdateThisPost("Profile with id: " + profileId + " not allowed to update post with id + " + postId);
@@ -108,10 +109,6 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void deleteExistingPost(Long profileId, Long postId) {
-        Optional<Profile> optionalProfile = profileRepository.findById(profileId);
-        if (optionalProfile.isEmpty()) {
-            throw new ProfileNotFoundException("Profile with id: " + profileId + " doesn`t exist");
-        }
         Optional<Post> optionalPost = postRepository.findByProfile_IdAndId(profileId, postId);
         if (optionalPost.isEmpty()) {
             throw new PostNotFoundException("Post with id: " + postId + " doesn`t exist for profile with id: " + profileId);
@@ -122,14 +119,20 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Long createNewCommentAndReturnCommentId(Long postId, Long id, CommentDto commentDto) {
-        Optional<Profile> optionalProfile = profileRepository.findById(id);
+    public boolean isPostOwnedByUser(Long userId, Long postId) {
+        return postRepository.existsByProfile_User_IdAndId(userId, postId);
+    }
+
+    @Override
+    public Long createNewCommentAndReturnCommentId(Long postId, Long userId, CommentDto commentDto) {
+        Optional<Profile> optionalProfile = profileRepository.findByUser_Id(userId);
         if (optionalProfile.isEmpty()) {
-            throw new ProfileNotFoundException("Profile with id: " + id + " doesn`t exist");
+            throw new ProfileNotFoundException("Profile with id: " + userId + " doesn`t exist");
         }
+
         Optional<Post> optionalPost = postRepository.findById(postId);
         if (optionalPost.isEmpty()) {
-            throw new PostNotFoundException("Post with id: " + id + " doesn`t exist");
+            throw new PostNotFoundException("Post with id: " + userId + " doesn`t exist");
         }
 
         Comment comment = Comment.builder()
@@ -145,7 +148,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Set<Long> returnAuthorsByUserId(Long userId) {
-        Optional<Profile> optionalProfile = profileRepository.findById(userId);
+        Optional<Profile> optionalProfile = profileRepository.findByUser_Id(userId);
         if (optionalProfile.isEmpty()) {
             throw new ProfileNotFoundException("Profile with id: " + userId + " doesn`t exist");
         }

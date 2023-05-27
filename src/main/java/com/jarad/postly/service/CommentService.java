@@ -5,9 +5,11 @@ import com.jarad.postly.util.dto.CommentDto;
 
 public interface CommentService {
 
-    Comment returnCommentById(Long id);
+    Comment returnCommentById(Long commentId);
 
-    void updateExistingComment(Long profileId, Long commentId, CommentDto commentDto);
+    void updateExistingComment(Long userId, Long commentId, CommentDto commentDto);
 
     void deleteExistingComment(Long profileId, Long commentId);
+
+    boolean isCommentOwnedByUser(Long profileId, Long commentId);
 }

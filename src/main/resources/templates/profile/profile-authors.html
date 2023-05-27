@@ -21,7 +21,7 @@
                     <a class="btn btn-primary" th:href="@{/profiles/{id}(id=${author.author.id})}">Check Author Profile</a>
                 </div>
                 <div th:if="${authorPage.totalPages > 0}" class="pagination" th:each="pageNumber : ${pageNumbers}">
-                    <a th:href="@{/profiles/{profileId}/authors(profileId=${profileId}, page=${pageNumber}, size=${authorPage.size})}" th:text="${pageNumber}" th:class="${pageNumber==authorPage.number + 1} ? active"> </a>
+                    <a th:href="@{/profiles/{profileId}/authors(profileId=${profileId}, page=${pageNumber})}" th:text="${pageNumber}" class="btn" th:classappend="${pageNumber==authorPage.number + 1} ? disabled"> </a>
                 </div>
             </div>
 
@@ -31,7 +31,7 @@
                     <a class="btn btn-primary" th:href="@{/profiles/{id}(id=${author.author.id})}">Check Author Profile</a>
                 </div>
                 <div th:if="${authorPage.totalPages > 0}" class="pagination" th:each="pageNumber : ${pageNumbers}">
-                    <a th:href="@{/profiles/{profileId}/authors(profileId=${profileId}, page=${pageNumber}, size=${authorPage.size})}" th:text="${pageNumber}" th:class="${pageNumber==authorPage.number + 1} ? active"> </a>
+                    <a th:href="@{/profiles/{profileId}/authors(profileId=${profileId}, page=${pageNumber})}" th:text="${pageNumber}" class="btn" th:classappend="${pageNumber==authorPage.number + 1} ? disabled"> </a>
                 </div>
             </div>
         </main>

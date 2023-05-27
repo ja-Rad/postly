@@ -22,10 +22,10 @@
                 <p th:text="${post.description}"></p>
                 <a class="btn btn-primary" th:href="@{/posts/{id}/comments(id=${post.id})}">Check Comment Section</a>
             </div>
-            <form th:action="@{/posts/{id}/update-form(id=${postId})}" th:method="get">
+            <form th:action="@{/posts/{id}/update-form(id=${post.id})}" th:method="get">
                 <p><input type="submit" value="Edit Post" /></p>
             </form>
-            <form th:action="@{/posts/{id}(id=${postId})}" th:method="delete">
+            <form th:action="@{/posts/{id}(id=${post.id})}" th:method="delete">
                 <p><input type="submit" value="Delete Post" /></p>
             </form>
         </div>

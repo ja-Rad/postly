@@ -11,10 +11,6 @@ import com.jarad.postly.repository.PostRepository;
 import com.jarad.postly.repository.ProfileRepository;
 import com.jarad.postly.repository.UserRepository;
 import com.jarad.postly.util.dto.ProfileDto;
-import com.jarad.postly.util.exception.AuthorNotFoundException;
-import com.jarad.postly.util.exception.CommentNotFoundException;
-import com.jarad.postly.util.exception.FollowerNotFoundException;
-import com.jarad.postly.util.exception.PostNotFoundException;
 import com.jarad.postly.util.exception.ProfileForUserAlreadyExistException;
 import com.jarad.postly.util.exception.ProfileNotFoundException;
 import com.jarad.postly.util.exception.UserNotFoundException;
@@ -60,9 +56,6 @@ public class ProfileServiceImpl implements ProfileService {
     public Page<Profile> returnPaginatedProfilesByCreationDateDescending(int page) {
         Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by("creationDate").descending());
         Page<Profile> pageProfile = profileRepository.findAll(pageable);
-        if (pageProfile.getContent().isEmpty()) {
-            throw new ProfileNotFoundException("Profiles on page: " + (page + 1) + " not found");
-        }
 
         return pageProfile;
     }
@@ -71,9 +64,6 @@ public class ProfileServiceImpl implements ProfileService {
     public Page<Post> returnProfilePaginatedPostsByCreationDateDescending(Long profileId, int page) {
         Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by("creationDate").descending());
         Page<Post> pageProfilePosts = postRepository.findPostPageByProfile_Id(profileId, pageable);
-        if (pageProfilePosts.getContent().isEmpty()) {
-            throw new PostNotFoundException("Posts for profile with id: " + profileId + " on page: " + (page + 1) + " not found");
-        }
 
         return pageProfilePosts;
     }
@@ -82,9 +72,6 @@ public class ProfileServiceImpl implements ProfileService {
     public Page<Follower> returnProfilePaginatedAuthorsByCreationDateDescending(Long profileId, int page) {
         Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by("creationDate").descending());
         Page<Follower> pageProfileAuthors = followerRepository.findAuthorPageById_FollowerId(profileId, pageable);
-        if (pageProfileAuthors.getContent().isEmpty()) {
-            throw new AuthorNotFoundException("Authors for profile with id: " + profileId + " on page: " + (page + 1) + " not found");
-        }
 
         return pageProfileAuthors;
     }
@@ -93,9 +80,6 @@ public class ProfileServiceImpl implements ProfileService {
     public Page<Follower> returnProfilePaginatedFollowersByCreationDateDescending(Long profileId, int page) {
         Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by("creationDate").descending());
         Page<Follower> pageProfileFollowers = followerRepository.findFollowerPageById_AuthorId(profileId, pageable);
-        if (pageProfileFollowers.getContent().isEmpty()) {
-            throw new FollowerNotFoundException("Followers for profile with id: " + profileId + " on page: " + (page + 1) + " not found");
-        }
 
         return pageProfileFollowers;
     }
@@ -104,9 +88,6 @@ public class ProfileServiceImpl implements ProfileService {
     public Page<Comment> returnProfilePaginatedCommentsByCreationDateDescending(Long profileId, int page) {
         Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by("creationDate").descending());
         Page<Comment> pageProfileComments = commentRepository.findCommentPageByProfile_Id(profileId, pageable);
-        if (pageProfileComments.getContent().isEmpty()) {
-            throw new CommentNotFoundException("Comments for profile with id: " + profileId + " on page: " + (page + 1) + " not found");
-        }
 
         return pageProfileComments;
     }

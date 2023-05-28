@@ -20,6 +20,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashSet;
@@ -30,6 +31,7 @@ import static org.apache.commons.lang3.ObjectUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @Service
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -61,6 +63,7 @@ public class UserServiceImpl implements UserService {
         return userRoles;
     }
 
+    @Transactional
     @Override
     public void registerNewUserAccount(UserDto userDto) {
         String userEmail = userDto.getEmail();
@@ -82,6 +85,7 @@ public class UserServiceImpl implements UserService {
         sendVerificationEmail(user);
     }
 
+    @Transactional
     @Override
     public void resetPasswordForExistingUser(UserDtoOnlyEmail userDto) {
         String userEmail = userDto.getEmail();
@@ -98,6 +102,7 @@ public class UserServiceImpl implements UserService {
         sendForgotPasswordEmail(user);
     }
 
+    @Transactional
     @Override
     public void sendVerificationEmail(User user) {
         MimeMessage message = mailSender.createMimeMessage();
@@ -108,6 +113,7 @@ public class UserServiceImpl implements UserService {
         mailSender.send(message);
     }
 
+    @Transactional
     @Override
     public void sendForgotPasswordEmail(User user) {
         MimeMessage message = mailSender.createMimeMessage();
@@ -123,6 +129,7 @@ public class UserServiceImpl implements UserService {
      *
      * @return ROLE_USER from table 'roles'
      */
+    @Transactional
     @Override
     public Role getRoleUser() {
         Optional<Role> optionalRoleUser = roleRepository.findByName(SecurityRole.ROLE_USER.toString());
@@ -205,6 +212,7 @@ public class UserServiceImpl implements UserService {
      * @param verificationCode that provided in /verify?code=
      * @return true if verification code is in database, user is present and user is not enabled, false if otherwise
      */
+    @Transactional
     @Override
     public boolean verifyNewUser(String verificationCode) {
         if (isNotEmpty(verificationCode)) {
@@ -234,6 +242,7 @@ public class UserServiceImpl implements UserService {
      * @param verificationCode is provided in /verify?code=
      * @return true if verification code is in database, user is present and user is enabled, false if otherwise
      */
+    @Transactional
     @Override
     public boolean verifyForgotPassword(String verificationCode, UserDtoOnlyPassword userDto) {
         if (isNotEmpty(verificationCode)) {
@@ -251,7 +260,6 @@ public class UserServiceImpl implements UserService {
                 userRepository.save(user);
                 return true;
             }
-
         }
         return false;
     }

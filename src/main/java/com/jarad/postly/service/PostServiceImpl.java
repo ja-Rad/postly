@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.Collections;
@@ -30,6 +31,7 @@ import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.lang3.ObjectUtils.notEqual;
 
 @Service
+@Transactional(readOnly = true)
 public class PostServiceImpl implements PostService {
     public static final int PAGE_SIZE = 10;
     private final PostRepository postRepository;
@@ -72,6 +74,7 @@ public class PostServiceImpl implements PostService {
         return optionalPost.get();
     }
 
+    @Transactional
     @Override
     public Long createNewPostAndReturnPostId(Long userId, PostDto postDto) {
         Optional<Profile> optionalProfile = profileRepository.findByUser_Id(userId);
@@ -90,6 +93,7 @@ public class PostServiceImpl implements PostService {
         return savedPost.getId();
     }
 
+    @Transactional
     @Override
     public void updateExistingPost(Long profileId, Long postId, PostDto postDto) {
         Optional<Post> optionalPost = postRepository.findById(postId);
@@ -108,6 +112,7 @@ public class PostServiceImpl implements PostService {
         postRepository.save(post);
     }
 
+    @Transactional
     @Override
     public void deleteExistingPost(Long profileId, Long postId) {
         Optional<Post> optionalPost = postRepository.findByProfile_IdAndId(profileId, postId);
@@ -124,6 +129,7 @@ public class PostServiceImpl implements PostService {
         return postRepository.existsByProfile_User_IdAndId(userId, postId);
     }
 
+    @Transactional
     @Override
     public Long createNewCommentAndReturnCommentId(Long postId, Long userId, CommentDto commentDto) {
         Optional<Profile> optionalProfile = profileRepository.findByUser_Id(userId);

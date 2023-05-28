@@ -6,10 +6,12 @@ import com.jarad.postly.util.dto.CommentDto;
 import com.jarad.postly.util.exception.CommentNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
+@Transactional(readOnly = true)
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
@@ -29,6 +31,7 @@ public class CommentServiceImpl implements CommentService {
         return optionalComment.get();
     }
 
+    @Transactional
     @Override
     public void updateExistingComment(Long userId, Long commentId, CommentDto commentDto) {
         Optional<Comment> optionalComment = commentRepository.findByProfile_User_IdAndId(userId, commentId);
@@ -41,6 +44,7 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.save(comment);
     }
 
+    @Transactional
     @Override
     public void deleteExistingComment(Long profileId, Long commentId) {
         Optional<Comment> optionalComment = commentRepository.findByProfile_User_IdAndId(profileId, commentId);

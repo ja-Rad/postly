@@ -24,7 +24,7 @@ public interface PostService {
 
     void updateExistingPost(Long profileId, Long postId, PostDto postDto);
 
-    Long createNewCommentAndReturnCommentId(Long postId, Long userId, CommentDto commentDto);
+    Long createNewCommentAndReturnCommentId(Long userId, Long postId, CommentDto commentDto);
 
     void deleteExistingPost(Long profileId, Long postId);
 

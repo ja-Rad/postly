@@ -15,7 +15,7 @@
         </header>
         <main>
             <h2>Update a Post:</h2>
-            <form th:action="@{/posts/{id}(id=${post.id})}" th:object="${post}" th:method="put" class="form">
+            <form th:action="@{/posts/{id}(id=${postId})}" th:object="${post}" th:method="put" class="form">
                 <div class="form-group">
                     <label for="title">Title</label>
                     <input class="form-control" type="text" th:field="*{title}" id="title" placeholder="Type title here:" />

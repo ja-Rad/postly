@@ -89,6 +89,7 @@ public class PostController {
                                     Model model) {
         Post post = postService.returnPostById(postId);
         model.addAttribute("post", post);
+        model.addAttribute("postId", postId);
 
         return POST_SUBFOLDER_PREFIX + "post-update-form";
     }
@@ -184,7 +185,7 @@ public class PostController {
         }
 
         Long userId = userDetails.getUserId();
-        Long commentId = postService.createNewCommentAndReturnCommentId(postId, userId, commentDto);
+        Long commentId = postService.createNewCommentAndReturnCommentId(userId, postId, commentDto);
 
         return "redirect:/comments/" + commentId;
     }

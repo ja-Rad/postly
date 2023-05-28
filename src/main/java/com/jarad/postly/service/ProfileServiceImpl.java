@@ -56,7 +56,6 @@ public class ProfileServiceImpl implements ProfileService {
     public Page<Profile> returnPaginatedProfilesByCreationDateDescending(int page) {
         Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by("creationDate").descending());
         Page<Profile> pageProfile = profileRepository.findAll(pageable);
-
         return pageProfile;
     }
 

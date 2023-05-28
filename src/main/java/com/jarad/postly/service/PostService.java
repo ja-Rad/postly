@@ -12,9 +12,9 @@ import java.util.Set;
 public interface PostService {
     List<Integer> returnListOfPageNumbers(int totalPages);
 
-    Page<Post> returnPaginatedPostsByCreationDateDescending(int page, int size);
+    Page<Post> returnPaginatedPostsByCreationDateDescending(int page);
 
-    Page<Comment> returnPaginatedCommentsByCreationDateDescending(Long id, int page, int size);
+    Page<Comment> returnPaginatedCommentsByCreationDateDescending(Long postId, int page);
 
     Set<Long> returnAuthorsByUserId(Long userId);
 

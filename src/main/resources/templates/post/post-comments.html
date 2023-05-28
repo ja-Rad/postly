@@ -44,7 +44,7 @@
                     <p><input type="submit" value="Add Comment" /></p>
                 </form>
             </div>
-            <div th:if="${commentPage.totalPages > 0}" class="pagination" th:each="pageNumber : ${pageNumbers}">
+            <div th:if="${pageNumbers}" class="pagination" th:each="pageNumber : ${pageNumbers}">
                 <a th:href="@{/posts/{id}/comments(id=${postId}, page=${pageNumber})}" th:text="${pageNumber}" class="btn" th:classappend="${pageNumber==commentPage.number + 1} ? disabled"> </a>
             </div>
         </main>

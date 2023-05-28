@@ -17,28 +17,26 @@
             <h2>Profiles</h2>
 
             <div th:each="profile : ${profilePage.content}">
-                <div th:if="${profile.id} != ${userId}">
-                    <p th:text="${profile.username}"></p>
-                    <p th:text="${profile.creationDate}"></p>
-                    <div th:if="${not #lists.isEmpty(authorsByUserId)}">
-                        <div th:if="${#lists.contains(authorsByUserId, profile.id)}">
-                            <form action="#" th:method="delete" th:action="@{/followers/{id}(id=${profile.id})}">
-                                <div>
-                                    <input type="submit" value="Unfollow Author" />
-                                </div>
-                            </form>
-                        </div>
-                        <div th:unless="${#lists.contains(authorsByUserId, profile.id)}">
-                            <form action="#" th:method="post" th:action="@{/followers/{id}(id=${profile.id})}">
-                                <div>
-                                    <input type="submit" value="Follow Author" />
-                                </div>
-                            </form>
-                        </div>
+                <p th:text="${profile.username}"></p>
+                <p th:text="${profile.creationDate}"></p>
+                <div th:if="${not #lists.isEmpty(authorsByUserId)}">
+                    <div th:if="${#lists.contains(authorsByUserId, profile.id)}">
+                        <form action="#" th:method="delete" th:action="@{/followers/{id}(id=${profile.id})}">
+                            <div>
+                                <input type="submit" value="Unfollow Author" />
+                            </div>
+                        </form>
+                    </div>
+                    <div th:unless="${#lists.contains(authorsByUserId, profile.id)}">
+                        <form action="#" th:method="post" th:action="@{/followers/{id}(id=${profile.id})}">
+                            <div>
+                                <input type="submit" value="Follow Author" />
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
-            <div th:if="${profilePage.totalPages > 0}" class="pagination" th:each="pageNumber : ${pageNumbers}">
+            <div th:if="${pageNumbers}" class="pagination" th:each="pageNumber : ${pageNumbers}">
                 <a th:href="@{/profiles(page=${pageNumber})}" th:text="${pageNumber}" class="btn" th:classappend="${pageNumber==profilePage.number + 1} ? disabled"> </a>
             </div>
         </main>

@@ -54,7 +54,7 @@ public class ProfileController {
         model.addAttribute("profilePage", profilePage);
 
         int totalPages = profilePage.getTotalPages();
-        if (totalPages > 0) {
+        if (totalPages > 1) {
             List<Integer> pageNumbers = profileService.returnListOfPageNumbers(totalPages);
             model.addAttribute("pageNumbers", pageNumbers);
         }
@@ -97,7 +97,7 @@ public class ProfileController {
         model.addAttribute("postPage", postPage);
 
         int totalPages = postPage.getTotalPages();
-        if (totalPages > 0) {
+        if (totalPages > 1) {
             List<Integer> pageNumbers = profileService.returnListOfPageNumbers(totalPages);
             model.addAttribute("pageNumbers", pageNumbers);
         }
@@ -121,7 +121,7 @@ public class ProfileController {
         model.addAttribute("authorPage", authorPage);
 
         int totalPages = authorPage.getTotalPages();
-        if (totalPages > 0) {
+        if (totalPages > 1) {
             List<Integer> pageNumbers = profileService.returnListOfPageNumbers(totalPages);
             model.addAttribute("pageNumbers", pageNumbers);
         }
@@ -145,7 +145,7 @@ public class ProfileController {
         model.addAttribute("followerPage", followerPage);
 
         int totalPages = followerPage.getTotalPages();
-        if (totalPages > 0) {
+        if (totalPages > 1) {
             List<Integer> pageNumbers = profileService.returnListOfPageNumbers(totalPages);
             model.addAttribute("pageNumbers", pageNumbers);
         }
@@ -164,12 +164,12 @@ public class ProfileController {
         if (profileService.isUserOwnsThisProfile(userId, profileId)) {
             model.addAttribute("personalProfile", true);
         }
-        
+
         Page<Comment> commentPage = profileService.returnProfilePaginatedCommentsByCreationDateDescending(profileId, page - 1);
         model.addAttribute("commentPage", commentPage);
 
         int totalPages = commentPage.getTotalPages();
-        if (totalPages > 0) {
+        if (totalPages > 1) {
             List<Integer> pageNumbers = profileService.returnListOfPageNumbers(totalPages);
             model.addAttribute("pageNumbers", pageNumbers);
         }

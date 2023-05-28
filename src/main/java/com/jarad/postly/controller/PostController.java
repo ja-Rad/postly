@@ -40,18 +40,15 @@ public class PostController {
     @GetMapping("/posts")
     public String getPaginatedPosts(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                     @RequestParam(value = "page", defaultValue = "1") int page,
-                                    @RequestParam(value = "size", defaultValue = "10") int size,
                                     Model model) {
         Long userId = userDetails.getUserId();
-        model.addAttribute("userId", userId);
-
         Set<Long> authorsByUserId = postService.returnAuthorsByUserId(userId);
         model.addAttribute("authorsByUserId", authorsByUserId);
 
-        Page<Post> postPage = postService.returnPaginatedPostsByCreationDateDescending(page - 1, size);
+        Page<Post> postPage = postService.returnPaginatedPostsByCreationDateDescending(page - 1);
         int totalPages = postPage.getTotalPages();
 
-        if (totalPages > 0) {
+        if (totalPages > 1) {
             List<Integer> pageNumbers = postService.returnListOfPageNumbers(totalPages);
             model.addAttribute("pageNumbers", pageNumbers);
         }
@@ -98,19 +95,16 @@ public class PostController {
     public String getPostCommentsById(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                       @PathVariable("id") Long postId,
                                       Model model,
-                                      @RequestParam(value = "page", defaultValue = "1") int page,
-                                      @RequestParam(value = "size", defaultValue = "10") int size) {
+                                      @RequestParam(value = "page", defaultValue = "1") int page) {
 
         Long userId = userDetails.getUserId();
-        model.addAttribute("userId", userId);
-
         Set<Long> authorsByUserId = postService.returnAuthorsByUserId(userId);
         model.addAttribute("authorsByUserId", authorsByUserId);
 
-        Page<Comment> commentPage = postService.returnPaginatedCommentsByCreationDateDescending(postId, page - 1, size);
+        Page<Comment> commentPage = postService.returnPaginatedCommentsByCreationDateDescending(postId, page - 1);
         int totalPages = commentPage.getTotalPages();
 
-        if (totalPages > 0) {
+        if (totalPages > 1) {
             List<Integer> pageNumbers = postService.returnListOfPageNumbers(totalPages);
             model.addAttribute("pageNumbers", pageNumbers);
         }

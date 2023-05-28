@@ -51,13 +51,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Page<Post> returnPaginatedPostsByCreationDateDescending(int page, int size) {
+    public Page<Post> returnPaginatedPostsByCreationDateDescending(int page) {
         Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by("creationDate").descending());
         return postRepository.findAll(pageable);
     }
 
     @Override
-    public Page<Comment> returnPaginatedCommentsByCreationDateDescending(Long postId, int page, int size) {
+    public Page<Comment> returnPaginatedCommentsByCreationDateDescending(Long postId, int page) {
         Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by("creationDate").descending());
         return commentRepository.findByPost_Id(postId, pageable);
     }

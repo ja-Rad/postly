@@ -23,6 +23,8 @@ public interface ProfileService {
 
     List<Integer> returnListOfPageNumbers(int totalPages);
 
+    boolean isUserOwnsThisProfile(Long userId, Long profileId);
+
     Set<Long> returnAuthorsByUserId(Long userId);
 
     Profile returnProfileById(Long profileId);

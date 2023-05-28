@@ -24,8 +24,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -35,6 +37,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
 @Service
+@Transactional(readOnly = true)
 public class ProfileServiceImpl implements ProfileService {
 
     public static final int PAGE_SIZE = 10;
@@ -125,6 +128,7 @@ public class ProfileServiceImpl implements ProfileService {
         return optionalProfile.get();
     }
 
+    @Transactional
     @Override
     public Long createNewProfileAndReturnProfileId(Long userId, ProfileDto profileDto) {
         Optional<User> optionalUser = userRepository.findById(userId);
@@ -148,6 +152,7 @@ public class ProfileServiceImpl implements ProfileService {
         return savedProfile.getId();
     }
 
+    @Transactional
     @Override
     public Long updateExistingProfile(Long profileId, ProfileDto profileDto) {
         Optional<Profile> optionalProfile = profileRepository.findById(profileId);
@@ -162,6 +167,7 @@ public class ProfileServiceImpl implements ProfileService {
         return savedProfile.getId();
     }
 
+    @Transactional
     @Override
     public void deleteExistingProfile(Long userId, Long profileId) {
         Optional<User> optionalUser = userRepository.findById(userId);
@@ -185,15 +191,23 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
+    public boolean isUserOwnsThisProfile(Long userId, Long profileId) {
+        return profileRepository.existsByUser_IdAndId(userId, profileId);
+    }
+
+    @Override
     public Set<Long> returnAuthorsByUserId(Long userId) {
-        Optional<Profile> optionalProfile = profileRepository.findById(userId);
-        if (optionalProfile.isEmpty()) {
-            throw new ProfileNotFoundException("Profile with id: " + userId + " doesn`t exist");
+        Optional<Profile> optionalProfile = profileRepository.findByUser_Id(userId);
+
+        if (optionalProfile.isPresent()) {
+            Profile profile = optionalProfile.get();
+
+            return profile.getFollowers().stream()
+                    .map(follower -> follower.getId().getAuthorId())
+                    .collect(toSet());
+
         }
 
-        Profile profile = optionalProfile.get();
-        return profile.getFollowers().stream()
-                .map(follower -> follower.getId().getAuthorId())
-                .collect(toSet());
+        return Collections.emptySet();
     }
 }

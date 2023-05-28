@@ -19,8 +19,8 @@ public class UserDetailsImpl implements UserDetails {
         this.user = user;
     }
 
-    @Override
     @Transactional
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         for (Role role : user.getRoles()) {

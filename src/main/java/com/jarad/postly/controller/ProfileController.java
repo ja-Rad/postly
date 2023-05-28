@@ -74,7 +74,7 @@ public class ProfileController {
         Profile profile = profileService.returnProfileById(profileId);
         model.addAttribute("profile", profile);
 
-        if (profileService.isProfileExistForUser(userId)) {
+        if (profileService.isUserOwnsThisProfile(userId, profileId)) {
             model.addAttribute("personalProfile", true);
         }
 
@@ -89,7 +89,7 @@ public class ProfileController {
         Long userId = userDetails.getUserId();
         model.addAttribute("profileId", profileId);
 
-        if (profileService.isProfileExistForUser(userId)) {
+        if (profileService.isUserOwnsThisProfile(userId, profileId)) {
             model.addAttribute("personalProfile", true);
         }
 
@@ -113,7 +113,7 @@ public class ProfileController {
         Long userId = userDetails.getUserId();
         model.addAttribute("profileId", profileId);
 
-        if (profileService.isProfileExistForUser(userId)) {
+        if (profileService.isUserOwnsThisProfile(userId, profileId)) {
             model.addAttribute("personalProfile", true);
         }
 
@@ -137,7 +137,7 @@ public class ProfileController {
         Long userId = userDetails.getUserId();
         model.addAttribute("profileId", profileId);
 
-        if (profileService.isProfileExistForUser(userId)) {
+        if (profileService.isUserOwnsThisProfile(userId, profileId)) {
             model.addAttribute("personalProfile", true);
         }
 
@@ -161,10 +161,10 @@ public class ProfileController {
         Long userId = userDetails.getUserId();
         model.addAttribute("profileId", profileId);
 
-        if (profileService.isProfileExistForUser(userId)) {
+        if (profileService.isUserOwnsThisProfile(userId, profileId)) {
             model.addAttribute("personalProfile", true);
         }
-
+        
         Page<Comment> commentPage = profileService.returnProfilePaginatedCommentsByCreationDateDescending(profileId, page - 1);
         model.addAttribute("commentPage", commentPage);
 

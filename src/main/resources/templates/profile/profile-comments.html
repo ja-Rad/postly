@@ -35,7 +35,7 @@
                     <a class="btn btn-primary" th:href="@{/posts/{id}(id=${comment.post.id})}">Check Post</a>
                 </div>
                 <div th:if="${commentPage.totalPages > 0}" class="pagination" th:each="pageNumber : ${pageNumbers}">
-                    <a th:href="@{/profiles/{profileId}/comments(profileId=${profileId}, page=${pageNumber}, size=${commentPage.size})}" th:text="${pageNumber}" class="btn" th:classappend="${pageNumber==commentPage.number + 1} ? disabled"> </a>
+                    <a th:href="@{/profiles/{profileId}/comments(profileId=${profileId}, page=${pageNumber})}" th:text="${pageNumber}" class="btn" th:classappend="${pageNumber==commentPage.number + 1} ? disabled"> </a>
                 </div>
             </div>
         </main>

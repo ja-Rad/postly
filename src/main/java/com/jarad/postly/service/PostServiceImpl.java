@@ -19,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -149,13 +150,15 @@ public class PostServiceImpl implements PostService {
     @Override
     public Set<Long> returnAuthorsByUserId(Long userId) {
         Optional<Profile> optionalProfile = profileRepository.findByUser_Id(userId);
-        if (optionalProfile.isEmpty()) {
-            throw new ProfileNotFoundException("Profile with id: " + userId + " doesn`t exist");
+
+        if (optionalProfile.isPresent()) {
+            Profile profile = optionalProfile.get();
+
+            return profile.getFollowers().stream()
+                    .map(follower -> follower.getId().getAuthorId())
+                    .collect(toSet());
         }
 
-        Profile profile = optionalProfile.get();
-        return profile.getFollowers().stream()
-                .map(follower -> follower.getId().getAuthorId())
-                .collect(toSet());
+        return Collections.emptySet();
     }
 }

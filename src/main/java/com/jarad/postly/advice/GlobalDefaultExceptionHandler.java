@@ -4,6 +4,7 @@ import com.jarad.postly.util.exception.AuthorNotFoundException;
 import com.jarad.postly.util.exception.CommentNotFoundException;
 import com.jarad.postly.util.exception.EmailNotFoundException;
 import com.jarad.postly.util.exception.FollowerNotFoundException;
+import com.jarad.postly.util.exception.FollowerServiceException;
 import com.jarad.postly.util.exception.PostNotFoundException;
 import com.jarad.postly.util.exception.ProfileNotFoundException;
 import com.jarad.postly.util.exception.UserNotFoundException;
@@ -36,6 +37,40 @@ class GlobalDefaultExceptionHandler {
     })
     public String errorHandler404(HttpServletRequest request, Exception ex, Model model) {
         HttpStatus status = HttpStatus.NOT_FOUND;
+        model.addAttribute("status", status.value());
+        model.addAttribute("url", request.getRequestURL());
+        model.addAttribute("message", ex.getMessage());
+
+        return DEFAULT_ERROR_VIEW;
+    }
+
+    /**
+     * Error Handler for status code: 403 - Forbidden
+     *
+     * @return error page located at templates/error.html
+     */
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler({
+            FollowerServiceException.class
+    })
+    public String errorHandler403(HttpServletRequest request, Exception ex, Model model) {
+        HttpStatus status = HttpStatus.FORBIDDEN;
+        model.addAttribute("status", status.value());
+        model.addAttribute("url", request.getRequestURL());
+        model.addAttribute("message", ex.getMessage());
+
+        return DEFAULT_ERROR_VIEW;
+    }
+
+    /**
+     * Error Handler for status code: 500 - Internal Server Error
+     *
+     * @return error page located at templates/error.html
+     */
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler({RuntimeException.class})
+    public String errorHandler500(HttpServletRequest request, Exception ex, Model model) {
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
         model.addAttribute("status", status.value());
         model.addAttribute("url", request.getRequestURL());
         model.addAttribute("message", ex.getMessage());

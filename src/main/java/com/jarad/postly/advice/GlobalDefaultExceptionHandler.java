@@ -21,6 +21,24 @@ class GlobalDefaultExceptionHandler {
     public static final String DEFAULT_ERROR_VIEW = "error";
 
     /**
+     * Error Handler for status code: 403 - Forbidden
+     *
+     * @return error page located at templates/error.html
+     */
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler({
+            FollowerServiceException.class
+    })
+    public String errorHandler403(HttpServletRequest request, Exception ex, Model model) {
+        HttpStatus status = HttpStatus.FORBIDDEN;
+        model.addAttribute("status", status.value());
+        model.addAttribute("url", request.getRequestURL());
+        model.addAttribute("message", ex.getMessage());
+
+        return DEFAULT_ERROR_VIEW;
+    }
+
+    /**
      * Error Handler for status code: 404 - Not Found
      *
      * @return error page located at templates/error.html
@@ -37,24 +55,6 @@ class GlobalDefaultExceptionHandler {
     })
     public String errorHandler404(HttpServletRequest request, Exception ex, Model model) {
         HttpStatus status = HttpStatus.NOT_FOUND;
-        model.addAttribute("status", status.value());
-        model.addAttribute("url", request.getRequestURL());
-        model.addAttribute("message", ex.getMessage());
-
-        return DEFAULT_ERROR_VIEW;
-    }
-
-    /**
-     * Error Handler for status code: 403 - Forbidden
-     *
-     * @return error page located at templates/error.html
-     */
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    @ExceptionHandler({
-            FollowerServiceException.class
-    })
-    public String errorHandler403(HttpServletRequest request, Exception ex, Model model) {
-        HttpStatus status = HttpStatus.FORBIDDEN;
         model.addAttribute("status", status.value());
         model.addAttribute("url", request.getRequestURL());
         model.addAttribute("message", ex.getMessage());

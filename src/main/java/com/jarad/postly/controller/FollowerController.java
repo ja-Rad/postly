@@ -3,6 +3,7 @@ package com.jarad.postly.controller;
 import com.jarad.postly.security.UserDetailsImpl;
 import com.jarad.postly.service.FollowerService;
 import com.jarad.postly.util.annotation.LogExecutionTime;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 
 @Controller
+@Slf4j
 public class FollowerController {
 
     private final FollowerService followerService;
@@ -40,6 +42,8 @@ public class FollowerController {
     public String addFollower(@AuthenticationPrincipal UserDetailsImpl userDetails,
                               @PathVariable("id") Long authorId,
                               @RequestHeader(HttpHeaders.REFERER) String referer) {
+        log.info("Entering addFollower");
+
         Long userId = userDetails.getUserId();
         followerService.addFollowerToAuthor(userId, authorId);
         String trimmedRefererPath = getTrimmedRefererPath(referer);
@@ -52,6 +56,8 @@ public class FollowerController {
     public String deleteFollower(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                  @PathVariable("id") Long authorId,
                                  @RequestHeader(HttpHeaders.REFERER) String referer) {
+        log.info("Entering deleteFollower");
+
         Long userId = userDetails.getUserId();
         followerService.deleteFollowerFromAuthor(userId, authorId);
         String trimmedRefererPath = getTrimmedRefererPath(referer);

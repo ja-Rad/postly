@@ -10,6 +10,7 @@ import com.jarad.postly.util.annotation.LogExecutionTime;
 import com.jarad.postly.util.dto.ProfileDto;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,6 +29,7 @@ import java.util.List;
 import java.util.Set;
 
 @Controller
+@Slf4j
 public class ProfileController {
 
     private final ProfileService profileService;
@@ -46,6 +48,8 @@ public class ProfileController {
     public String getPaginatedProfiles(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                        @RequestParam(value = "page", defaultValue = "1") int page,
                                        Model model) {
+        log.info("Entering getPaginatedProfiles");
+
         Long userId = userDetails.getUserId();
         model.addAttribute("userId", userId);
 
@@ -69,8 +73,9 @@ public class ProfileController {
     public String getProfileById(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                  @PathVariable("id") Long profileId,
                                  Model model) {
-        Long userId = userDetails.getUserId();
+        log.info("Entering getProfileById");
 
+        Long userId = userDetails.getUserId();
         Set<Long> authorsByUserId = profileService.returnAuthorsByUserId(userId);
         model.addAttribute("authorsByUserId", authorsByUserId);
 
@@ -90,6 +95,8 @@ public class ProfileController {
                                   @PathVariable("id") Long profileId,
                                   @RequestParam(value = "page", defaultValue = "1") int page,
                                   Model model) {
+        log.info("Entering getProfilePosts");
+
         Long userId = userDetails.getUserId();
         model.addAttribute("profileId", profileId);
 
@@ -115,6 +122,8 @@ public class ProfileController {
                                     @PathVariable("id") Long profileId,
                                     @RequestParam(value = "page", defaultValue = "1") int page,
                                     Model model) {
+        log.info("Entering getProfileAuthors");
+
         Long userId = userDetails.getUserId();
         model.addAttribute("profileId", profileId);
 
@@ -140,6 +149,8 @@ public class ProfileController {
                                       @PathVariable("id") Long profileId,
                                       @RequestParam(value = "page", defaultValue = "1") int page,
                                       Model model) {
+        log.info("Entering getProfileFollowers");
+
         Long userId = userDetails.getUserId();
         model.addAttribute("profileId", profileId);
 
@@ -165,6 +176,8 @@ public class ProfileController {
                                      @PathVariable("id") Long profileId,
                                      @RequestParam(value = "page", defaultValue = "1") int page,
                                      Model model) {
+        log.info("Entering getProfileComments");
+
         Long userId = userDetails.getUserId();
         model.addAttribute("profileId", profileId);
 
@@ -188,8 +201,12 @@ public class ProfileController {
     @LogExecutionTime
     public String getProfileForm(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                  Model model) {
+        log.info("Entering getProfileForm");
+
         Long userId = userDetails.getUserId();
         if (profileService.isProfileExistForUser(userId)) {
+            log.info("Profile already exists for user, redirecting to /profiles");
+
             return "redirect:/profiles";
         }
 
@@ -203,6 +220,8 @@ public class ProfileController {
     @LogExecutionTime
     public String getProfileUpdateForm(@PathVariable("id") Long profileId,
                                        Model model) {
+        log.info("Entering getProfileUpdateForm");
+
         Profile profile = profileService.returnProfileById(profileId);
         model.addAttribute("profile", profile);
         model.addAttribute("profileId", profileId);
@@ -219,7 +238,11 @@ public class ProfileController {
                                    HttpSession session,
                                    @ModelAttribute("profile") @Valid ProfileDto profileDto,
                                    BindingResult bindingResult) {
+        log.info("Entering createNewProfile");
+
         if (bindingResult.hasErrors()) {
+            log.info("Validation errors occurred");
+
             return PROFILE_SUBFOLDER_PREFIX + "profile-create-form";
         }
 
@@ -236,7 +259,11 @@ public class ProfileController {
                                         @ModelAttribute("profile") @Valid ProfileDto profileDto,
                                         BindingResult bindingResult,
                                         Model model) {
+        log.info("Entering updateExistingProfile");
+
         if (bindingResult.hasErrors()) {
+            log.info("Validation errors occurred");
+
             model.addAttribute("profileId", profileId);
             return PROFILE_SUBFOLDER_PREFIX + "profile-update-form";
         }
@@ -251,6 +278,8 @@ public class ProfileController {
     public String deleteExistingProfile(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                         @PathVariable("id") Long profileId,
                                         HttpSession session) {
+        log.info("Entering deleteExistingProfile");
+
         Long userId = userDetails.getUserId();
         profileService.deleteExistingProfile(userId, profileId);
         session.setAttribute("usersActiveProfileId", null);

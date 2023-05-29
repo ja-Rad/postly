@@ -8,6 +8,7 @@ import com.jarad.postly.util.annotation.LogExecutionTime;
 import com.jarad.postly.util.dto.CommentDto;
 import com.jarad.postly.util.dto.PostDto;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,6 +27,7 @@ import java.util.List;
 import java.util.Set;
 
 @Controller
+@Slf4j
 public class PostController {
     private final PostService postService;
     private final String POST_SUBFOLDER_PREFIX = "post/";
@@ -43,6 +45,8 @@ public class PostController {
     public String getPaginatedPosts(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                     @RequestParam(value = "page", defaultValue = "1") int page,
                                     Model model) {
+        log.info("Entering getPaginatedPosts");
+
         Long userId = userDetails.getUserId();
         Set<Long> authorsByUserId = postService.returnAuthorsByUserId(userId);
         model.addAttribute("authorsByUserId", authorsByUserId);
@@ -64,6 +68,7 @@ public class PostController {
     public String getPostById(@AuthenticationPrincipal UserDetailsImpl userDetails,
                               @PathVariable("id") Long postId,
                               Model model) {
+        log.info("Entering getPostById");
 
         Long userId = userDetails.getUserId();
         Post post = postService.returnPostById(postId);
@@ -79,6 +84,8 @@ public class PostController {
     @GetMapping("/posts/create-form")
     @LogExecutionTime
     public String getPostCreateForm(Model model) {
+        log.info("Entering getPostCreateForm");
+
         PostDto postDto = new PostDto();
         model.addAttribute("post", postDto);
 
@@ -89,6 +96,8 @@ public class PostController {
     @LogExecutionTime
     public String getPostUpdateForm(@PathVariable("id") Long postId,
                                     Model model) {
+        log.info("Entering getPostCreateForm");
+
         Post post = postService.returnPostById(postId);
         model.addAttribute("post", post);
         model.addAttribute("postId", postId);
@@ -102,6 +111,7 @@ public class PostController {
                                       @PathVariable("id") Long postId,
                                       Model model,
                                       @RequestParam(value = "page", defaultValue = "1") int page) {
+        log.info("Entering getPostCommentsById");
 
         Long userId = userDetails.getUserId();
         Set<Long> authorsByUserId = postService.returnAuthorsByUserId(userId);
@@ -124,6 +134,8 @@ public class PostController {
     @LogExecutionTime
     public String getPostCommentsById(@PathVariable("id") Long postId,
                                       Model model) {
+        log.info("Entering getPostCommentsById");
+
         CommentDto commentDto = new CommentDto();
         model.addAttribute("comment", commentDto);
         model.addAttribute("postId", postId);
@@ -139,7 +151,11 @@ public class PostController {
     public String addPost(@AuthenticationPrincipal UserDetailsImpl userDetails,
                           @ModelAttribute("post") @Valid PostDto postDto,
                           BindingResult bindingResult) {
+        log.info("Entering addPost");
+
         if (bindingResult.hasErrors()) {
+            log.info("Validation errors occurred");
+
             return POST_SUBFOLDER_PREFIX + "post-create-form";
         }
 
@@ -156,7 +172,11 @@ public class PostController {
                                  @ModelAttribute("post") @Valid PostDto postDto,
                                  BindingResult bindingResult,
                                  Model model) {
+        log.info("Entering updatePostById");
+
         if (bindingResult.hasErrors()) {
+            log.info("Validation errors occurred");
+
             model.addAttribute("postId", postId);
             return POST_SUBFOLDER_PREFIX + "post-update-form";
         }
@@ -171,6 +191,7 @@ public class PostController {
     @LogExecutionTime
     public String deletePostById(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                  @PathVariable("id") Long postId) {
+        log.info("Entering deletePostById");
 
         Long userId = userDetails.getUserId();
         postService.deleteExistingPost(userId, postId);
@@ -184,7 +205,11 @@ public class PostController {
                                      @ModelAttribute("comment") @Valid CommentDto commentDto,
                                      BindingResult bindingResult,
                                      Model model) {
+        log.info("Entering addPostCommentById");
+
         if (bindingResult.hasErrors()) {
+            log.info("Validation errors occurred");
+
             model.addAttribute("postId", postId);
             return POST_SUBFOLDER_PREFIX + "post-comment-create-form";
         }

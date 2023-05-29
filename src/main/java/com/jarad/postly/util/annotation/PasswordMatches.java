@@ -1,5 +1,6 @@
-package com.jarad.postly.util.validation;
+package com.jarad.postly.util.annotation;
 
+import com.jarad.postly.util.validation.PasswordMatchesValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 

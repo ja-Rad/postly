@@ -1,6 +1,6 @@
 package com.jarad.postly.util.dto;
 
-import com.jarad.postly.util.validation.PasswordMatches;
+import com.jarad.postly.util.annotation.PasswordMatches;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;

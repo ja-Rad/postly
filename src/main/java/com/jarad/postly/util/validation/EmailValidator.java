@@ -1,5 +1,6 @@
 package com.jarad.postly.util.validation;
 
+import com.jarad.postly.util.annotation.ValidEmail;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

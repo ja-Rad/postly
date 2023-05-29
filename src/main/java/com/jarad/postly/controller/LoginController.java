@@ -2,6 +2,7 @@ package com.jarad.postly.controller;
 
 import com.jarad.postly.security.UserDetailsImpl;
 import com.jarad.postly.service.LoginService;
+import com.jarad.postly.util.annotation.LogExecutionTime;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,6 +21,7 @@ public class LoginController {
     }
 
     @GetMapping("/")
+    @LogExecutionTime
     public String showIndexPage(@AuthenticationPrincipal UserDetailsImpl userDetails, HttpSession session) {
         Long userId = userDetails.getUserId();
         boolean profileExistForUser = loginService.isProfileExistForUser(userId);
@@ -34,6 +36,7 @@ public class LoginController {
     }
 
     @GetMapping("/login")
+    @LogExecutionTime
     public String showLoginPage() {
         return LOGIN_SUBFOLDER_PREFIX + "login";
     }

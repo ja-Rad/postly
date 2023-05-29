@@ -4,6 +4,7 @@ import com.jarad.postly.entity.Comment;
 import com.jarad.postly.entity.Post;
 import com.jarad.postly.security.UserDetailsImpl;
 import com.jarad.postly.service.PostService;
+import com.jarad.postly.util.annotation.LogExecutionTime;
 import com.jarad.postly.util.dto.CommentDto;
 import com.jarad.postly.util.dto.PostDto;
 import jakarta.validation.Valid;
@@ -38,6 +39,7 @@ public class PostController {
      * READ Mappings
      */
     @GetMapping("/posts")
+    @LogExecutionTime
     public String getPaginatedPosts(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                     @RequestParam(value = "page", defaultValue = "1") int page,
                                     Model model) {
@@ -58,6 +60,7 @@ public class PostController {
     }
 
     @GetMapping("/posts/{id}")
+    @LogExecutionTime
     public String getPostById(@AuthenticationPrincipal UserDetailsImpl userDetails,
                               @PathVariable("id") Long postId,
                               Model model) {
@@ -74,6 +77,7 @@ public class PostController {
     }
 
     @GetMapping("/posts/create-form")
+    @LogExecutionTime
     public String getPostCreateForm(Model model) {
         PostDto postDto = new PostDto();
         model.addAttribute("post", postDto);
@@ -82,6 +86,7 @@ public class PostController {
     }
 
     @GetMapping("/posts/{id}/update-form")
+    @LogExecutionTime
     public String getPostUpdateForm(@PathVariable("id") Long postId,
                                     Model model) {
         Post post = postService.returnPostById(postId);
@@ -92,6 +97,7 @@ public class PostController {
     }
 
     @GetMapping("/posts/{id}/comments")
+    @LogExecutionTime
     public String getPostCommentsById(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                       @PathVariable("id") Long postId,
                                       Model model,
@@ -115,6 +121,7 @@ public class PostController {
     }
 
     @GetMapping("/posts/{id}/comments/create-form")
+    @LogExecutionTime
     public String getPostCommentsById(@PathVariable("id") Long postId,
                                       Model model) {
         CommentDto commentDto = new CommentDto();
@@ -128,6 +135,7 @@ public class PostController {
      * WRITE Mappings
      */
     @PostMapping("posts")
+    @LogExecutionTime
     public String addPost(@AuthenticationPrincipal UserDetailsImpl userDetails,
                           @ModelAttribute("post") @Valid PostDto postDto,
                           BindingResult bindingResult) {
@@ -142,6 +150,7 @@ public class PostController {
     }
 
     @PutMapping("posts/{id}")
+    @LogExecutionTime
     public String updatePostById(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                  @PathVariable("id") Long postId,
                                  @ModelAttribute("post") @Valid PostDto postDto,
@@ -159,6 +168,7 @@ public class PostController {
     }
 
     @DeleteMapping("posts/{id}")
+    @LogExecutionTime
     public String deletePostById(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                  @PathVariable("id") Long postId) {
 
@@ -168,6 +178,7 @@ public class PostController {
     }
 
     @PostMapping("/posts/{id}/comments/create-form")
+    @LogExecutionTime
     public String addPostCommentById(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                      @PathVariable("id") Long postId,
                                      @ModelAttribute("comment") @Valid CommentDto commentDto,

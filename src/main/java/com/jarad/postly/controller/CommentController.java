@@ -4,6 +4,7 @@ package com.jarad.postly.controller;
 import com.jarad.postly.entity.Comment;
 import com.jarad.postly.security.UserDetailsImpl;
 import com.jarad.postly.service.CommentService;
+import com.jarad.postly.util.annotation.LogExecutionTime;
 import com.jarad.postly.util.dto.CommentDto;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,7 @@ public class CommentController {
      * READ Mappings
      */
     @GetMapping("/comments/{id}")
+    @LogExecutionTime
     public String getCommentById(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                  @PathVariable("id") Long commentId,
                                  Model model) {
@@ -47,6 +49,7 @@ public class CommentController {
     }
 
     @GetMapping("/comments/{id}/update-form")
+    @LogExecutionTime
     public String getPostUpdateForm(@PathVariable("id") Long commentId,
                                     Model model) {
         Comment comment = commentService.returnCommentById(commentId);
@@ -60,6 +63,7 @@ public class CommentController {
      * WRITE Mappings
      */
     @PutMapping("comments/{id}")
+    @LogExecutionTime
     public String updateCommentById(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                     @PathVariable("id") Long commentId,
                                     @ModelAttribute("comment") @Valid CommentDto commentDto,
@@ -77,6 +81,7 @@ public class CommentController {
     }
 
     @DeleteMapping("comments/{id}")
+    @LogExecutionTime
     public String deleteCommentById(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                     @PathVariable("id") Long commentId) {
         Long userId = userDetails.getUserId();

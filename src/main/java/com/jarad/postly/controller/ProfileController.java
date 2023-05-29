@@ -6,6 +6,7 @@ import com.jarad.postly.entity.Post;
 import com.jarad.postly.entity.Profile;
 import com.jarad.postly.security.UserDetailsImpl;
 import com.jarad.postly.service.ProfileService;
+import com.jarad.postly.util.annotation.LogExecutionTime;
 import com.jarad.postly.util.dto.ProfileDto;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -41,6 +42,7 @@ public class ProfileController {
      * READ Mappings
      */
     @GetMapping("/profiles")
+    @LogExecutionTime
     public String getPaginatedProfiles(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                        @RequestParam(value = "page", defaultValue = "1") int page,
                                        Model model) {
@@ -63,6 +65,7 @@ public class ProfileController {
     }
 
     @GetMapping("/profiles/{id}")
+    @LogExecutionTime
     public String getProfileById(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                  @PathVariable("id") Long profileId,
                                  Model model) {
@@ -82,6 +85,7 @@ public class ProfileController {
     }
 
     @GetMapping("/profiles/{id}/posts")
+    @LogExecutionTime
     public String getProfilePosts(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                   @PathVariable("id") Long profileId,
                                   @RequestParam(value = "page", defaultValue = "1") int page,
@@ -106,6 +110,7 @@ public class ProfileController {
     }
 
     @GetMapping("/profiles/{id}/authors")
+    @LogExecutionTime
     public String getProfileAuthors(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                     @PathVariable("id") Long profileId,
                                     @RequestParam(value = "page", defaultValue = "1") int page,
@@ -130,6 +135,7 @@ public class ProfileController {
     }
 
     @GetMapping("/profiles/{id}/followers")
+    @LogExecutionTime
     public String getProfileFollowers(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                       @PathVariable("id") Long profileId,
                                       @RequestParam(value = "page", defaultValue = "1") int page,
@@ -154,6 +160,7 @@ public class ProfileController {
     }
 
     @GetMapping("/profiles/{id}/comments")
+    @LogExecutionTime
     public String getProfileComments(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                      @PathVariable("id") Long profileId,
                                      @RequestParam(value = "page", defaultValue = "1") int page,
@@ -178,6 +185,7 @@ public class ProfileController {
     }
 
     @GetMapping("/profiles/create-form")
+    @LogExecutionTime
     public String getProfileForm(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                  Model model) {
         Long userId = userDetails.getUserId();
@@ -192,6 +200,7 @@ public class ProfileController {
     }
 
     @GetMapping("/profiles/{id}/update-form")
+    @LogExecutionTime
     public String getProfileUpdateForm(@PathVariable("id") Long profileId,
                                        Model model) {
         Profile profile = profileService.returnProfileById(profileId);
@@ -205,6 +214,7 @@ public class ProfileController {
      * WRITE Mappings
      */
     @PostMapping("/profiles")
+    @LogExecutionTime
     public String createNewProfile(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                    HttpSession session,
                                    @ModelAttribute("profile") @Valid ProfileDto profileDto,
@@ -221,6 +231,7 @@ public class ProfileController {
     }
 
     @PutMapping("/profiles/{id}")
+    @LogExecutionTime
     public String updateExistingProfile(@PathVariable("id") Long profileId,
                                         @ModelAttribute("profile") @Valid ProfileDto profileDto,
                                         BindingResult bindingResult,
@@ -236,6 +247,7 @@ public class ProfileController {
     }
 
     @DeleteMapping("/profiles/{id}")
+    @LogExecutionTime
     public String deleteExistingProfile(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                         @PathVariable("id") Long profileId,
                                         HttpSession session) {

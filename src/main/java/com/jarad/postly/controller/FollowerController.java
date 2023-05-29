@@ -2,6 +2,7 @@ package com.jarad.postly.controller;
 
 import com.jarad.postly.security.UserDetailsImpl;
 import com.jarad.postly.service.FollowerService;
+import com.jarad.postly.util.annotation.LogExecutionTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -35,6 +36,7 @@ public class FollowerController {
      * WRITE Mappings
      */
     @PostMapping("/followers/{id}")
+    @LogExecutionTime
     public String addFollower(@AuthenticationPrincipal UserDetailsImpl userDetails,
                               @PathVariable("id") Long authorId,
                               @RequestHeader(HttpHeaders.REFERER) String referer) {
@@ -46,6 +48,7 @@ public class FollowerController {
     }
 
     @DeleteMapping("/followers/{id}")
+    @LogExecutionTime
     public String deleteFollower(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                  @PathVariable("id") Long authorId,
                                  @RequestHeader(HttpHeaders.REFERER) String referer) {

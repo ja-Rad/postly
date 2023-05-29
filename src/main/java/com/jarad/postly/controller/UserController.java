@@ -1,6 +1,7 @@
 package com.jarad.postly.controller;
 
 import com.jarad.postly.service.UserService;
+import com.jarad.postly.util.annotation.LogExecutionTime;
 import com.jarad.postly.util.dto.UserDto;
 import com.jarad.postly.util.dto.UserDtoOnlyEmail;
 import com.jarad.postly.util.dto.UserDtoOnlyPassword;
@@ -30,6 +31,7 @@ public class UserController {
      * READ Mappings
      */
     @GetMapping("/users/verify")
+    @LogExecutionTime
     public String showVerifyPage(@RequestParam String code) {
         boolean isVerified = userService.verifyNewUser(code);
         if (isVerified) {
@@ -41,11 +43,13 @@ public class UserController {
     }
 
     @GetMapping("/users/verify-notification")
+    @LogExecutionTime
     public String showVerifyNotificationPage() {
         return USER_SUBFOLDER_PREFIX + "verify-notification";
     }
 
     @GetMapping("/users/forgot-password-verify")
+    @LogExecutionTime
     public String showForgotPasswordVerifyPage(@RequestParam String code, Model model) {
         UserDtoOnlyPassword userDto = new UserDtoOnlyPassword();
         model.addAttribute("user", userDto);
@@ -55,16 +59,19 @@ public class UserController {
     }
 
     @GetMapping("/users/forgot-password-verify-success")
+    @LogExecutionTime
     public String showForgotPasswordVerifySuccessPage() {
         return USER_SUBFOLDER_PREFIX + "forgot-password-verify-success";
     }
 
     @GetMapping("/users/forgot-password-verify-fail")
+    @LogExecutionTime
     public String showForgotPasswordVerifyFailPage() {
         return USER_SUBFOLDER_PREFIX + "forgot-password-verify-fail";
     }
 
     @GetMapping("/users/forgot-password")
+    @LogExecutionTime
     public String showForgotPasswordPage(Model model) {
         UserDtoOnlyEmail userDto = new UserDtoOnlyEmail();
         model.addAttribute("user", userDto);
@@ -73,11 +80,13 @@ public class UserController {
     }
 
     @GetMapping("/users/forgot-password-verify-notification")
+    @LogExecutionTime
     public String showForgotPasswordVerifyNotificationPage() {
         return USER_SUBFOLDER_PREFIX + "forgot-password-verify-notification";
     }
 
     @GetMapping("/users/registration")
+    @LogExecutionTime
     public String showRegistrationForm(Model model) {
         UserDto userDto = new UserDto();
         model.addAttribute("user", userDto);
@@ -89,6 +98,7 @@ public class UserController {
      * WRITE Mappings
      */
     @PostMapping("/users/forgot-password-verify")
+    @LogExecutionTime
     public String processForgotPasswordVerifyPage(@RequestParam String code,
                                                   @ModelAttribute("user") @Valid UserDtoOnlyPassword userDto,
                                                   BindingResult bindingResult,
@@ -107,6 +117,7 @@ public class UserController {
     }
 
     @PostMapping("/users/forgot-password")
+    @LogExecutionTime
     public String resetPasswordForUserAccount(@ModelAttribute("user") @Valid UserDtoOnlyEmail userDto,
                                               BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -118,6 +129,7 @@ public class UserController {
     }
 
     @PostMapping("/users/registration")
+    @LogExecutionTime
     public String registerUserAccount(@ModelAttribute("user") @Valid UserDto userDto,
                                       BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {

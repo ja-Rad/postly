@@ -10,6 +10,7 @@ import com.jarad.postly.util.dto.CommentDto;
 import com.jarad.postly.util.dto.PostDto;
 import com.jarad.postly.util.exception.PostNotFoundException;
 import com.jarad.postly.util.exception.ProfileNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,6 +31,7 @@ import static java.util.stream.Collectors.toSet;
 
 @Service
 @Transactional(readOnly = true)
+@Slf4j
 public class PostServiceImpl implements PostService {
     public static final int PAGE_SIZE = 10;
     private final PostRepository postRepository;
@@ -66,7 +68,9 @@ public class PostServiceImpl implements PostService {
     public Post returnPostById(Long postId) {
         Optional<Post> optionalPost = postRepository.findById(postId);
         if (optionalPost.isEmpty()) {
-            throw new PostNotFoundException("Post with this id: " + postId + " doesn`t exist");
+            String message = "Post with this id: " + postId + " doesn`t exist";
+            log.info(message);
+            throw new PostNotFoundException(message);
         }
 
         return optionalPost.get();
@@ -75,9 +79,13 @@ public class PostServiceImpl implements PostService {
     @Transactional
     @Override
     public Long createNewPostAndReturnPostId(Long userId, PostDto postDto) {
+        log.info("Creating a new post for user with ID {}", userId);
+
         Optional<Profile> optionalProfile = profileRepository.findByUser_Id(userId);
         if (optionalProfile.isEmpty()) {
-            throw new ProfileNotFoundException("Profile with id: " + userId + " doesn`t exist");
+            String message = "Profile with id: " + userId + " doesn`t exist";
+            log.info(message);
+            throw new ProfileNotFoundException(message);
         }
 
         Post post = Post.builder()
@@ -88,15 +96,21 @@ public class PostServiceImpl implements PostService {
                 .build();
         Post savedPost = postRepository.save(post);
 
+        log.info("New post created with ID {} for user with ID {}", savedPost.getId(), userId);
+
         return savedPost.getId();
     }
 
     @Transactional
     @Override
     public void updateExistingPost(Long userId, Long postId, PostDto postDto) {
+        log.info("Updating post with ID {} owned by user with ID {}", postId, userId);
+
         Optional<Post> optionalPost = postRepository.findByProfile_User_IdAndId(userId, postId);
         if (optionalPost.isEmpty()) {
-            throw new PostNotFoundException("Post with id: " + postId + " that is owned by user with id: " + userId + " doesn`t exist");
+            String message = "Post with id: " + postId + " that is owned by user with id: " + userId + " doesn`t exist";
+            log.info(message);
+            throw new PostNotFoundException(message);
         }
 
         Post post = optionalPost.get();
@@ -104,6 +118,9 @@ public class PostServiceImpl implements PostService {
         post.setDescription(postDto.getDescription());
 
         postRepository.save(post);
+
+        log.info("Post with ID {} owned by user with ID {} has been updated", postId, userId);
+
     }
 
     @Transactional
@@ -111,7 +128,9 @@ public class PostServiceImpl implements PostService {
     public void deleteExistingPost(Long profileId, Long postId) {
         Optional<Post> optionalPost = postRepository.findByProfile_IdAndId(profileId, postId);
         if (optionalPost.isEmpty()) {
-            throw new PostNotFoundException("Post with id: " + postId + " doesn`t exist for profile with id: " + profileId);
+            String message = "Post with id: " + postId + " doesn`t exist for profile with id: " + profileId;
+            log.info(message);
+            throw new PostNotFoundException(message);
         }
 
         Post post = optionalPost.get();
@@ -126,14 +145,20 @@ public class PostServiceImpl implements PostService {
     @Transactional
     @Override
     public Long createNewCommentAndReturnCommentId(Long userId, Long postId, CommentDto commentDto) {
+        log.info("Creating a new comment for user with ID {} on post with ID {}", userId, postId);
+
         Optional<Profile> optionalProfile = profileRepository.findByUser_Id(userId);
         if (optionalProfile.isEmpty()) {
-            throw new ProfileNotFoundException("Profile with id: " + userId + " doesn`t exist");
+            String message = "Profile with id: " + userId + " doesn`t exist";
+            log.info(message);
+            throw new ProfileNotFoundException(message);
         }
 
         Optional<Post> optionalPost = postRepository.findById(postId);
         if (optionalPost.isEmpty()) {
-            throw new PostNotFoundException("Post with id: " + postId + " doesn`t exist");
+            String message = "Post with id: " + postId + " doesn`t exist";
+            log.info(message);
+            throw new PostNotFoundException(message);
         }
 
         Comment comment = Comment.builder()
@@ -143,6 +168,8 @@ public class PostServiceImpl implements PostService {
                 .post(optionalPost.get())
                 .build();
         Comment savedComment = commentRepository.save(comment);
+
+        log.info("New comment created with ID {} for user with ID {} on post with ID {}", savedComment.getId(), userId, postId);
 
         return savedComment.getId();
     }

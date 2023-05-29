@@ -13,6 +13,7 @@ import com.jarad.postly.util.exception.UserAlreadyExistException;
 import com.jarad.postly.util.exception.UserNotFoundException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +33,7 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @Service
 @Transactional(readOnly = true)
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -68,7 +70,9 @@ public class UserServiceImpl implements UserService {
     public void registerNewUserAccount(UserDto userDto) {
         String userEmail = userDto.getEmail();
         if (userRepository.existsByEmail(userEmail)) {
-            throw new UserAlreadyExistException("Account with that email: " + userEmail + " already exist");
+            String message = "Account with that email: " + userEmail + " already exist";
+            log.info(message);
+            throw new UserAlreadyExistException(message);
         }
 
         User user = User.builder()
@@ -81,17 +85,21 @@ public class UserServiceImpl implements UserService {
         userRoles.add(getRoleUser());
 
         userRepository.save(user);
-
         sendVerificationEmail(user);
+
+        log.info("User {} wants to register an account", userEmail);
     }
 
     @Transactional
     @Override
     public void resetPasswordForExistingUser(UserDtoOnlyEmail userDto) {
         String userEmail = userDto.getEmail();
+
         Optional<User> optionalUser = userRepository.findByEmail(userEmail);
         if (optionalUser.isEmpty()) {
-            throw new UserNotFoundException("User with email: " + userEmail + " doesn`t exist");
+            String message = "User with email: " + userEmail + " doesn`t exist";
+            log.info(message);
+            throw new UserNotFoundException(message);
         }
 
         User user = optionalUser.get();
@@ -100,6 +108,8 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
         sendForgotPasswordEmail(user);
+
+        log.info("User {} wants to reset the password", user.getEmail());
     }
 
     @Transactional
@@ -111,6 +121,8 @@ public class UserServiceImpl implements UserService {
         createVerifyEmailTemplate(user, helper);
 
         mailSender.send(message);
+
+        log.info("Email was sent to user {}", user.getEmail());
     }
 
     @Transactional
@@ -122,6 +134,8 @@ public class UserServiceImpl implements UserService {
         createForgotPasswordEmailTemplate(user, helper);
 
         mailSender.send(message);
+
+        log.info("Email was sent to user {}", user.getEmail());
     }
 
     /**
@@ -132,9 +146,15 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public Role getRoleUser() {
-        Optional<Role> optionalRoleUser = roleRepository.findByName(SecurityRole.ROLE_USER.toString());
+        String roleName = SecurityRole.ROLE_USER.toString();
+
+        log.info("Retrieving the {} role", roleName);
+
+        Optional<Role> optionalRoleUser = roleRepository.findByName(roleName);
 
         if (optionalRoleUser.isEmpty()) {
+            log.info("Creating and saving the {} role", roleName);
+
             Role roleUser = Role.builder()
                     .name(SecurityRole.ROLE_USER.toString())
                     .build();
@@ -170,8 +190,15 @@ public class UserServiceImpl implements UserService {
             helper.setTo(toAddress);
             helper.setSubject(subject);
             helper.setText(content, true);
+
+            log.info("Email Template for user: {} has been created", userEmail);
+
         } catch (MessagingException | UnsupportedEncodingException e) {
-            throw new EmailTemplateException("Exception appeared on Email Template. Detailed message of exception:" + e.getMessage());
+            String message = "Exception occurred while creating the Email Template. Details: " + e.getMessage();
+
+            log.info(message);
+
+            throw new EmailTemplateException(message);
         }
     }
 
@@ -200,8 +227,15 @@ public class UserServiceImpl implements UserService {
             helper.setTo(toAddress);
             helper.setSubject(subject);
             helper.setText(content, true);
+
+            log.info("Email Template for user: {} has been created", userEmail);
+
         } catch (MessagingException | UnsupportedEncodingException e) {
-            throw new EmailTemplateException("Exception appeared on Email Template. Detailed message of exception:" + e.getMessage());
+            String message = "Exception occurred while creating the Email Template. Details: " + e.getMessage();
+
+            log.info(message);
+
+            throw new EmailTemplateException(message);
         }
     }
 
@@ -219,19 +253,28 @@ public class UserServiceImpl implements UserService {
             Optional<User> optionalUser = userRepository.findByVerificationCode(verificationCode);
 
             if (optionalUser.isEmpty()) {
-                throw new UserNotFoundException("User with verificationCode: " + verificationCode + " doesn`t exist");
+                String message = "User with verificationCode: " + verificationCode + " doesn`t exist";
+                log.info(message);
+                throw new UserNotFoundException(message);
             }
 
             User user = optionalUser.get();
+
             if (!user.isEnabled()) {
                 user.setVerificationCode(null);
                 user.setEnabled(true);
                 user.setActiveProfile(false);
                 userRepository.save(user);
 
+                log.info("User with id: {} has been verified and enabled", user.getId());
+
                 return true;
             }
+
+            log.warn("User with id: {} is already enabled", user.getId());
         }
+
+        log.warn("Verification code is empty or null");
         return false;
     }
 
@@ -249,18 +292,28 @@ public class UserServiceImpl implements UserService {
             Optional<User> optionalUser = userRepository.findByVerificationCode(verificationCode);
 
             if (optionalUser.isEmpty()) {
-                throw new UserNotFoundException("User with verificationCode: " + verificationCode + " doesn`t exist");
+                String message = "User with verificationCode: " + verificationCode + " doesn`t exist";
+                log.info(message);
+                throw new UserNotFoundException(message);
             }
 
             User user = optionalUser.get();
+
             if (user.isEnabled()) {
                 String newUserPassword = userDto.getPassword();
                 user.setVerificationCode(null);
                 user.setPassword(passwordEncoder.encode(newUserPassword));
                 userRepository.save(user);
+
+                log.info("User with id: {} updated their password", user.getId());
+
                 return true;
             }
+
+            log.warn("User with id: {} is not enabled", user.getId());
         }
+
+        log.warn("Verification code is empty or null");
         return false;
     }
 }

@@ -14,6 +14,7 @@ import com.jarad.postly.util.dto.ProfileDto;
 import com.jarad.postly.util.exception.ProfileForUserAlreadyExistException;
 import com.jarad.postly.util.exception.ProfileNotFoundException;
 import com.jarad.postly.util.exception.UserNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -34,6 +35,7 @@ import static java.util.stream.Collectors.toSet;
 
 @Service
 @Transactional(readOnly = true)
+@Slf4j
 public class ProfileServiceImpl implements ProfileService {
 
     public static final int PAGE_SIZE = 10;
@@ -102,7 +104,9 @@ public class ProfileServiceImpl implements ProfileService {
     public Profile returnProfileById(Long profileId) {
         Optional<Profile> optionalProfile = profileRepository.findById(profileId);
         if (optionalProfile.isEmpty()) {
-            throw new ProfileNotFoundException("Profile with this id: " + profileId + " doesn`t exist");
+            String message = "Profile with this id: " + profileId + " doesn`t exist";
+            log.info(message);
+            throw new ProfileNotFoundException(message);
         }
 
         return optionalProfile.get();
@@ -111,13 +115,20 @@ public class ProfileServiceImpl implements ProfileService {
     @Transactional
     @Override
     public Long createNewProfileAndReturnProfileId(Long userId, ProfileDto profileDto) {
+        log.info("Creating a new profile for user with ID {}", userId);
+
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isEmpty()) {
-            throw new UserNotFoundException("User with id: " + userId + " doesn`t exist");
+            String message = "User with id: " + userId + " doesn`t exist";
+            log.info(message);
+            throw new UserNotFoundException(message);
         }
+
         Optional<Profile> optionalProfile = profileRepository.findByUser_Id(userId);
         if (optionalProfile.isPresent()) {
-            throw new ProfileForUserAlreadyExistException("Profile for user: " + userId + " already exist");
+            String message = "Profile for user: " + userId + " already exist";
+            log.info(message);
+            throw new ProfileForUserAlreadyExistException(message);
         }
 
         User user = optionalUser.get();
@@ -129,20 +140,28 @@ public class ProfileServiceImpl implements ProfileService {
                 .build();
         Profile savedProfile = profileRepository.save(profile);
 
+        log.info("New profile created with ID {} for user with ID {}", savedProfile.getId(), userId);
+
         return savedProfile.getId();
     }
 
     @Transactional
     @Override
     public Long updateExistingProfile(Long profileId, ProfileDto profileDto) {
+        log.info("Updating profile with ID {}", profileId);
+
         Optional<Profile> optionalProfile = profileRepository.findById(profileId);
         if (optionalProfile.isEmpty()) {
-            throw new ProfileNotFoundException("Profile for user with id: " + profileId + " doesn`t exist");
+            String message = "Profile for user with id: " + profileId + " doesn`t exist";
+            log.info(message);
+            throw new ProfileNotFoundException(message);
         }
 
         Profile profile = optionalProfile.get();
         profile.setUsername(profileDto.getUsername());
         Profile savedProfile = profileRepository.save(profile);
+
+        log.info("Profile with ID {} has been updated", profileId);
 
         return savedProfile.getId();
     }
@@ -150,19 +169,28 @@ public class ProfileServiceImpl implements ProfileService {
     @Transactional
     @Override
     public void deleteExistingProfile(Long userId, Long profileId) {
+        log.info("Deleting profile with ID {} for user with ID {}", profileId, userId);
+
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isEmpty()) {
-            throw new UserNotFoundException("User with id: " + userId + " doesn`t exist");
+            String message = "User with id: " + userId + " doesn`t exist";
+            log.info(message);
+            throw new UserNotFoundException(message);
         }
+
         Optional<Profile> optionalProfile = profileRepository.findByUser_Id(profileId);
         if (optionalProfile.isEmpty()) {
-            throw new ProfileNotFoundException("Profile for user with id: " + profileId + " doesn`t exist");
+            String message = "Profile for user with id: " + profileId + " doesn`t exist";
+            log.info(message);
+            throw new ProfileNotFoundException(message);
         }
 
         User user = optionalUser.get();
         user.setActiveProfile(false);
 
         profileRepository.deleteByUserAndId(user, profileId);
+
+        log.info("Profile with ID {} for user with ID {} has been deleted", profileId, userId);
     }
 
     @Override

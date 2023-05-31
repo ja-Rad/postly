@@ -6,34 +6,61 @@
         <link th:replace="~{fragments/main-stylesheet}" />
         <link rel="icon" th:href="@{~/favicon.ico}" type="image/x-icon" />
         <meta charset="utf-8" />
-        <title>User registration</title>
+        <title>Registration</title>
     </head>
 
     <body>
-        <main>
-            <h2>Registration</h2>
-            <form th:action="@{/users/registration}" th:object="${user}" th:method="post" class="form">
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input class="form-control" type="email" th:field="*{email}" id="email" placeholder="Type email here:" />
-                    <div class="alert alert-warning" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</div>
+        <div id="page-wrapper" class="d-flex flex-column min-vh-100">
+            <main class="mt-auto">
+                <div class="container-lg">
+                    <div class="row align-items-center justify-content-center">
+                        <div class="col-lg-4">
+                            <!-- Logo -->
+                            <div class="row">
+                                <img alt="Logo" class="img-fluid" th:src="@{~/images/potly-full-logo-light.png}" />
+                            </div>
+
+                            <!-- Form Login -->
+                            <form th:action="@{/users/registration}" th:object="${user}" th:method="post" class="form">
+                                <!-- Title -->
+                                <div class="text-center p-2">
+                                    <h4>Create an account</h4>
+                                </div>
+
+                                <!-- Email input -->
+                                <div class="form-floating mb-3">
+                                    <input class="form-control" type="email" th:field="*{email}" id="email" placeholder="Type email here:" />
+                                    <label for="email">Email</label>
+                                    <div class="alert alert-warning" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</div>
+                                </div>
+
+                                <!-- Password input -->
+                                <div class="form-floating mb-3">
+                                    <input class="form-control" type="password" th:field="*{password}" id="password" placeholder="Type password here:" />
+                                    <label for="password">Password</label>
+                                    <div class="alert alert-warning" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</div>
+                                </div>
+
+                                <!-- Confirm password input -->
+                                <div class="form-floating mb-3">
+                                    <input class="form-control" type="password" th:field="*{matchingPassword}" id="matchingPassword" placeholder="Type same password here:" />
+                                    <label for="matchingPassword">Confirm password</label>
+                                    <div class="alert alert-warning" th:if="${#fields.hasErrors('matchingPassword')}" th:errors="*{matchingPassword}">MatchingPassword Error</div>
+                                    <div class="alert alert-warning" th:unless="${#fields.hasErrors('email') OR #fields.hasErrors('password')}" th:if="${#fields.hasErrors('*')}" th:errors="*{*}">MatchingPassword Error</div>
+                                </div>
+
+                                <!-- Register button -->
+                                <input type="submit" class="btn btn-primary w-100" value="Register" />
+
+                                <!-- Log in link -->
+                                <p class="text-center text-muted m-2">Already a member? <a th:href="@{/login}" role="button">Log in</a></p>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input class="form-control" type="password" th:field="*{password}" id="password" placeholder="Type password here:" />
-                    <div class="alert alert-warning" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</div>
-                </div>
-                <div class="form-group">
-                    <label for="matchingPassword">Confirm password</label>
-                    <input class="form-control" type="password" th:field="*{matchingPassword}" id="matchingPassword" placeholder="Type same password here:" />
-                    <div class="alert alert-warning" th:if="${#fields.hasErrors('matchingPassword')}" th:errors="*{matchingPassword}">MatchingPassword Error</div>
-                    <div class="alert alert-warning" th:unless="${#fields.hasErrors('email') OR #fields.hasErrors('password')}" th:if="${#fields.hasErrors('*')}" th:errors="*{*}">MatchingPassword Error</div>
-                </div>
-                <input type="submit" class="btn btn-success" value="Create account" />
-                <a class="btn btn-primary" th:href="@{/login}" role="button">Login</a>
-            </form>
-        </main>
-        <footer class="bg-primary" id="footer-content" th:insert="~{fragments/footer-content}"></footer>
+            </main>
+            <footer class="bg-primary mt-auto" id="footer-content" th:insert="~{fragments/footer-content}"></footer>
+        </div>
         <link th:insert="~{fragments/bootstrap-js-bundle}" />
     </body>
 </html>

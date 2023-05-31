@@ -1,11 +1,7 @@
 body {
     min-height: 100vh !important;
-    display: flex !important;
-    flex-direction: column !important;
-}
-
-footer {
-    margin-top: auto !important;
+    /* display: flex !important;
+    flex-direction: column !important; */
 }
 
 p {
@@ -17,4 +13,7 @@ p {
 }
 .nav-link:hover {
     color: #f0ad4e !important;
+}
+a {
+    text-decoration: none;
 }

@@ -1,31 +1,82 @@
 package com.jarad.postly.service;
 
 import com.jarad.postly.entity.Comment;
+import com.jarad.postly.entity.Post;
+import com.jarad.postly.entity.Profile;
 import com.jarad.postly.repository.CommentRepository;
+import com.jarad.postly.repository.PostRepository;
+import com.jarad.postly.repository.ProfileRepository;
 import com.jarad.postly.util.dto.CommentDto;
 import com.jarad.postly.util.exception.CommentNotFoundException;
+import com.jarad.postly.util.exception.PostNotFoundException;
+import com.jarad.postly.util.exception.ProfileNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.IntStream;
+
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 @Service
 @Transactional(readOnly = true)
 @Slf4j
 public class CommentServiceImpl implements CommentService {
-
+    public static final int PAGE_SIZE = 10;
     private final CommentRepository commentRepository;
+    private final ProfileRepository profileRepository;
+    private final PostRepository postRepository;
 
     @Autowired
-    public CommentServiceImpl(CommentRepository commentRepository) {
+    public CommentServiceImpl(CommentRepository commentRepository, ProfileRepository profileRepository, PostRepository postRepository) {
         this.commentRepository = commentRepository;
+        this.profileRepository = profileRepository;
+        this.postRepository = postRepository;
     }
 
     @Override
-    public Comment returnCommentById(Long commentId) {
-        Optional<Comment> optionalComment = commentRepository.findById(commentId);
+    public List<Integer> returnListOfPageNumbers(int totalPages) {
+        return IntStream.rangeClosed(1, totalPages)
+                .boxed()
+                .collect(toList());
+    }
+
+    @Override
+    public Page<Comment> returnPaginatedCommentsByCreationDateDescending(Long postId, int page) {
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by("creationDate").descending());
+        return commentRepository.findByPost_Id(postId, pageable);
+    }
+
+    @Override
+    public Set<Long> returnAuthorsByUserId(Long userId) {
+        Optional<Profile> optionalProfile = profileRepository.findByUser_Id(userId);
+
+        if (optionalProfile.isPresent()) {
+            Profile profile = optionalProfile.get();
+
+            return profile.getFollowers().stream()
+                    .map(follower -> follower.getId().getAuthorId())
+                    .collect(toSet());
+        }
+
+        return Collections.emptySet();
+    }
+
+    @Override
+    public Comment returnCommentById(Long postId, Long commentId) {
+
+        Optional<Comment> optionalComment = commentRepository.findByPost_IdAndId(postId, commentId);
         if (optionalComment.isEmpty()) {
             String message = "Comment with ID " + commentId + " does not exist";
             log.info(message);
@@ -37,12 +88,44 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    public void updateExistingComment(Long userId, Long commentId, CommentDto commentDto) {
-        log.info("Updating comment with ID {} for profile with ID {}", commentId, userId);
+    public Long createNewCommentAndReturnCommentId(Long userId, Long postId, CommentDto commentDto) {
+        log.info("Creating a new comment for user with ID {} on post with ID {}", userId, postId);
 
-        Optional<Comment> optionalComment = commentRepository.findByProfile_User_IdAndId(userId, commentId);
+        Optional<Profile> optionalProfile = profileRepository.findByUser_Id(userId);
+        if (optionalProfile.isEmpty()) {
+            String message = "Profile with id: " + userId + " doesn`t exist";
+            log.info(message);
+            throw new ProfileNotFoundException(message);
+        }
+
+        Optional<Post> optionalPost = postRepository.findById(postId);
+        if (optionalPost.isEmpty()) {
+            String message = "Post with id: " + postId + " doesn`t exist";
+            log.info(message);
+            throw new PostNotFoundException(message);
+        }
+
+        Comment comment = Comment.builder()
+                .description(commentDto.getDescription())
+                .creationDate(Instant.now())
+                .profile(optionalProfile.get())
+                .post(optionalPost.get())
+                .build();
+        Comment savedComment = commentRepository.save(comment);
+
+        log.info("New comment created with ID {} for user with ID {} on post with ID {}", savedComment.getId(), userId, postId);
+
+        return savedComment.getId();
+    }
+
+    @Transactional
+    @Override
+    public void updateExistingComment(Long userId, Long postId, Long commentId, CommentDto commentDto) {
+        log.info("Updating comment with ID {} in post with ID {} for user with ID {}", commentId, postId, userId);
+
+        Optional<Comment> optionalComment = commentRepository.findByProfile_User_IdAndPost_IdAndId(userId, postId, commentId);
         if (optionalComment.isEmpty()) {
-            String message = "Comment with id: " + commentId + " for profile with id: " + userId + " doesn`t exist";
+            String message = "Comment with id: " + commentId + " in post with id: " + postId + " for user with id: " + userId + " doesn`t exist";
             log.info(message);
             throw new CommentNotFoundException(message);
         }
@@ -51,17 +134,17 @@ public class CommentServiceImpl implements CommentService {
         comment.setDescription(commentDto.getDescription());
         commentRepository.save(comment);
 
-        log.info("Comment with ID {} for profile with ID {} has been updated", commentId, userId);
+        log.info("Comment with ID {} in post with ID {} for user with ID {} has been updated", commentId, postId, userId);
     }
 
     @Transactional
     @Override
-    public void deleteExistingComment(Long profileId, Long commentId) {
-        log.info("Deleting comment with ID {} for profile with ID {}", commentId, profileId);
+    public void deleteExistingComment(Long userId, Long postId, Long commentId) {
+        log.info("Deleting comment with ID {} in post with ID {} for profile with ID {}", commentId, postId, userId);
 
-        Optional<Comment> optionalComment = commentRepository.findByProfile_User_IdAndId(profileId, commentId);
+        Optional<Comment> optionalComment = commentRepository.findByProfile_User_IdAndPost_IdAndId(userId, postId, commentId);
         if (optionalComment.isEmpty()) {
-            String message = "Comment with id: " + commentId + " for profile with id: " + profileId + " doesn`t exist";
+            String message = "Comment with id: " + commentId + " in post with id: " + postId + " for user with id: " + userId + " doesn`t exist";
             log.info(message);
             throw new CommentNotFoundException(message);
         }
@@ -70,7 +153,7 @@ public class CommentServiceImpl implements CommentService {
 
         commentRepository.delete(comment);
 
-        log.info("Comment with ID {} for profile with ID {} has been deleted", commentId, profileId);
+        log.info("Comment with ID {} in post with ID {} for user with ID {} has been deleted", commentId, postId, userId);
     }
 
     @Override

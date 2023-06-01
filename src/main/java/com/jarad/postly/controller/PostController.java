@@ -1,11 +1,9 @@
 package com.jarad.postly.controller;
 
-import com.jarad.postly.entity.Comment;
 import com.jarad.postly.entity.Post;
 import com.jarad.postly.security.UserDetailsImpl;
 import com.jarad.postly.service.PostService;
 import com.jarad.postly.util.annotation.LogExecutionTime;
-import com.jarad.postly.util.dto.CommentDto;
 import com.jarad.postly.util.dto.PostDto;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -105,44 +103,6 @@ public class PostController {
         return POST_SUBFOLDER_PREFIX + "post-update-form";
     }
 
-    @GetMapping("/posts/{id}/comments")
-    @LogExecutionTime
-    public String getPostCommentsById(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                      @PathVariable("id") Long postId,
-                                      Model model,
-                                      @RequestParam(value = "page", defaultValue = "1") int page) {
-        log.info("Entering getPostCommentsById");
-
-        Long userId = userDetails.getUserId();
-        Set<Long> authorsByUserId = postService.returnAuthorsByUserId(userId);
-        model.addAttribute("authorsByUserId", authorsByUserId);
-
-        Page<Comment> commentPage = postService.returnPaginatedCommentsByCreationDateDescending(postId, page - 1);
-        int totalPages = commentPage.getTotalPages();
-
-        if (totalPages > 1) {
-            List<Integer> pageNumbers = postService.returnListOfPageNumbers(totalPages);
-            model.addAttribute("pageNumbers", pageNumbers);
-        }
-        model.addAttribute("commentPage", commentPage);
-        model.addAttribute("postId", postId);
-
-        return POST_SUBFOLDER_PREFIX + "post-comments";
-    }
-
-    @GetMapping("/posts/{id}/comments/create-form")
-    @LogExecutionTime
-    public String getPostCommentsById(@PathVariable("id") Long postId,
-                                      Model model) {
-        log.info("Entering getPostCommentsById");
-
-        CommentDto commentDto = new CommentDto();
-        model.addAttribute("comment", commentDto);
-        model.addAttribute("postId", postId);
-
-        return POST_SUBFOLDER_PREFIX + "post-comment-create-form";
-    }
-
     /**
      * WRITE Mappings
      */
@@ -196,27 +156,5 @@ public class PostController {
         Long userId = userDetails.getUserId();
         postService.deleteExistingPost(userId, postId);
         return "redirect:/profiles/" + postId + "/posts";
-    }
-
-    @PostMapping("/posts/{id}/comments/create-form")
-    @LogExecutionTime
-    public String addPostCommentById(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                     @PathVariable("id") Long postId,
-                                     @ModelAttribute("comment") @Valid CommentDto commentDto,
-                                     BindingResult bindingResult,
-                                     Model model) {
-        log.info("Entering addPostCommentById");
-
-        if (bindingResult.hasErrors()) {
-            log.info("Validation errors occurred");
-
-            model.addAttribute("postId", postId);
-            return POST_SUBFOLDER_PREFIX + "post-comment-create-form";
-        }
-
-        Long userId = userDetails.getUserId();
-        Long commentId = postService.createNewCommentAndReturnCommentId(userId, postId, commentDto);
-
-        return "redirect:/comments/" + commentId;
     }
 }

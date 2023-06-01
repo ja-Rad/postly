@@ -2,14 +2,25 @@ package com.jarad.postly.service;
 
 import com.jarad.postly.entity.Comment;
 import com.jarad.postly.util.dto.CommentDto;
+import org.springframework.data.domain.Page;
+
+import java.util.List;
+import java.util.Set;
 
 public interface CommentService {
+    List<Integer> returnListOfPageNumbers(int totalPages);
 
-    Comment returnCommentById(Long commentId);
+    Page<Comment> returnPaginatedCommentsByCreationDateDescending(Long postId, int page);
 
-    void updateExistingComment(Long userId, Long commentId, CommentDto commentDto);
+    Set<Long> returnAuthorsByUserId(Long userId);
 
-    void deleteExistingComment(Long profileId, Long commentId);
+    Comment returnCommentById(Long postId, Long commentId);
 
-    boolean isCommentOwnedByUser(Long profileId, Long commentId);
+    Long createNewCommentAndReturnCommentId(Long userId, Long postId, CommentDto commentDto);
+
+    void updateExistingComment(Long userId, Long postId, Long commentId, CommentDto commentDto);
+
+    void deleteExistingComment(Long userId, Long postId, Long commentId);
+
+    boolean isCommentOwnedByUser(Long userId, Long commentId);
 }

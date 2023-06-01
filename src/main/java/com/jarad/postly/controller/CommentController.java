@@ -80,6 +80,8 @@ public class CommentController {
             model.addAttribute("personalComment", true);
         }
         model.addAttribute("comment", comment);
+        model.addAttribute("postId", postId);
+        model.addAttribute("commentId", commentId);
 
         return COMMENT_SUBFOLDER_PREFIX + "comment";
     }
@@ -91,8 +93,8 @@ public class CommentController {
         log.info("Entering getPostCommentsById");
 
         CommentDto commentDto = new CommentDto();
-        model.addAttribute("comment", commentDto);
         model.addAttribute("postId", postId);
+        model.addAttribute("comment", commentDto);
 
         return COMMENT_SUBFOLDER_PREFIX + "comment-create-form";
     }
@@ -106,6 +108,7 @@ public class CommentController {
 
         Comment comment = commentService.returnCommentById(postId, commentId);
         model.addAttribute("comment", comment);
+        model.addAttribute("postId", postId);
         model.addAttribute("commentId", commentId);
 
         return COMMENT_SUBFOLDER_PREFIX + "comment-update-form";
@@ -133,7 +136,7 @@ public class CommentController {
         Long userId = userDetails.getUserId();
         Long commentId = commentService.createNewCommentAndReturnCommentId(userId, postId, commentDto);
 
-        return "redirect:/comments/" + commentId;
+        return "redirect:/posts/" + postId + "/comments/" + commentId;
     }
 
     @PutMapping("/posts/{postId}/comments/{commentId}")
@@ -149,6 +152,7 @@ public class CommentController {
         if (bindingResult.hasErrors()) {
             log.info("Validation errors occurred");
 
+            model.addAttribute("postId", postId);
             model.addAttribute("commentId", commentId);
             return COMMENT_SUBFOLDER_PREFIX + "comment-update-form";
         }
@@ -156,7 +160,7 @@ public class CommentController {
         Long userId = userDetails.getUserId();
         commentService.updateExistingComment(userId, postId, commentId, commentDto);
 
-        return "redirect:/comments/" + commentId;
+        return "redirect:/posts/" + postId + "/comments/" + commentId;
     }
 
     @DeleteMapping("/posts/{postId}/comments/{commentId}")

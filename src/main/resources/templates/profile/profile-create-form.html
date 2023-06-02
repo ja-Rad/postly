@@ -6,33 +6,46 @@
         <link th:replace="~{fragments/main-stylesheet}" />
         <link rel="icon" type="image/x-icon" th:href="@{~/favicon.ico}" />
         <meta charset="utf-8" />
-        <title>Create profile</title>
+        <title>Profile Creation</title>
     </head>
 
     <body>
-        <header>
-            <div th:insert="~{fragments/navbar}" id="navbar-content"></div>
-        </header>
-        <main>
-            <h2>Create your own profile to share your Posts!</h2>
-            <h3>It is not mandatory to create a profile. You can return to this form whenever you like</h3>
-            <!-- <form action="#" th:method="post" th:action="@{/profiles}" th:object="${profile}">
-                <p>Username: <input th:field="*{username}" type="text" /></p>
-                <div><input type="submit" value="Create profile" /></div>
-                <p>Back to <a th:href="@{/logout}">Log out</a></p>
-            </form> -->
+        <div id="page-wrapper" class="d-flex flex-column min-vh-100">
+            <header>
+                <div th:insert="~{fragments/navbar}" id="navbar-content"></div>
+            </header>
+            <main class="mt-auto">
+                <div class="container-lg">
+                    <div class="row align-items-center justify-content-center">
+                        <div class="col-lg-4">
+                            <!-- Form -->
+                            <form th:action="@{/profiles}" th:object="${profile}" th:method="post" class="form">
+                                <!-- Title -->
+                                <div class="text-center p-2">
+                                    <h4>Create your unique profile</h4>
+                                    <p>Create your unique profile to share your posts, follow other authors, and leave comments!</p>
+                                    <p>Creating a profile is optional. You can return to this form at any time.</p>
+                                </div>
 
-            <form th:action="@{/profiles}" th:object="${profile}" th:method="post" class="form">
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input class="form-control" type="text" th:field="*{username}" id="username" placeholder="Type username here:" />
-                    <div class="alert alert-warning" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username Error</div>
+                                <!-- Username input -->
+                                <div class="form-floating mb-3">
+                                    <input class="form-control" type="text" th:field="*{username}" id="username" placeholder="Type username here:" />
+                                    <label for="username">Username</label>
+                                    <div class="alert alert-warning" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username Error</div>
+                                </div>
+
+                                <!-- Create profile button -->
+                                <input type="submit" class="btn btn-primary w-100" value="Create profile" />
+
+                                <!-- Go back link -->
+                                <p class="text-center text-muted m-2">Prefer to skip profile creation? <a th:href="@{~/posts}" role="button">Skip</a></p>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-                <input type="submit" class="btn btn-success" value="Create profile" />
-                <a class="btn btn-primary" th:href="@{/logout}" role="button">Log out</a>
-            </form>
-        </main>
-        <footer th:insert="~{fragments/footer-content}" id="footer-content" class="bg-primary"></footer>
+            </main>
+            <footer class="bg-primary mt-auto" id="footer-content" th:insert="~{fragments/footer-content}"></footer>
+        </div>
         <link th:insert="~{fragments/bootstrap-js-bundle}" />
     </body>
 </html>

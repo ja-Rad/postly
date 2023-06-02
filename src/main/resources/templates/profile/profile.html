@@ -10,45 +10,90 @@
     </head>
 
     <body>
-        <header>
-            <div th:insert="~{fragments/navbar}" id="navbar-content"></div>
-        </header>
-        <main>
-            <h2>Profile</h2>
-            <div th:if="${personalProfile}">
-                <p>MY PROFILE</p>
-                <p th:text="${profile.username}"></p>
-                <p th:text="${profile.creationDate}"></p>
-                <form th:action="@{/profiles/{id}/update-form(id=${session.usersActiveProfileId})}" th:method="get">
-                    <p><input type="submit" value="Edit Profile" /></p>
-                </form>
-                <form th:action="@{/profiles/{id}(id=${session.usersActiveProfileId})}" th:method="delete">
-                    <p><input type="submit" value="Delete Profile" /></p>
-                </form>
-            </div>
+        <div id="page-wrapper" class="d-flex flex-column min-vh-100">
+            <header>
+                <div th:insert="~{fragments/navbar}" id="navbar-content"></div>
+            </header>
+            <main class="mt-auto">
+                <div class="container-lg">
+                    <div class="row align-items-center justify-content-center">
+                        <div class="col-lg-6">
+                            <!-- Title -->
+                            <div class="p-2">
+                                <p class="text-muted">Profile</p>
+                            </div>
 
-            <div th:unless="${personalProfile}">
-                <p th:text="${profile.username}"></p>
-                <p th:text="${profile.creationDate}"></p>
-                <div th:if="${not #lists.isEmpty(authorsByUserId)}">
-                    <div th:if="${#lists.contains(authorsByUserId, profile.id)}">
-                        <form action="#" th:method="delete" th:action="@{/followers/{id}(id=${profile.id})}">
-                            <div>
-                                <input type="submit" value="Unfollow Author" />
+                            <!-- Profile Card -->
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <!-- Profile Information -->
+                                    <div class="d-flex flex-column">
+                                        <div>
+                                            <p class="text-muted">Author's name <span class="gradient-text-orange" th:text="${profile.username}">John Doe</span></p>
+                                        </div>
+                                        <div>
+                                            <p class="text-muted">Joined on <span class="gradient-text-orange" th:text="${profile.creationDate}">01/01/2001</span></p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Profile Visit -->
+                                    <div class="d-flex flex-column">
+                                        <div>
+                                            <!-- author's posts link -->
+                                            <p class="text-muted">Visit author's posts? <a th:href="@{~/profiles/{id}/posts(id=${profile.user.id})}" role="button">author's posts</a></p>
+                                        </div>
+                                        <div>
+                                            <!-- author's comments link -->
+                                            <p class="text-muted">Visit author's comments? <a th:href="@{~/profiles/{id}/comments(id=${profile.user.id})}" role="button">author's comments</a></p>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-center">
+                                        <div>
+                                            <!-- Go back link -->
+                                            <p class="text-center text-muted">Visit recently created authors? <a th:href="@{~/profiles}" role="button">Visit</a></p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Follow-Unfollow Block -->
+                                    <div th:if="${activeProfile}">
+                                        <div th:if="${userId} != ${profile.user.id}">
+                                            <div th:unless="${#lists.contains(authorsByUserId, profile.user.id)}">
+                                                <form th:action="@{~/followers/{id}(id=${profile.user.id})}" th:method="post">
+                                                    <input type="submit" class="btn btn-primary w-100" value="Follow Author" />
+                                                </form>
+                                            </div>
+                                            <div th:if="${#lists.contains(authorsByUserId, profile.user.id)}">
+                                                <form th:action="@{~/followers/{id}(id=${profile.user.id})}" th:method="delete">
+                                                    <input type="submit" class="btn btn-primary w-100" value="Unfollow Author" />
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </form>
-                    </div>
-                    <div th:unless="${#lists.contains(authorsByUserId, profile.id)}">
-                        <form action="#" th:method="post" th:action="@{/followers/{id}(id=${profile.id})}">
-                            <div>
-                                <input type="submit" value="Follow Author" />
+
+                            <!-- Personal Profile Block -->
+                            <div th:if="${personalProfile}">
+                                <div class="d-flex flex-row justify-content-center">
+                                    <div class="p-2">
+                                        <form th:action="@{~/profiles/{id}/update-form(id=${session.usersActiveProfileId})}" th:method="get">
+                                            <input type="submit" class="btn btn-primary w-100" value="Edit Profile" />
+                                        </form>
+                                    </div>
+                                    <div class="p-2">
+                                        <form th:action="@{/profiles/{id}(id=${session.usersActiveProfileId})}" th:method="delete">
+                                            <input type="submit" class="btn btn-primary w-100" value="Delete Profile" />
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </main>
-        <footer th:insert="~{fragments/footer-content}" id="footer-content" class="bg-primary"></footer>
+            </main>
+            <footer class="bg-primary mt-auto" id="footer-content" th:insert="~{fragments/footer-content}"></footer>
+        </div>
         <link th:insert="~{fragments/bootstrap-js-bundle}" />
     </body>
 </html>

@@ -51,6 +51,7 @@ public class ProfileController {
         log.info("Entering getPaginatedProfiles");
 
         Long userId = userDetails.getUserId();
+        boolean activeProfile = userDetails.isActiveProfile();
         model.addAttribute("userId", userId);
 
         Set<Long> authorsByUserId = profileService.returnAuthorsByUserId(userId);
@@ -64,6 +65,8 @@ public class ProfileController {
             List<Integer> pageNumbers = profileService.returnListOfPageNumbers(totalPages);
             model.addAttribute("pageNumbers", pageNumbers);
         }
+        model.addAttribute("userId", userId);
+        model.addAttribute("activeProfile", activeProfile);
 
         return PROFILE_SUBFOLDER_PREFIX + "profiles";
     }
@@ -76,6 +79,8 @@ public class ProfileController {
         log.info("Entering getProfileById");
 
         Long userId = userDetails.getUserId();
+        boolean activeProfile = userDetails.isActiveProfile();
+
         Set<Long> authorsByUserId = profileService.returnAuthorsByUserId(userId);
         model.addAttribute("authorsByUserId", authorsByUserId);
 
@@ -85,6 +90,8 @@ public class ProfileController {
         if (profileService.isUserOwnsThisProfile(userId, profileId)) {
             model.addAttribute("personalProfile", true);
         }
+        model.addAttribute("userId", userId);
+        model.addAttribute("activeProfile", activeProfile);
 
         return PROFILE_SUBFOLDER_PREFIX + "profile";
     }

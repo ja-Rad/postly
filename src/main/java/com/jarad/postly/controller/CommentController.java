@@ -50,6 +50,7 @@ public class CommentController {
 
         Long userId = userDetails.getUserId();
         boolean activeProfile = userDetails.isActiveProfile();
+
         Set<Long> authorsByUserId = commentService.returnAuthorsByUserId(userId);
         model.addAttribute("authorsByUserId", authorsByUserId);
 
@@ -77,12 +78,19 @@ public class CommentController {
         log.info("Entering getCommentById");
 
         Long userId = userDetails.getUserId();
+        boolean activeProfile = userDetails.isActiveProfile();
+
+        Set<Long> authorsByUserId = commentService.returnAuthorsByUserId(userId);
+        model.addAttribute("authorsByUserId", authorsByUserId);
+
         Comment comment = commentService.returnCommentById(postId, commentId);
 
         if (commentService.isCommentOwnedByUser(userId, commentId)) {
             model.addAttribute("personalComment", true);
         }
         model.addAttribute("comment", comment);
+        model.addAttribute("userId", userId);
+        model.addAttribute("activeProfile", activeProfile);
         model.addAttribute("postId", postId);
         model.addAttribute("commentId", commentId);
 

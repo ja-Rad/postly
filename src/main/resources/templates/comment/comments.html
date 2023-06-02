@@ -20,10 +20,15 @@
                         <div class="col-lg-6">
                             <!-- Title -->
                             <div class="d-flex justify-content-between">
-                                <div>
+                                <div class="p-2">
                                     <p class="text-muted">Comment Section</p>
                                 </div>
-                                <div>
+                                <div class="p-2">
+                                    <form th:action="@{~/posts/{postId}/comments/create-form(postId=${postId})}" th:method="get">
+                                        <input type="submit" class="btn btn-primary w-100" value="Add Comment" />
+                                    </form>
+                                </div>
+                                <div class="p-2">
                                     <p class="text-center text-muted">Return to post? <a th:href="@{~/posts/{postId}(postId=${postId})}" role="button">Go back</a></p>
                                 </div>
                             </div>
@@ -81,7 +86,7 @@
                             <div class="d-flex justify-content-between">
                                 <!-- Go back link -->
                                 <div>
-                                    <p class="text-center text-muted m-2">Return to post? <a th:href="@{~/posts/{postId}(postId=${postId})}" role="button">Go back</a></p>
+                                    <p class="text-center text-muted">Return to post? <a th:href="@{~/posts/{postId}(postId=${postId})}" role="button">Go back</a></p>
                                 </div>
                                 <!-- Add comment link -->
                                 <div>

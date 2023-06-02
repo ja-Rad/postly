@@ -47,6 +47,7 @@ public class PostController {
 
         Long userId = userDetails.getUserId();
         boolean activeProfile = userDetails.isActiveProfile();
+        
         Set<Long> authorsByUserId = postService.returnAuthorsByUserId(userId);
         model.addAttribute("authorsByUserId", authorsByUserId);
 
@@ -72,12 +73,19 @@ public class PostController {
         log.info("Entering getPostById");
 
         Long userId = userDetails.getUserId();
+        boolean activeProfile = userDetails.isActiveProfile();
+
+        Set<Long> authorsByUserId = postService.returnAuthorsByUserId(userId);
+        model.addAttribute("authorsByUserId", authorsByUserId);
+
         Post post = postService.returnPostById(postId);
 
         if (postService.isPostOwnedByUser(userId, postId)) {
             model.addAttribute("personalPost", true);
         }
         model.addAttribute("post", post);
+        model.addAttribute("userId", userId);
+        model.addAttribute("activeProfile", activeProfile);
 
         return POST_SUBFOLDER_PREFIX + "post";
     }

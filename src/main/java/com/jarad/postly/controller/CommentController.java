@@ -49,6 +49,7 @@ public class CommentController {
         log.info("Entering getPostCommentsById");
 
         Long userId = userDetails.getUserId();
+        boolean activeProfile = userDetails.isActiveProfile();
         Set<Long> authorsByUserId = commentService.returnAuthorsByUserId(userId);
         model.addAttribute("authorsByUserId", authorsByUserId);
 
@@ -60,6 +61,8 @@ public class CommentController {
             model.addAttribute("pageNumbers", pageNumbers);
         }
         model.addAttribute("commentPage", commentPage);
+        model.addAttribute("userId", userId);
+        model.addAttribute("activeProfile", activeProfile);
         model.addAttribute("postId", postId);
 
         return COMMENT_SUBFOLDER_PREFIX + "comments";

@@ -11,9 +11,57 @@ p {
 .nav-link {
     color: white !important;
 }
+
 .nav-link:hover {
     color: #f0ad4e !important;
 }
+
 a {
     text-decoration: none;
+}
+
+.postly-text-orange {
+    color: #f1580c;
+}
+
+.postly-text-blue {
+    color: #2199ea;
+}
+
+.gradient-text-orange {
+    /* Fallback: Set a background color. */
+    background-color: black;
+
+    /* Create the gradient. */
+    background-image: linear-gradient(to right, #ef453b 0%, #fcbe65 100%);
+
+    /* Set the background size and repeat properties. */
+    background-size: 100%;
+    background-repeat: repeat;
+
+    /* Use the text as a mask for the background. */
+    /* This will show the gradient as a text color rather than element bg. */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-background-clip: text;
+    -moz-text-fill-color: transparent;
+}
+
+.gradient-text-blue {
+    /* Fallback: Set a background color. */
+    background-color: black;
+
+    /* Create the gradient. */
+    background-image: linear-gradient(to right, #323f8f 0%, #31bcf1 100%);
+
+    /* Set the background size and repeat properties. */
+    background-size: 100%;
+    background-repeat: repeat;
+
+    /* Use the text as a mask for the background. */
+    /* This will show the gradient as a text color rather than element bg. */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-background-clip: text;
+    -moz-text-fill-color: transparent;
 }

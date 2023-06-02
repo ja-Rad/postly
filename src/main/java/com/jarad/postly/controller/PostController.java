@@ -46,6 +46,7 @@ public class PostController {
         log.info("Entering getPaginatedPosts");
 
         Long userId = userDetails.getUserId();
+        boolean activeProfile = userDetails.isActiveProfile();
         Set<Long> authorsByUserId = postService.returnAuthorsByUserId(userId);
         model.addAttribute("authorsByUserId", authorsByUserId);
 
@@ -57,6 +58,8 @@ public class PostController {
             model.addAttribute("pageNumbers", pageNumbers);
         }
         model.addAttribute("postPage", postPage);
+        model.addAttribute("userId", userId);
+        model.addAttribute("activeProfile", activeProfile);
 
         return POST_SUBFOLDER_PREFIX + "posts";
     }

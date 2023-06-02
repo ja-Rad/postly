@@ -42,7 +42,7 @@ public class Post implements Serializable {
     private Long id;
 
     @NotBlank(message = "Title may not be blank")
-    @Size(min = 6, max = 255, message = "Title must be between 6 and 36 characters long")
+    @Size(min = 6, max = 60, message = "Title must be between 6 and 60 characters long")
     @Column(name = "title")
     private String title;
 

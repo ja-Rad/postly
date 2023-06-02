@@ -6,37 +6,51 @@
         <link th:replace="~{fragments/main-stylesheet}" />
         <link rel="icon" type="image/x-icon" th:href="@{~/favicon.ico}" />
         <meta charset="utf-8" />
-        <title>Create profile</title>
+        <title>Add Post</title>
     </head>
 
     <body>
-        <header>
-            <div th:insert="~{fragments/navbar}" id="navbar-content"></div>
-        </header>
-        <main>
-            <h2>Create a Post:</h2>
-            <!-- <form action="#" th:method="post" th:action="@{/posts}" th:object="${post}">
-                <p>Title: <input th:field="*{title}" type="text" /></p>
-                <p>Description:<textarea th:field="*{description}" type="text"></textarea></p>
-                <div>
-                    <input type="submit" value="Create Post" />
+        <div id="page-wrapper" class="d-flex flex-column min-vh-100">
+            <header>
+                <div th:insert="~{fragments/navbar}" id="navbar-content"></div>
+            </header>
+            <main class="mt-auto">
+                <div class="container-lg">
+                    <div class="row align-items-center justify-content-center">
+                        <div class="col-lg-6">
+                            <!-- Form -->
+                            <form th:action="@{/posts}" th:object="${post}" th:method="post" class="form">
+                                <!-- Title -->
+                                <div class="text-center p-2">
+                                    <h4>Add Post</h4>
+                                </div>
+
+                                <!-- Title input -->
+                                <div class="form-floating mb-3">
+                                    <input class="form-control" type="text" th:field="*{title}" id="title" placeholder="Type title here:" />
+                                    <label for="title">Title</label>
+                                    <div class="alert alert-warning" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title Error</div>
+                                </div>
+
+                                <!-- Content input -->
+                                <div class="form-floating mb-3">
+                                    <textarea class="form-control" type="text" th:field="*{description}" id="comment" rows="30"></textarea>
+                                    <label for="comment">Content</label>
+                                    <div class="alert alert-warning" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Description Error</div>
+                                </div>
+
+                                <!-- Add Comment button -->
+                                <input type="submit" class="btn btn-primary w-100" value="Add Post" />
+
+                                <!-- Go back link -->
+                                <p class="text-center text-muted m-2">Return to recent posts? <a th:href="@{~/posts}" role="button">Go back</a></p>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-            </form> -->
-            <form th:action="@{/posts}" th:object="${post}" th:method="post" class="form">
-                <div class="form-group">
-                    <label for="title">Title</label>
-                    <input class="form-control" type="text" th:field="*{title}" id="title" placeholder="Type title here:" />
-                    <div class="alert alert-warning" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title Error</div>
-                </div>
-                <div class="form-group">
-                    <label for="comment">Description</label>
-                    <textarea class="form-control" type="text" th:field="*{description}" id="comment" rows="3"></textarea>
-                    <div class="alert alert-warning" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Description Error</div>
-                </div>
-                <input type="submit" class="btn btn-success" value="Create Post" />
-            </form>
-        </main>
-        <footer th:insert="~{fragments/footer-content}" id="footer-content" class="bg-primary"></footer>
+            </main>
+            <footer class="bg-primary mt-auto" id="footer-content" th:insert="~{fragments/footer-content}"></footer>
+        </div>
         <link th:insert="~{fragments/bootstrap-js-bundle}" />
     </body>
 </html>

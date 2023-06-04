@@ -30,17 +30,22 @@
                                     <div class="d-flex justify-content-between">
                                         <div>
                                             <p class="text-muted">Post title <span class="gradient-text-orange" th:text="${post.title}">Post Title Example</span></p>
-                                            <p class="text-muted">View comments for this post? <a th:href="@{/posts/{id}/comments(id=${post.id})}" role="button">View</a></p>
                                         </div>
                                         <div>
-                                            <p class="text-muted">Written by <span class="gradient-text-orange" th:text="${post.profile.username}">John Doe</span></p>
-                                            <p class="text-muted">Publication Date <span class="gradient-text-orange" th:text="${post.creationDate}">01/01/2001</span></p>
+                                            <p class="text-muted">View comments for this post? <a th:href="@{/posts/{id}/comments(id=${post.id})}" role="button">View</a></p>
                                         </div>
                                     </div>
 
                                     <!-- Post -->
                                     <p th:text="${post.description}">post example</p>
-
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <p class="text-muted">Written by <span class="gradient-text-orange" th:text="${post.profile.username}">John Doe</span></p>
+                                        </div>
+                                        <div>
+                                            <p class="text-muted">Publication Date <span class="gradient-text-orange" th:text="${post.creationDate}">01/01/2001</span></p>
+                                        </div>
+                                    </div>
                                     <div class="d-flex justify-content-between">
                                         <div>
                                             <!-- author's page link -->

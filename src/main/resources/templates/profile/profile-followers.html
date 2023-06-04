@@ -6,37 +6,67 @@
         <link th:replace="~{fragments/main-stylesheet}" />
         <link rel="icon" type="image/x-icon" th:href="@{~/favicon.ico}" />
         <meta charset="utf-8" />
-        <title>Profile Posts</title>
+        <title>Author`s Followers</title>
     </head>
 
     <body>
-        <header>
-            <div th:insert="~{fragments/navbar}" id="navbar-content"></div>
-        </header>
-        <main>
-            <h2>Profile Followers</h2>
-            <div th:if="${personalProfile}">
-                <div th:each="follower : ${followerPage.content}">
-                    <p th:text="${follower.follower.username}"></p>
-                    <a class="btn btn-primary" th:href="@{/profiles/{id}(id=${follower.follower.id})}">Check Follower Profile</a>
-                </div>
-                <div th:if="${pageNumbers}" class="pagination" th:each="pageNumber : ${pageNumbers}">
-                    <a th:href="@{/profiles/{profileId}/followers(profileId=${profileId}, page=${pageNumber})}" th:text="${pageNumber}" class="btn" th:classappend="${pageNumber==followerPage.number + 1} ? disabled"> </a>
-                </div>
-            </div>
+        <div id="page-wrapper" class="d-flex flex-column min-vh-100">
+            <header>
+                <div th:insert="~{fragments/navbar}" id="navbar-content"></div>
+            </header>
+            <main class="mt-auto">
+                <div class="container-lg">
+                    <div class="row align-items-center justify-content-center">
+                        <div class="col-lg-8">
+                            <!-- Title -->
+                            <div class="d-flex justify-content-between">
+                                <div class="p-2">
+                                    <p class="text-muted">Author`s Followers</p>
+                                </div>
+                                <div class="p-2">
+                                    <p class="text-center text-muted">Return to author`s profile? <a th:href="@{~/profiles/{profileId}(profileId=${profileId})}" role="button">Go back</a></p>
+                                </div>
+                            </div>
+                            <!-- Table -->
+                            <div class="table-responsive-lg">
+                                <!-- Profile-Comments Card -->
+                                <table class="table table-hover">
+                                    <caption>
+                                        Author`s Followers
+                                    </caption>
+                                    <thead>
+                                        <tr>
+                                            <th>Author`s name</th>
+                                            <th>Author`s page</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="follower : ${followerPage.content}">
+                                            <td th:text="${follower.follower.username}">John Doe</td>
+                                            <td>
+                                                <p class="text-muted"><a th:href="@{/profiles/{id}(id=${follower.follower.id})}" role="button">View follower</a></p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
 
-            <div th:unless="${personalProfile}">
-                <div th:each="follower : ${followerPage.content}">
-                    <p th:text="${follower.follower.username}"></p>
-                    <a class="btn btn-primary" th:href="@{/profiles/{id}(id=${follower.follower.id})}">Check Follower Profile</a>
+                            <!-- Pagination -->
+                            <div th:if="${pageNumbers}">
+                                <ul class="pagination">
+                                    <li th:each="pageNumber : ${pageNumbers}" class="page-item" th:classappend="${pageNumber==followerPage.number + 1} ? active">
+                                        <a class="page-link" th:href="@{/profiles/{profileId}/followers(profileId=${profileId}, page=${pageNumber})}">
+                                            <span th:text="${pageNumber}">42</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div th:if="${pageNumbers}" class="pagination" th:each="pageNumber : ${pageNumbers}">
-                    <a th:href="@{/profiles/{profileId}/followers(profileId=${profileId}, page=${pageNumber})}" th:text="${pageNumber}" class="btn" th:classappend="${pageNumber==followerPage.number + 1} ? disabled"> </a>
-                </div>
-            </div>
-        </main>
-
-        <footer th:insert="~{fragments/footer-content}" id="footer-content" class="bg-primary"></footer>
+            </main>
+            <footer class="bg-primary mt-auto" id="footer-content" th:insert="~{fragments/footer-content}"></footer>
+        </div>
         <link th:insert="~{fragments/bootstrap-js-bundle}" />
     </body>
 </html>

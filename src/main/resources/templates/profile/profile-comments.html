@@ -6,41 +6,75 @@
         <link th:replace="~{fragments/main-stylesheet}" />
         <link rel="icon" type="image/x-icon" th:href="@{~/favicon.ico}" />
         <meta charset="utf-8" />
-        <title>Profile Posts</title>
+        <title>Author`s Comments</title>
     </head>
 
     <body>
-        <header>
-            <div th:insert="~{fragments/navbar}" id="navbar-content"></div>
-        </header>
-        <main>
-            <h2>Profile Comments</h2>
-            <div th:if="${personalProfile}">
-                <div th:each="comment : ${commentPage.content}">
-                    <p th:text="${comment.post.title}"></p>
-                    <p th:text="${comment.description}"></p>
-                    <p th:text="${comment.creationDate}"></p>
-                    <a class="btn btn-primary" th:href="@{/posts/{id}(id=${comment.post.id})}">Check Post</a>
-                </div>
-                <div th:if="${pageNumbers}" class="pagination" th:each="pageNumber : ${pageNumbers}">
-                    <a th:href="@{/profiles/{profileId}/comments(profileId=${profileId}, page=${pageNumber})}" th:text="${pageNumber}" class="btn" th:classappend="${pageNumber==commentPage.number + 1} ? disabled"> </a>
-                </div>
-            </div>
+        <div id="page-wrapper" class="d-flex flex-column min-vh-100">
+            <header>
+                <div th:insert="~{fragments/navbar}" id="navbar-content"></div>
+            </header>
+            <main class="mt-auto">
+                <div class="container-lg">
+                    <div class="row align-items-center justify-content-center">
+                        <div class="col-lg-8">
+                            <!-- Title -->
+                            <div class="d-flex justify-content-between">
+                                <div class="p-2">
+                                    <p class="text-muted">Author`s Comments</p>
+                                </div>
+                                <div class="p-2">
+                                    <p class="text-center text-muted">Return to author`s profile? <a th:href="@{~/profiles/{profileId}(profileId=${profileId})}" role="button">Go back</a></p>
+                                </div>
+                            </div>
+                            <!-- Table -->
+                            <div class="table-responsive-lg">
+                                <!-- Profile-Comments Card -->
+                                <table class="table table-hover">
+                                    <caption>
+                                        Author`s Comments
+                                    </caption>
+                                    <thead>
+                                        <tr>
+                                            <th>Published On</th>
+                                            <th>Post Title</th>
+                                            <th>Author`s Comments</th>
+                                            <th>Post</th>
+                                            <th>Comment</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="comment : ${commentPage.content}">
+                                            <td th:text="${#temporals.format(comment.creationDate, 'dd-MM-yyyy HH:mm')}">01-01-2001</td>
+                                            <td th:text="${#strings.length(comment.post.title) > 61} ? ${#strings.substring(comment.post.title,0,60)} + '...' : ${comment.post.title}">Post Title Example</td>
+                                            <td th:text="${#strings.length(comment.description) > 61} ? ${#strings.substring(comment.description,0,60)} + '...' : ${comment.description}">Post Title Example</td>
+                                            <td>
+                                                <p class="text-muted"><a th:href="@{/posts/{id}(id=${comment.post.id})}" role="button">View post</a></p>
+                                            </td>
+                                            <td>
+                                                <p class="text-muted"><a th:href="@{/posts/{postId}/comments/{commentId}(postId=${comment.post.id}, commentId=${comment.id})}" role="button">View comment</a></p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
 
-            <div th:unless="${personalProfile}">
-                <div th:each="comment : ${commentPage.content}">
-                    <p th:text="${comment.post.title}"></p>
-                    <p th:text="${comment.description}"></p>
-                    <p th:text="${comment.creationDate}"></p>
-                    <a class="btn btn-primary" th:href="@{/posts/{id}(id=${comment.post.id})}">Check Post</a>
+                            <!-- Pagination -->
+                            <div th:if="${pageNumbers}">
+                                <ul class="pagination">
+                                    <li th:each="pageNumber : ${pageNumbers}" class="page-item" th:classappend="${pageNumber==commentPage.number + 1} ? active">
+                                        <a class="page-link" th:href="@{/profiles/{profileId}/comments(profileId=${profileId}, page=${pageNumber})}">
+                                            <span th:text="${pageNumber}">42</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div th:if="${pageNumbers}" class="pagination" th:each="pageNumber : ${pageNumbers}">
-                    <a th:href="@{/profiles/{profileId}/comments(profileId=${profileId}, page=${pageNumber})}" th:text="${pageNumber}" class="btn" th:classappend="${pageNumber==commentPage.number + 1} ? disabled"> </a>
-                </div>
-            </div>
-        </main>
-
-        <footer th:insert="~{fragments/footer-content}" id="footer-content" class="bg-primary"></footer>
+            </main>
+            <footer class="bg-primary mt-auto" id="footer-content" th:insert="~{fragments/footer-content}"></footer>
+        </div>
         <link th:insert="~{fragments/bootstrap-js-bundle}" />
     </body>
 </html>

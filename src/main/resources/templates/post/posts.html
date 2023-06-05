@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link th:replace="~{fragments/bootstrap-stylesheet}" />
         <link th:replace="~{fragments/main-stylesheet}" />
-        <link rel="icon" type="image/x-icon" th:href="@{~/images/favicon/postly-symbol-logo-light-favicon.ico}" />
+        <link rel="icon" type="image/x-icon" th:href="@{~/favicon.ico}" />
         <meta charset="utf-8" />
         <title>Posts</title>
     </head>
@@ -77,7 +77,7 @@
                                 </div>
                                 <!-- Add post link -->
                                 <div>
-                                    <form th:action="@{~/posts/{postId}/create-form(postId=${postId})}" th:method="get">
+                                    <form th:action="@{~/posts/create-form}" th:method="get">
                                         <input type="submit" class="btn btn-primary w-100" value="Add Post" />
                                     </form>
                                 </div>

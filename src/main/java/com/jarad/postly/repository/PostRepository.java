@@ -10,15 +10,15 @@ import java.util.Optional;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
-    Page<Post> findPostPageByProfile_Id(Long profileId, Pageable pageable);
+    Page<Post> findPostPageByProfileId(Long profileId, Pageable pageable);
 
-    Page<Post> findByProfile_User_IdNot(Long userId, Pageable pageable);
+    Page<Post> findByProfileUserIdNot(Long userId, Pageable pageable);
 
-    Optional<Post> findByProfile_IdAndId(Long profileId, Long postId);
+    Optional<Post> findByProfileIdAndId(Long profileId, Long postId);
 
-    Optional<Post> findByProfile_User_IdAndId(Long userId, Long postId);
+    Optional<Post> findByProfileUserIdAndId(Long userId, Long postId);
 
-    boolean existsByProfile_User_IdAndId(Long userId, Long postId);
+    boolean existsByProfileUserIdAndId(Long userId, Long postId);
 
 
 }

@@ -61,7 +61,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public Page<Comment> returnPaginatedCommentsByCreationDateDescending(Long postId, int page) {
         Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by("creationDate").descending());
-        return commentRepository.findByPost_Id(postId, pageable);
+        return commentRepository.findByPostId(postId, pageable);
     }
 
     @Override
@@ -81,7 +81,7 @@ public class PostServiceImpl implements PostService {
     public Long createNewPostAndReturnPostId(Long userId, PostDto postDto) {
         log.info("Creating a new post for user with ID {}", userId);
 
-        Optional<Profile> optionalProfile = profileRepository.findByUser_Id(userId);
+        Optional<Profile> optionalProfile = profileRepository.findByUserId(userId);
         if (optionalProfile.isEmpty()) {
             String message = MessageFormat.format("Profile with ID {0} doesn''t exist", userId);
             log.info(message);
@@ -106,7 +106,7 @@ public class PostServiceImpl implements PostService {
     public void updateExistingPost(Long userId, Long postId, PostDto postDto) {
         log.info("Updating post with ID {} owned by user with ID {}", postId, userId);
 
-        Optional<Post> optionalPost = postRepository.findByProfile_User_IdAndId(userId, postId);
+        Optional<Post> optionalPost = postRepository.findByProfileUserIdAndId(userId, postId);
         if (optionalPost.isEmpty()) {
             String message = MessageFormat.format("Post with ID {0} that is owned by user with ID {1} doesn''t exist", postId, userId);
             log.info(message);
@@ -126,7 +126,7 @@ public class PostServiceImpl implements PostService {
     @Transactional
     @Override
     public void deleteExistingPost(Long profileId, Long postId) {
-        Optional<Post> optionalPost = postRepository.findByProfile_IdAndId(profileId, postId);
+        Optional<Post> optionalPost = postRepository.findByProfileIdAndId(profileId, postId);
         if (optionalPost.isEmpty()) {
             String message = MessageFormat.format("Post with ID {0} doesn''t exist for profile with ID {1}", postId, profileId);
             log.info(message);
@@ -139,7 +139,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public boolean isPostOwnedByUser(Long userId, Long postId) {
-        return postRepository.existsByProfile_User_IdAndId(userId, postId);
+        return postRepository.existsByProfileUserIdAndId(userId, postId);
     }
 
     @Transactional
@@ -147,7 +147,7 @@ public class PostServiceImpl implements PostService {
     public Long createNewCommentAndReturnCommentId(Long userId, Long postId, CommentDto commentDto) {
         log.info("Creating a new comment for user with ID {} on post with ID {}", userId, postId);
 
-        Optional<Profile> optionalProfile = profileRepository.findByUser_Id(userId);
+        Optional<Profile> optionalProfile = profileRepository.findByUserId(userId);
         if (optionalProfile.isEmpty()) {
             String message = MessageFormat.format("Profile with ID {0} doesn''t exist", userId);
             log.info(message);
@@ -176,7 +176,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Set<Long> returnAuthorsByUserId(Long userId) {
-        Optional<Profile> optionalProfile = profileRepository.findByUser_Id(userId);
+        Optional<Profile> optionalProfile = profileRepository.findByUserId(userId);
 
         if (optionalProfile.isPresent()) {
             Profile profile = optionalProfile.get();

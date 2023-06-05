@@ -18,6 +18,6 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public boolean isProfileExistForUser(Long userId) {
-        return profileRepository.existsByUser_Id(userId);
+        return profileRepository.existsByUserId(userId);
     }
 }

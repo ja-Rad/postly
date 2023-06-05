@@ -65,7 +65,7 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public Page<Post> returnProfilePaginatedPostsByCreationDateDescending(Long profileId, int page) {
         Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by(CREATION_DATE).descending());
-        Page<Post> pageProfilePosts = postRepository.findPostPageByProfile_Id(profileId, pageable);
+        Page<Post> pageProfilePosts = postRepository.findPostPageByProfileId(profileId, pageable);
 
         return pageProfilePosts;
     }
@@ -73,7 +73,7 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public Page<Follower> returnProfilePaginatedAuthorsByCreationDateDescending(Long profileId, int page) {
         Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by(CREATION_DATE).descending());
-        Page<Follower> pageProfileAuthors = followerRepository.findAuthorPageById_FollowerId(profileId, pageable);
+        Page<Follower> pageProfileAuthors = followerRepository.findAuthorPageByIdFollowerId(profileId, pageable);
 
         return pageProfileAuthors;
     }
@@ -81,7 +81,7 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public Page<Follower> returnProfilePaginatedFollowersByCreationDateDescending(Long profileId, int page) {
         Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by(CREATION_DATE).descending());
-        Page<Follower> pageProfileFollowers = followerRepository.findFollowerPageById_AuthorId(profileId, pageable);
+        Page<Follower> pageProfileFollowers = followerRepository.findFollowerPageByIdAuthorId(profileId, pageable);
 
         return pageProfileFollowers;
     }
@@ -89,7 +89,7 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public Page<Comment> returnProfilePaginatedCommentsByCreationDateDescending(Long profileId, int page) {
         Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by(CREATION_DATE).descending());
-        Page<Comment> pageProfileComments = commentRepository.findCommentPageByProfile_Id(profileId, pageable);
+        Page<Comment> pageProfileComments = commentRepository.findCommentPageByProfileId(profileId, pageable);
 
         return pageProfileComments;
     }
@@ -125,7 +125,7 @@ public class ProfileServiceImpl implements ProfileService {
             throw new UserNotFoundException(message);
         }
 
-        Optional<Profile> optionalProfile = profileRepository.findByUser_Id(userId);
+        Optional<Profile> optionalProfile = profileRepository.findByUserId(userId);
         if (optionalProfile.isPresent()) {
             String message = MessageFormat.format("Profile for user with ID {0} already exist", userId);
             log.info(message);
@@ -179,7 +179,7 @@ public class ProfileServiceImpl implements ProfileService {
             throw new UserNotFoundException(message);
         }
 
-        Optional<Profile> optionalProfile = profileRepository.findByUser_Id(profileId);
+        Optional<Profile> optionalProfile = profileRepository.findByUserId(profileId);
         if (optionalProfile.isEmpty()) {
             String message = MessageFormat.format("Profile for user with ID {0} doesn''t exist", profileId);
             log.info(message);
@@ -196,17 +196,17 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public boolean isProfileExistForUser(Long userId) {
-        return profileRepository.existsByUser_Id(userId);
+        return profileRepository.existsByUserId(userId);
     }
 
     @Override
     public boolean isUserOwnsThisProfile(Long userId, Long profileId) {
-        return profileRepository.existsByUser_IdAndId(userId, profileId);
+        return profileRepository.existsByUserIdAndId(userId, profileId);
     }
 
     @Override
     public Set<Long> returnAuthorsByUserId(Long userId) {
-        Optional<Profile> optionalProfile = profileRepository.findByUser_Id(userId);
+        Optional<Profile> optionalProfile = profileRepository.findByUserId(userId);
 
         if (optionalProfile.isPresent()) {
             Profile profile = optionalProfile.get();

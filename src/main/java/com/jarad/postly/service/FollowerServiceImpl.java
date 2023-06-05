@@ -91,7 +91,7 @@ public class FollowerServiceImpl implements FollowerService {
             throw new ProfileNotFoundException(message);
         }
 
-        followerRepository.deleteById_AuthorIdAndId_FollowerId(authorId, followerId);
+        followerRepository.deleteByIdAuthorIdAndIdFollowerId(authorId, followerId);
 
         log.info("Follower with ID {} has been deleted from author with ID {}", followerId, authorId);
     }

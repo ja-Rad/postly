@@ -55,12 +55,12 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Page<Comment> returnPaginatedCommentsByCreationDateDescending(Long postId, int page) {
         Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by("creationDate").descending());
-        return commentRepository.findByPost_Id(postId, pageable);
+        return commentRepository.findByPostId(postId, pageable);
     }
 
     @Override
     public Set<Long> returnAuthorsByUserId(Long userId) {
-        Optional<Profile> optionalProfile = profileRepository.findByUser_Id(userId);
+        Optional<Profile> optionalProfile = profileRepository.findByUserId(userId);
 
         if (optionalProfile.isPresent()) {
             Profile profile = optionalProfile.get();
@@ -76,7 +76,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Comment returnCommentById(Long postId, Long commentId) {
 
-        Optional<Comment> optionalComment = commentRepository.findByPost_IdAndId(postId, commentId);
+        Optional<Comment> optionalComment = commentRepository.findByPostIdAndId(postId, commentId);
         if (optionalComment.isEmpty()) {
             String message = MessageFormat.format("Comment with ID {0} doesn''t exist", commentId);
             log.info(message);
@@ -91,7 +91,7 @@ public class CommentServiceImpl implements CommentService {
     public Long createNewCommentAndReturnCommentId(Long userId, Long postId, CommentDto commentDto) {
         log.info("Creating a new comment for user with ID {} on post with ID {}", userId, postId);
 
-        Optional<Profile> optionalProfile = profileRepository.findByUser_Id(userId);
+        Optional<Profile> optionalProfile = profileRepository.findByUserId(userId);
         if (optionalProfile.isEmpty()) {
             String message = MessageFormat.format("Profile with ID {0} doesn''t exist", userId);
             log.info(message);
@@ -123,7 +123,7 @@ public class CommentServiceImpl implements CommentService {
     public void updateExistingComment(Long userId, Long postId, Long commentId, CommentDto commentDto) {
         log.info("Updating comment with ID {} in post with ID {} for user with ID {}", commentId, postId, userId);
 
-        Optional<Comment> optionalComment = commentRepository.findByProfile_User_IdAndPost_IdAndId(userId, postId, commentId);
+        Optional<Comment> optionalComment = commentRepository.findByProfileUserIdAndPostIdAndId(userId, postId, commentId);
         if (optionalComment.isEmpty()) {
             String message = MessageFormat.format("Comment with ID {0} in post with ID {1} for user with ID {2} doesn''t exist", commentId, postId, userId);
             log.info(message);
@@ -142,7 +142,7 @@ public class CommentServiceImpl implements CommentService {
     public void deleteExistingComment(Long userId, Long postId, Long commentId) {
         log.info("Deleting comment with ID {} in post with ID {} for profile with ID {}", commentId, postId, userId);
 
-        Optional<Comment> optionalComment = commentRepository.findByProfile_User_IdAndPost_IdAndId(userId, postId, commentId);
+        Optional<Comment> optionalComment = commentRepository.findByProfileUserIdAndPostIdAndId(userId, postId, commentId);
         if (optionalComment.isEmpty()) {
             String message = MessageFormat.format("Comment with ID {0} in post with ID {1} for user with ID {2} doesn''t exist", commentId, postId, userId);
             log.info(message);
@@ -158,7 +158,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public boolean isCommentOwnedByUser(Long userId, Long commentId) {
-        return commentRepository.existsByProfile_User_IdAndId(userId, commentId);
+        return commentRepository.existsByProfileUserIdAndId(userId, commentId);
     }
 }
 

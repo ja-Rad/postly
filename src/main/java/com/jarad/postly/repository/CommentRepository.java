@@ -10,15 +10,15 @@ import java.util.Optional;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    Page<Comment> findCommentPageByProfile_Id(Long profileId, Pageable pageable);
+    Page<Comment> findCommentPageByProfileId(Long profileId, Pageable pageable);
 
-    Page<Comment> findByPost_Id(Long postId, Pageable pageable);
+    Page<Comment> findByPostId(Long postId, Pageable pageable);
 
-    Optional<Comment> findByProfile_User_IdAndId(Long userId, Long commentId);
+    Optional<Comment> findByProfileUserIdAndId(Long userId, Long commentId);
 
-    Optional<Comment> findByProfile_User_IdAndPost_IdAndId(Long userId, Long postId, Long commentId);
+    Optional<Comment> findByProfileUserIdAndPostIdAndId(Long userId, Long postId, Long commentId);
 
-    Optional<Comment> findByPost_IdAndId(Long postId, Long commentId);
+    Optional<Comment> findByPostIdAndId(Long postId, Long commentId);
 
-    boolean existsByProfile_User_IdAndId(Long userId, Long commentId);
+    boolean existsByProfileUserIdAndId(Long userId, Long commentId);
 }

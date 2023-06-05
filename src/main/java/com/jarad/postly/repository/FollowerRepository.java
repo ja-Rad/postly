@@ -10,11 +10,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FollowerRepository extends JpaRepository<Follower, FollowerId> {
 
-    Page<Follower> findAuthorPageById_FollowerId(Long followerId, Pageable pageable);
+    Page<Follower> findAuthorPageByIdFollowerId(Long followerId, Pageable pageable);
 
-    Page<Follower> findFollowerPageById_AuthorId(Long authorId, Pageable pageable);
+    Page<Follower> findFollowerPageByIdAuthorId(Long authorId, Pageable pageable);
 
-    void deleteById_AuthorIdAndId_FollowerId(Long authorId, Long followerId);
+    void deleteByIdAuthorIdAndIdFollowerId(Long authorId, Long followerId);
 
 
 }

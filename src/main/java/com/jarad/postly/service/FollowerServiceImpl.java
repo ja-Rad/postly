@@ -5,7 +5,6 @@ import com.jarad.postly.entity.Profile;
 import com.jarad.postly.entity.embeddable.FollowerPK;
 import com.jarad.postly.repository.FollowerRepository;
 import com.jarad.postly.repository.ProfileRepository;
-import com.jarad.postly.util.exception.AuthorNotFoundException;
 import com.jarad.postly.util.exception.FollowerServiceException;
 import com.jarad.postly.util.exception.ProfileNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -37,19 +36,8 @@ public class FollowerServiceImpl implements FollowerService {
     public void addFollowerToAuthor(Long followerId, Long authorId) {
         log.info("Adding follower with ID {} to author with ID {}", followerId, authorId);
 
-        Optional<Profile> optionalAuthorsProfile = profileRepository.findById(authorId);
-        if (optionalAuthorsProfile.isEmpty()) {
-            String message = MessageFormat.format("Authors Profile with ID {0} doesn''t exist", authorId);
-            log.info(message);
-            throw new AuthorNotFoundException(message);
-        }
-
-        Optional<Profile> optionalFollowersProfile = profileRepository.findById(followerId);
-        if (optionalFollowersProfile.isEmpty()) {
-            String message = MessageFormat.format("Followers Profile with ID {0} doesn''t exist", followerId);
-            log.info(message);
-            throw new ProfileNotFoundException(message);
-        }
+        findProfileById(authorId, "Authors");
+        findProfileById(followerId, "Followers");
 
         if (Objects.equals(followerId, authorId)) {
             String message = MessageFormat.format("Follower with ID {0} can''t follow author with same ID {1} because Self-following is not allowed", followerId, authorId);
@@ -77,22 +65,25 @@ public class FollowerServiceImpl implements FollowerService {
     public void deleteFollowerFromAuthor(Long followerId, Long authorId) {
         log.info("Deleting follower with ID {} from author with ID {}", followerId, authorId);
 
-        Optional<Profile> optionalAuthorsProfile = profileRepository.findById(authorId);
-        if (optionalAuthorsProfile.isEmpty()) {
-            String message = MessageFormat.format("Authors Profile with ID {0} doesn''t exist", authorId);
-            log.info(message);
-            throw new AuthorNotFoundException(message);
-        }
-
-        Optional<Profile> optionalFollowersProfile = profileRepository.findById(followerId);
-        if (optionalFollowersProfile.isEmpty()) {
-            String message = MessageFormat.format("Followers Profile with ID {0} doesn''t exist", followerId);
-            log.info(message);
-            throw new ProfileNotFoundException(message);
-        }
+        findProfileById(authorId, "Authors");
+        findProfileById(followerId, "Followers");
 
         followerRepository.deleteByIdAuthorIdAndIdFollowerId(authorId, followerId);
 
         log.info("Follower with ID {} has been deleted from author with ID {}", followerId, authorId);
+    }
+
+    /**
+     * Helper Method to find Profile based on its type
+     *
+     * @param profileType is represented by Authors and Followers
+     */
+    private void findProfileById(Long profileId, String profileType) {
+        Optional<Profile> optionalProfile = profileRepository.findById(profileId);
+        if (optionalProfile.isEmpty()) {
+            String message = MessageFormat.format("{0} Profile with ID {1} doesn''t exist", profileType, profileId);
+            log.info(message);
+            throw new ProfileNotFoundException(message);
+        }
     }
 }

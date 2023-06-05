@@ -12,8 +12,6 @@ import java.util.Optional;
 public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findPostPageByProfileId(Long profileId, Pageable pageable);
 
-    Page<Post> findByProfileUserIdNot(Long userId, Pageable pageable);
-
     Optional<Post> findByProfileIdAndId(Long profileId, Long postId);
 
     Optional<Post> findByProfileUserIdAndId(Long userId, Long postId);

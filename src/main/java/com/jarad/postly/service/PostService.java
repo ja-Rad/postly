@@ -2,7 +2,6 @@ package com.jarad.postly.service;
 
 import com.jarad.postly.entity.Comment;
 import com.jarad.postly.entity.Post;
-import com.jarad.postly.util.dto.CommentDto;
 import com.jarad.postly.util.dto.PostDto;
 import org.springframework.data.domain.Page;
 
@@ -23,8 +22,6 @@ public interface PostService {
     Long createNewPostAndReturnPostId(Long userId, PostDto postDto);
 
     void updateExistingPost(Long profileId, Long postId, PostDto postDto);
-
-    Long createNewCommentAndReturnCommentId(Long userId, Long postId, CommentDto commentDto);
 
     void deleteExistingPost(Long profileId, Long postId);
 

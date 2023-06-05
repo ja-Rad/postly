@@ -6,7 +6,6 @@ import com.jarad.postly.entity.Profile;
 import com.jarad.postly.repository.CommentRepository;
 import com.jarad.postly.repository.PostRepository;
 import com.jarad.postly.repository.ProfileRepository;
-import com.jarad.postly.util.dto.CommentDto;
 import com.jarad.postly.util.dto.PostDto;
 import com.jarad.postly.util.exception.PostNotFoundException;
 import com.jarad.postly.util.exception.ProfileNotFoundException;
@@ -140,38 +139,6 @@ public class PostServiceImpl implements PostService {
     @Override
     public boolean isPostOwnedByUser(Long userId, Long postId) {
         return postRepository.existsByProfileUserIdAndId(userId, postId);
-    }
-
-    @Transactional
-    @Override
-    public Long createNewCommentAndReturnCommentId(Long userId, Long postId, CommentDto commentDto) {
-        log.info("Creating a new comment for user with ID {} on post with ID {}", userId, postId);
-
-        Optional<Profile> optionalProfile = profileRepository.findByUserId(userId);
-        if (optionalProfile.isEmpty()) {
-            String message = MessageFormat.format("Profile with ID {0} doesn''t exist", userId);
-            log.info(message);
-            throw new ProfileNotFoundException(message);
-        }
-
-        Optional<Post> optionalPost = postRepository.findById(postId);
-        if (optionalPost.isEmpty()) {
-            String message = MessageFormat.format("Post with ID {0} doesn''t exist", postId);
-            log.info(message);
-            throw new PostNotFoundException(message);
-        }
-
-        Comment comment = Comment.builder()
-                .description(commentDto.getDescription())
-                .creationDate(Instant.now())
-                .profile(optionalProfile.get())
-                .post(optionalPost.get())
-                .build();
-        Comment savedComment = commentRepository.save(comment);
-
-        log.info("New comment created with ID {} for user with ID {} on post with ID {}", savedComment.getId(), userId, postId);
-
-        return savedComment.getId();
     }
 
     @Override

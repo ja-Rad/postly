@@ -1,9 +1,9 @@
 package com.jarad.postly.controller;
 
+import com.jarad.postly.aspect.LogExecutionTime;
 import com.jarad.postly.entity.Post;
 import com.jarad.postly.security.UserDetailsImpl;
 import com.jarad.postly.service.PostService;
-import com.jarad.postly.util.annotation.LogExecutionTime;
 import com.jarad.postly.util.dto.PostDto;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;

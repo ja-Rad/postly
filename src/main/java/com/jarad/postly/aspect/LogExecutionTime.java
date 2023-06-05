@@ -1,4 +1,4 @@
-package com.jarad.postly.util.annotation;
+package com.jarad.postly.aspect;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

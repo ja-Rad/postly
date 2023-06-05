@@ -1,6 +1,5 @@
 package com.jarad.postly.util.validation;
 
-import com.jarad.postly.util.annotation.PasswordMatches;
 import com.jarad.postly.util.dto.UserDto;
 import com.jarad.postly.util.dto.UserDtoOnlyPassword;
 import com.jarad.postly.util.exception.PasswordMatchesValidatorException;

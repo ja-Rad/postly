@@ -1,7 +1,7 @@
 package com.jarad.postly.controller;
 
+import com.jarad.postly.aspect.LogExecutionTime;
 import com.jarad.postly.service.UserService;
-import com.jarad.postly.util.annotation.LogExecutionTime;
 import com.jarad.postly.util.dto.UserDto;
 import com.jarad.postly.util.dto.UserDtoOnlyEmail;
 import com.jarad.postly.util.dto.UserDtoOnlyPassword;

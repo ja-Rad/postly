@@ -14,7 +14,7 @@ public class LogExecutionTimeAspect {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Around("@annotation(com.jarad.postly.util.annotation.LogExecutionTime)")
+    @Around("@annotation(com.jarad.postly.aspect.LogExecutionTime)")
     public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
         final StopWatch stopWatch = new StopWatch();
 

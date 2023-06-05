@@ -1,8 +1,8 @@
 package com.jarad.postly.controller;
 
+import com.jarad.postly.aspect.LogExecutionTime;
 import com.jarad.postly.security.UserDetailsImpl;
 import com.jarad.postly.service.FollowerService;
-import com.jarad.postly.util.annotation.LogExecutionTime;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;

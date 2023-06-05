@@ -1,12 +1,12 @@
 package com.jarad.postly.controller;
 
+import com.jarad.postly.aspect.LogExecutionTime;
 import com.jarad.postly.entity.Comment;
 import com.jarad.postly.entity.Follower;
 import com.jarad.postly.entity.Post;
 import com.jarad.postly.entity.Profile;
 import com.jarad.postly.security.UserDetailsImpl;
 import com.jarad.postly.service.ProfileService;
-import com.jarad.postly.util.annotation.LogExecutionTime;
 import com.jarad.postly.util.dto.ProfileDto;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;

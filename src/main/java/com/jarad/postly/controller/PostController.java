@@ -27,8 +27,8 @@ import java.util.Set;
 @Controller
 @Slf4j
 public class PostController {
+    private static final String POST_SUBFOLDER_PREFIX = "post/";
     private final PostService postService;
-    private final String POST_SUBFOLDER_PREFIX = "post/";
 
     @Autowired
     public PostController(PostService postService) {
@@ -47,7 +47,7 @@ public class PostController {
 
         Long userId = userDetails.getUserId();
         boolean activeProfile = userDetails.isActiveProfile();
-        
+
         Set<Long> authorsByUserId = postService.returnAuthorsByUserId(userId);
         model.addAttribute("authorsByUserId", authorsByUserId);
 

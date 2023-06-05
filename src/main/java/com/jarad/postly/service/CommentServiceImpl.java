@@ -19,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.MessageFormat;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
@@ -26,7 +27,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.IntStream;
 
-import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
 @Service
@@ -49,7 +49,7 @@ public class CommentServiceImpl implements CommentService {
     public List<Integer> returnListOfPageNumbers(int totalPages) {
         return IntStream.rangeClosed(1, totalPages)
                 .boxed()
-                .collect(toList());
+                .toList();
     }
 
     @Override
@@ -78,7 +78,7 @@ public class CommentServiceImpl implements CommentService {
 
         Optional<Comment> optionalComment = commentRepository.findByPost_IdAndId(postId, commentId);
         if (optionalComment.isEmpty()) {
-            String message = "Comment with ID " + commentId + " does not exist";
+            String message = MessageFormat.format("Comment with ID {0} doesn''t exist", commentId);
             log.info(message);
             throw new CommentNotFoundException(message);
         }
@@ -93,14 +93,14 @@ public class CommentServiceImpl implements CommentService {
 
         Optional<Profile> optionalProfile = profileRepository.findByUser_Id(userId);
         if (optionalProfile.isEmpty()) {
-            String message = "Profile with id: " + userId + " doesn`t exist";
+            String message = MessageFormat.format("Profile with ID {0} doesn''t exist", userId);
             log.info(message);
             throw new ProfileNotFoundException(message);
         }
 
         Optional<Post> optionalPost = postRepository.findById(postId);
         if (optionalPost.isEmpty()) {
-            String message = "Post with id: " + postId + " doesn`t exist";
+            String message = MessageFormat.format("Post with ID {0} doesn''t exist", postId);
             log.info(message);
             throw new PostNotFoundException(message);
         }
@@ -125,7 +125,7 @@ public class CommentServiceImpl implements CommentService {
 
         Optional<Comment> optionalComment = commentRepository.findByProfile_User_IdAndPost_IdAndId(userId, postId, commentId);
         if (optionalComment.isEmpty()) {
-            String message = "Comment with id: " + commentId + " in post with id: " + postId + " for user with id: " + userId + " doesn`t exist";
+            String message = MessageFormat.format("Comment with ID {0} in post with ID {1} for user with ID {2} doesn''t exist", commentId, postId, userId);
             log.info(message);
             throw new CommentNotFoundException(message);
         }
@@ -144,7 +144,7 @@ public class CommentServiceImpl implements CommentService {
 
         Optional<Comment> optionalComment = commentRepository.findByProfile_User_IdAndPost_IdAndId(userId, postId, commentId);
         if (optionalComment.isEmpty()) {
-            String message = "Comment with id: " + commentId + " in post with id: " + postId + " for user with id: " + userId + " doesn`t exist";
+            String message = MessageFormat.format("Comment with ID {0} in post with ID {1} for user with ID {2} doesn''t exist", commentId, postId, userId);
             log.info(message);
             throw new CommentNotFoundException(message);
         }

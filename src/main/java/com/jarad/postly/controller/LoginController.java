@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Slf4j
 public class LoginController {
 
+    private static final String LOGIN_SUBFOLDER_PREFIX = "login/";
     private final LoginService loginService;
-    private final String LOGIN_SUBFOLDER_PREFIX = "login/";
 
     @Autowired
     public LoginController(LoginService loginService) {

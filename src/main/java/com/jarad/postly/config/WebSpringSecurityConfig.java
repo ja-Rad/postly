@@ -21,15 +21,14 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity(jsr250Enabled = true)
 public class WebSpringSecurityConfig {
 
-    public static final String[] ENDPOINTS_WHITELIST = {
+    public static final String LOGIN = "/login";
+    private static final String[] ENDPOINTS_WHITELIST = {
             "/users/**"
     };
-
-    public static final String[] STATIC_RESOURCES_WHITELIST = {
+    private static final String[] STATIC_RESOURCES_WHITELIST = {
             "/images/**",
             "/styles/**"
     };
-
     private final UserDetailsService userDetailsService;
 
     @Autowired
@@ -74,7 +73,7 @@ public class WebSpringSecurityConfig {
 
                 // Login Filter
                 .formLogin((form) -> form
-                        .loginPage("/login").usernameParameter("email").permitAll()
+                        .loginPage(LOGIN).usernameParameter("email").permitAll()
                         .defaultSuccessUrl("/", true)
                         .failureUrl("/login?error=true")
                 )
@@ -84,7 +83,7 @@ public class WebSpringSecurityConfig {
                         .logoutUrl("/logout").permitAll()
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
-                        .logoutSuccessUrl("/login")
+                        .logoutSuccessUrl(LOGIN)
                 )
 
                 // Session Filter
@@ -93,7 +92,7 @@ public class WebSpringSecurityConfig {
                         .invalidSessionUrl("/invalidSession")
                         .maximumSessions(1)
                         .maxSessionsPreventsLogin(true)
-                        .expiredUrl("/login")
+                        .expiredUrl(LOGIN)
 
                 )
 

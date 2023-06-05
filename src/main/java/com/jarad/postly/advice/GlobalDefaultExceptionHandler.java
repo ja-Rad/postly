@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 class GlobalDefaultExceptionHandler {
 
     public static final String DEFAULT_ERROR_VIEW = "error";
+    public static final String STATUS = "status";
+    public static final String MESSAGE = "message";
 
     /**
      * Error Handler for status code: 403 - Forbidden
@@ -31,9 +33,9 @@ class GlobalDefaultExceptionHandler {
     })
     public String errorHandler403(HttpServletRequest request, Exception ex, Model model) {
         HttpStatus status = HttpStatus.FORBIDDEN;
-        model.addAttribute("status", status.value());
+        model.addAttribute(STATUS, status.value());
         model.addAttribute("url", request.getRequestURL());
-        model.addAttribute("message", ex.getMessage());
+        model.addAttribute(MESSAGE, ex.getMessage());
 
         return DEFAULT_ERROR_VIEW;
     }
@@ -55,9 +57,9 @@ class GlobalDefaultExceptionHandler {
     })
     public String errorHandler404(HttpServletRequest request, Exception ex, Model model) {
         HttpStatus status = HttpStatus.NOT_FOUND;
-        model.addAttribute("status", status.value());
+        model.addAttribute(STATUS, status.value());
         model.addAttribute("url", request.getRequestURL());
-        model.addAttribute("message", ex.getMessage());
+        model.addAttribute(MESSAGE, ex.getMessage());
 
         return DEFAULT_ERROR_VIEW;
     }
@@ -71,9 +73,9 @@ class GlobalDefaultExceptionHandler {
     @ExceptionHandler({RuntimeException.class})
     public String errorHandler500(HttpServletRequest request, Exception ex, Model model) {
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-        model.addAttribute("status", status.value());
+        model.addAttribute(STATUS, status.value());
         model.addAttribute("url", request.getRequestURL());
-        model.addAttribute("message", ex.getMessage());
+        model.addAttribute(MESSAGE, ex.getMessage());
 
         return DEFAULT_ERROR_VIEW;
     }

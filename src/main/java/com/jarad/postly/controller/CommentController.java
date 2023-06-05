@@ -29,7 +29,10 @@ import java.util.Set;
 @Slf4j
 public class CommentController {
 
-    private final String COMMENT_SUBFOLDER_PREFIX = "comment/";
+    public static final String POST_ID = "postId";
+    public static final String COMMENT = "comment";
+    public static final String COMMENT_ID = "commentId";
+    private static final String COMMENT_SUBFOLDER_PREFIX = "comment/";
     private CommentService commentService;
 
     @Autowired
@@ -43,7 +46,7 @@ public class CommentController {
     @GetMapping("/posts/{postId}/comments")
     @LogExecutionTime
     public String getPostCommentsById(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                      @PathVariable("postId") Long postId,
+                                      @PathVariable(POST_ID) Long postId,
                                       Model model,
                                       @RequestParam(value = "page", defaultValue = "1") int page) {
         log.info("Entering getPostCommentsById");
@@ -64,7 +67,7 @@ public class CommentController {
         model.addAttribute("commentPage", commentPage);
         model.addAttribute("userId", userId);
         model.addAttribute("activeProfile", activeProfile);
-        model.addAttribute("postId", postId);
+        model.addAttribute(POST_ID, postId);
 
         return COMMENT_SUBFOLDER_PREFIX + "comments";
     }
@@ -72,8 +75,8 @@ public class CommentController {
     @GetMapping("/posts/{postId}/comments/{commentId}")
     @LogExecutionTime
     public String getCommentById(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                 @PathVariable("postId") Long postId,
-                                 @PathVariable("commentId") Long commentId,
+                                 @PathVariable(POST_ID) Long postId,
+                                 @PathVariable(COMMENT_ID) Long commentId,
                                  Model model) {
         log.info("Entering getCommentById");
 
@@ -88,39 +91,39 @@ public class CommentController {
         if (commentService.isCommentOwnedByUser(userId, commentId)) {
             model.addAttribute("personalComment", true);
         }
-        model.addAttribute("comment", comment);
+        model.addAttribute(COMMENT, comment);
         model.addAttribute("userId", userId);
         model.addAttribute("activeProfile", activeProfile);
-        model.addAttribute("postId", postId);
-        model.addAttribute("commentId", commentId);
+        model.addAttribute(POST_ID, postId);
+        model.addAttribute(COMMENT_ID, commentId);
 
-        return COMMENT_SUBFOLDER_PREFIX + "comment";
+        return COMMENT_SUBFOLDER_PREFIX + COMMENT;
     }
 
     @GetMapping("/posts/{postId}/comments/create-form")
     @LogExecutionTime
-    public String getPostCommentsById(@PathVariable("postId") Long postId,
+    public String getPostCommentsById(@PathVariable(POST_ID) Long postId,
                                       Model model) {
         log.info("Entering getPostCommentsById");
 
         CommentDto commentDto = new CommentDto();
-        model.addAttribute("postId", postId);
-        model.addAttribute("comment", commentDto);
+        model.addAttribute(POST_ID, postId);
+        model.addAttribute(COMMENT, commentDto);
 
         return COMMENT_SUBFOLDER_PREFIX + "comment-create-form";
     }
 
     @GetMapping("/posts/{postId}/comments/{commentId}/update-form")
     @LogExecutionTime
-    public String getPostUpdateForm(@PathVariable("postId") Long postId,
-                                    @PathVariable("commentId") Long commentId,
+    public String getPostUpdateForm(@PathVariable(POST_ID) Long postId,
+                                    @PathVariable(COMMENT_ID) Long commentId,
                                     Model model) {
         log.info("Entering getPostUpdateForm");
 
         Comment comment = commentService.returnCommentById(postId, commentId);
-        model.addAttribute("comment", comment);
-        model.addAttribute("postId", postId);
-        model.addAttribute("commentId", commentId);
+        model.addAttribute(COMMENT, comment);
+        model.addAttribute(POST_ID, postId);
+        model.addAttribute(COMMENT_ID, commentId);
 
         return COMMENT_SUBFOLDER_PREFIX + "comment-update-form";
     }
@@ -131,8 +134,8 @@ public class CommentController {
     @PostMapping("/posts/{postId}/comments/create-form")
     @LogExecutionTime
     public String addPostCommentById(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                     @PathVariable("postId") Long postId,
-                                     @ModelAttribute("comment") @Valid CommentDto commentDto,
+                                     @PathVariable(POST_ID) Long postId,
+                                     @ModelAttribute(COMMENT) @Valid CommentDto commentDto,
                                      BindingResult bindingResult,
                                      Model model) {
         log.info("Entering addPostCommentById");
@@ -140,7 +143,7 @@ public class CommentController {
         if (bindingResult.hasErrors()) {
             log.info("Validation errors occurred");
 
-            model.addAttribute("postId", postId);
+            model.addAttribute(POST_ID, postId);
             return COMMENT_SUBFOLDER_PREFIX + "comment-create-form";
         }
 
@@ -153,9 +156,9 @@ public class CommentController {
     @PutMapping("/posts/{postId}/comments/{commentId}")
     @LogExecutionTime
     public String updateCommentById(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                    @PathVariable("postId") Long postId,
-                                    @PathVariable("commentId") Long commentId,
-                                    @ModelAttribute("comment") @Valid CommentDto commentDto,
+                                    @PathVariable(POST_ID) Long postId,
+                                    @PathVariable(COMMENT_ID) Long commentId,
+                                    @ModelAttribute(COMMENT) @Valid CommentDto commentDto,
                                     BindingResult bindingResult,
                                     Model model) {
         log.info("Entering updateCommentById");
@@ -163,8 +166,8 @@ public class CommentController {
         if (bindingResult.hasErrors()) {
             log.info("Validation errors occurred");
 
-            model.addAttribute("postId", postId);
-            model.addAttribute("commentId", commentId);
+            model.addAttribute(POST_ID, postId);
+            model.addAttribute(COMMENT_ID, commentId);
             return COMMENT_SUBFOLDER_PREFIX + "comment-update-form";
         }
 
@@ -177,8 +180,8 @@ public class CommentController {
     @DeleteMapping("/posts/{postId}/comments/{commentId}")
     @LogExecutionTime
     public String deleteCommentById(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                    @PathVariable("postId") Long postId,
-                                    @PathVariable("commentId") Long commentId) {
+                                    @PathVariable(POST_ID) Long postId,
+                                    @PathVariable(COMMENT_ID) Long commentId) {
         log.info("Entering deleteCommentById");
 
         Long userId = userDetails.getUserId();

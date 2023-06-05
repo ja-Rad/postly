@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Slf4j
 public class UserController {
 
+    public static final String VALIDATION_ERRORS_OCCURRED = "Validation errors occurred";
     private final UserService userService;
 
     private final String USER_SUBFOLDER_PREFIX = "user/";
@@ -126,7 +127,7 @@ public class UserController {
         log.info("Entering processForgotPasswordVerifyPage");
 
         if (bindingResult.hasErrors()) {
-            log.info("Validation errors occurred");
+            log.info(VALIDATION_ERRORS_OCCURRED);
 
             model.addAttribute("code", code);
             return USER_SUBFOLDER_PREFIX + "forgot-password-form";
@@ -151,7 +152,7 @@ public class UserController {
         log.info("Entering resetPasswordForUserAccount");
 
         if (bindingResult.hasErrors()) {
-            log.info("Validation errors occurred");
+            log.info(VALIDATION_ERRORS_OCCURRED);
 
             return USER_SUBFOLDER_PREFIX + "forgot-password";
         }
@@ -168,7 +169,7 @@ public class UserController {
         log.info("Entering registerUserAccount");
 
         if (bindingResult.hasErrors()) {
-            log.info("Validation errors occurred");
+            log.info(VALIDATION_ERRORS_OCCURRED);
 
             return USER_SUBFOLDER_PREFIX + "registration";
         }

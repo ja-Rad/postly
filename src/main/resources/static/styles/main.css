@@ -20,6 +20,14 @@ a {
     text-decoration: none;
 }
 
+.postly-background-gradient-orange {
+    background: linear-gradient(to right, #ef453b 0%, #fcbe65 100%);
+}
+
+.postly-background-gradient-blue {
+    background: linear-gradient(to right, #323f8f 0%, #31bcf1 100%);
+}
+
 .postly-text-orange {
     color: #f1580c;
 }

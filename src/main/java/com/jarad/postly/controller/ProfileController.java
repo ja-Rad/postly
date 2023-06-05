@@ -32,6 +32,11 @@ import java.util.Set;
 @Slf4j
 public class ProfileController {
 
+    public static final String USER_ID = "userId";
+    public static final String PROFILE_ID = "profileId";
+    public static final String PAGE_NUMBERS = "pageNumbers";
+    public static final String PROFILE = "profile";
+    public static final String PERSONAL_PROFILE = "personalProfile";
     private final ProfileService profileService;
     private final String PROFILE_SUBFOLDER_PREFIX = "profile/";
 
@@ -52,7 +57,7 @@ public class ProfileController {
 
         Long userId = userDetails.getUserId();
         boolean activeProfile = userDetails.isActiveProfile();
-        model.addAttribute("userId", userId);
+        model.addAttribute(USER_ID, userId);
 
         Set<Long> authorsByUserId = profileService.returnAuthorsByUserId(userId);
         model.addAttribute("authorsByUserId", authorsByUserId);
@@ -63,9 +68,9 @@ public class ProfileController {
         int totalPages = profilePage.getTotalPages();
         if (totalPages > 1) {
             List<Integer> pageNumbers = profileService.returnListOfPageNumbers(totalPages);
-            model.addAttribute("pageNumbers", pageNumbers);
+            model.addAttribute(PAGE_NUMBERS, pageNumbers);
         }
-        model.addAttribute("userId", userId);
+        model.addAttribute(USER_ID, userId);
         model.addAttribute("activeProfile", activeProfile);
 
         return PROFILE_SUBFOLDER_PREFIX + "profiles";
@@ -85,15 +90,15 @@ public class ProfileController {
         model.addAttribute("authorsByUserId", authorsByUserId);
 
         Profile profile = profileService.returnProfileById(profileId);
-        model.addAttribute("profile", profile);
+        model.addAttribute(PROFILE, profile);
 
         if (profileService.isUserOwnsThisProfile(userId, profileId)) {
-            model.addAttribute("personalProfile", true);
+            model.addAttribute(PERSONAL_PROFILE, true);
         }
-        model.addAttribute("userId", userId);
+        model.addAttribute(USER_ID, userId);
         model.addAttribute("activeProfile", activeProfile);
 
-        return PROFILE_SUBFOLDER_PREFIX + "profile";
+        return PROFILE_SUBFOLDER_PREFIX + PROFILE;
     }
 
     @GetMapping("/profiles/{id}/posts")
@@ -105,10 +110,10 @@ public class ProfileController {
         log.info("Entering getProfilePosts");
 
         Long userId = userDetails.getUserId();
-        model.addAttribute("profileId", profileId);
+        model.addAttribute(PROFILE_ID, profileId);
 
         if (profileService.isUserOwnsThisProfile(userId, profileId)) {
-            model.addAttribute("personalProfile", true);
+            model.addAttribute(PERSONAL_PROFILE, true);
         }
 
         Page<Post> postPage = profileService.returnProfilePaginatedPostsByCreationDateDescending(profileId, page - 1);
@@ -117,7 +122,7 @@ public class ProfileController {
         int totalPages = postPage.getTotalPages();
         if (totalPages > 1) {
             List<Integer> pageNumbers = profileService.returnListOfPageNumbers(totalPages);
-            model.addAttribute("pageNumbers", pageNumbers);
+            model.addAttribute(PAGE_NUMBERS, pageNumbers);
         }
 
         return PROFILE_SUBFOLDER_PREFIX + "profile-posts";
@@ -132,10 +137,10 @@ public class ProfileController {
         log.info("Entering getProfileAuthors");
 
         Long userId = userDetails.getUserId();
-        model.addAttribute("profileId", profileId);
+        model.addAttribute(PROFILE_ID, profileId);
 
         if (profileService.isUserOwnsThisProfile(userId, profileId)) {
-            model.addAttribute("personalProfile", true);
+            model.addAttribute(PERSONAL_PROFILE, true);
         }
 
         Page<Follower> authorPage = profileService.returnProfilePaginatedAuthorsByCreationDateDescending(profileId, page - 1);
@@ -144,7 +149,7 @@ public class ProfileController {
         int totalPages = authorPage.getTotalPages();
         if (totalPages > 1) {
             List<Integer> pageNumbers = profileService.returnListOfPageNumbers(totalPages);
-            model.addAttribute("pageNumbers", pageNumbers);
+            model.addAttribute(PAGE_NUMBERS, pageNumbers);
         }
 
         return PROFILE_SUBFOLDER_PREFIX + "profile-authors";
@@ -159,10 +164,10 @@ public class ProfileController {
         log.info("Entering getProfileFollowers");
 
         Long userId = userDetails.getUserId();
-        model.addAttribute("profileId", profileId);
+        model.addAttribute(PROFILE_ID, profileId);
 
         if (profileService.isUserOwnsThisProfile(userId, profileId)) {
-            model.addAttribute("personalProfile", true);
+            model.addAttribute(PERSONAL_PROFILE, true);
         }
 
         Page<Follower> followerPage = profileService.returnProfilePaginatedFollowersByCreationDateDescending(profileId, page - 1);
@@ -171,7 +176,7 @@ public class ProfileController {
         int totalPages = followerPage.getTotalPages();
         if (totalPages > 1) {
             List<Integer> pageNumbers = profileService.returnListOfPageNumbers(totalPages);
-            model.addAttribute("pageNumbers", pageNumbers);
+            model.addAttribute(PAGE_NUMBERS, pageNumbers);
         }
 
         return PROFILE_SUBFOLDER_PREFIX + "profile-followers";
@@ -186,10 +191,10 @@ public class ProfileController {
         log.info("Entering getProfileComments");
 
         Long userId = userDetails.getUserId();
-        model.addAttribute("profileId", profileId);
+        model.addAttribute(PROFILE_ID, profileId);
 
         if (profileService.isUserOwnsThisProfile(userId, profileId)) {
-            model.addAttribute("personalProfile", true);
+            model.addAttribute(PERSONAL_PROFILE, true);
         }
 
         Page<Comment> commentPage = profileService.returnProfilePaginatedCommentsByCreationDateDescending(profileId, page - 1);
@@ -198,7 +203,7 @@ public class ProfileController {
         int totalPages = commentPage.getTotalPages();
         if (totalPages > 1) {
             List<Integer> pageNumbers = profileService.returnListOfPageNumbers(totalPages);
-            model.addAttribute("pageNumbers", pageNumbers);
+            model.addAttribute(PAGE_NUMBERS, pageNumbers);
         }
 
         return PROFILE_SUBFOLDER_PREFIX + "profile-comments";
@@ -218,7 +223,7 @@ public class ProfileController {
         }
 
         ProfileDto profileDto = new ProfileDto();
-        model.addAttribute("profile", profileDto);
+        model.addAttribute(PROFILE, profileDto);
 
         return PROFILE_SUBFOLDER_PREFIX + "profile-create-form";
     }
@@ -230,8 +235,8 @@ public class ProfileController {
         log.info("Entering getProfileUpdateForm");
 
         Profile profile = profileService.returnProfileById(profileId);
-        model.addAttribute("profile", profile);
-        model.addAttribute("profileId", profileId);
+        model.addAttribute(PROFILE, profile);
+        model.addAttribute(PROFILE_ID, profileId);
 
         return PROFILE_SUBFOLDER_PREFIX + "profile-update-form";
     }
@@ -243,7 +248,7 @@ public class ProfileController {
     @LogExecutionTime
     public String createNewProfile(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                    HttpSession session,
-                                   @ModelAttribute("profile") @Valid ProfileDto profileDto,
+                                   @ModelAttribute(PROFILE) @Valid ProfileDto profileDto,
                                    BindingResult bindingResult) {
         log.info("Entering createNewProfile");
 
@@ -263,7 +268,7 @@ public class ProfileController {
     @PutMapping("/profiles/{id}")
     @LogExecutionTime
     public String updateExistingProfile(@PathVariable("id") Long profileId,
-                                        @ModelAttribute("profile") @Valid ProfileDto profileDto,
+                                        @ModelAttribute(PROFILE) @Valid ProfileDto profileDto,
                                         BindingResult bindingResult,
                                         Model model) {
         log.info("Entering updateExistingProfile");
@@ -271,7 +276,7 @@ public class ProfileController {
         if (bindingResult.hasErrors()) {
             log.info("Validation errors occurred");
 
-            model.addAttribute("profileId", profileId);
+            model.addAttribute(PROFILE_ID, profileId);
             return PROFILE_SUBFOLDER_PREFIX + "profile-update-form";
         }
 

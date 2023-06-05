@@ -19,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.MessageFormat;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
@@ -26,7 +27,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.IntStream;
 
-import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
 @Service
@@ -49,7 +49,7 @@ public class PostServiceImpl implements PostService {
     public List<Integer> returnListOfPageNumbers(int totalPages) {
         return IntStream.rangeClosed(1, totalPages)
                 .boxed()
-                .collect(toList());
+                .toList();
     }
 
     @Override
@@ -68,7 +68,7 @@ public class PostServiceImpl implements PostService {
     public Post returnPostById(Long postId) {
         Optional<Post> optionalPost = postRepository.findById(postId);
         if (optionalPost.isEmpty()) {
-            String message = "Post with this id: " + postId + " doesn`t exist";
+            String message = MessageFormat.format("Post with ID {0} doesn''t exist", postId);
             log.info(message);
             throw new PostNotFoundException(message);
         }
@@ -83,7 +83,7 @@ public class PostServiceImpl implements PostService {
 
         Optional<Profile> optionalProfile = profileRepository.findByUser_Id(userId);
         if (optionalProfile.isEmpty()) {
-            String message = "Profile with id: " + userId + " doesn`t exist";
+            String message = MessageFormat.format("Profile with ID {0} doesn''t exist", userId);
             log.info(message);
             throw new ProfileNotFoundException(message);
         }
@@ -108,7 +108,7 @@ public class PostServiceImpl implements PostService {
 
         Optional<Post> optionalPost = postRepository.findByProfile_User_IdAndId(userId, postId);
         if (optionalPost.isEmpty()) {
-            String message = "Post with id: " + postId + " that is owned by user with id: " + userId + " doesn`t exist";
+            String message = MessageFormat.format("Post with ID {0} that is owned by user with ID {1} doesn''t exist", postId, userId);
             log.info(message);
             throw new PostNotFoundException(message);
         }
@@ -128,7 +128,7 @@ public class PostServiceImpl implements PostService {
     public void deleteExistingPost(Long profileId, Long postId) {
         Optional<Post> optionalPost = postRepository.findByProfile_IdAndId(profileId, postId);
         if (optionalPost.isEmpty()) {
-            String message = "Post with id: " + postId + " doesn`t exist for profile with id: " + profileId;
+            String message = MessageFormat.format("Post with ID {0} doesn''t exist for profile with ID {1}", postId, profileId);
             log.info(message);
             throw new PostNotFoundException(message);
         }
@@ -149,14 +149,14 @@ public class PostServiceImpl implements PostService {
 
         Optional<Profile> optionalProfile = profileRepository.findByUser_Id(userId);
         if (optionalProfile.isEmpty()) {
-            String message = "Profile with id: " + userId + " doesn`t exist";
+            String message = MessageFormat.format("Profile with ID {0} doesn''t exist", userId);
             log.info(message);
             throw new ProfileNotFoundException(message);
         }
 
         Optional<Post> optionalPost = postRepository.findById(postId);
         if (optionalPost.isEmpty()) {
-            String message = "Post with id: " + postId + " doesn`t exist";
+            String message = MessageFormat.format("Post with ID {0} doesn''t exist", postId);
             log.info(message);
             throw new PostNotFoundException(message);
         }

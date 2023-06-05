@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link th:replace="~{fragments/bootstrap-stylesheet}" />
@@ -8,40 +8,6 @@
         <meta charset="utf-8" />
         <title>Profile Posts</title>
     </head>
-    <!-- 
-    <body>
-        <main>
-            <h2>Profile Posts</h2>
-            <div th:if="${personalProfile}">
-                <div th:each="post : ${postPage.content}">
-                    <p th:text="${post.title}"></p>
-                    <p th:text="${post.description}"></p>
-                    <p th:text="${post.creationDate}"></p>
-                    <a class="btn btn-primary" th:href="@{/posts/{id}(id=${post.id})}">Check Post</a>
-                </div>
-                <div>
-                    <form th:action="@{/posts/create-form}" th:method="get">
-                        <p><input type="submit" value="Add Post" /></p>
-                    </form>
-                </div>
-                <div th:if="${pageNumbers}" class="pagination" th:each="pageNumber : ${pageNumbers}">
-                    <a th:href="@{/profiles/{profileId}/posts(profileId=${profileId}, page=${pageNumber})}" th:text="${pageNumber}" class="btn" th:classappend="${pageNumber==postPage.number + 1} ? disabled"> </a>
-                </div>
-            </div>
-
-            <div th:unless="${personalProfile}">
-                <div th:each="post : ${postPage.content}">
-                    <p th:text="${post.title}"></p>
-                    <p th:text="${post.description}"></p>
-                    <p th:text="${post.creationDate}"></p>
-                    <a class="btn btn-primary" th:href="@{/posts/{id}(id=${post.id})}">Check Post</a>
-                </div>
-                <div th:if="${pageNumbers}" class="pagination" th:each="pageNumber : ${pageNumbers}">
-                    <a th:href="@{/profiles/{profileId}/posts(profileId=${profileId}, page=${pageNumber})}" th:text="${pageNumber}" class="btn" th:classappend="${pageNumber==postPage.number + 1} ? disabled"> </a>
-                </div>
-            </div>
-        </main>
-    </body> -->
 
     <body>
         <div id="page-wrapper" class="d-flex flex-column min-vh-100">

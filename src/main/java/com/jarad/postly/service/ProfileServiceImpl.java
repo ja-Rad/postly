@@ -23,6 +23,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.MessageFormat;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
@@ -30,7 +31,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.IntStream;
 
-import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
 @Service
@@ -39,6 +39,7 @@ import static java.util.stream.Collectors.toSet;
 public class ProfileServiceImpl implements ProfileService {
 
     public static final int PAGE_SIZE = 10;
+    public static final String CREATION_DATE = "creationDate";
     private final ProfileRepository profileRepository;
     private final FollowerRepository followerRepository;
     private final PostRepository postRepository;
@@ -56,14 +57,14 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public Page<Profile> returnPaginatedProfilesByCreationDateDescending(int page) {
-        Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by("creationDate").descending());
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by(CREATION_DATE).descending());
         Page<Profile> pageProfile = profileRepository.findAll(pageable);
         return pageProfile;
     }
 
     @Override
     public Page<Post> returnProfilePaginatedPostsByCreationDateDescending(Long profileId, int page) {
-        Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by("creationDate").descending());
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by(CREATION_DATE).descending());
         Page<Post> pageProfilePosts = postRepository.findPostPageByProfile_Id(profileId, pageable);
 
         return pageProfilePosts;
@@ -71,7 +72,7 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public Page<Follower> returnProfilePaginatedAuthorsByCreationDateDescending(Long profileId, int page) {
-        Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by("creationDate").descending());
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by(CREATION_DATE).descending());
         Page<Follower> pageProfileAuthors = followerRepository.findAuthorPageById_FollowerId(profileId, pageable);
 
         return pageProfileAuthors;
@@ -79,7 +80,7 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public Page<Follower> returnProfilePaginatedFollowersByCreationDateDescending(Long profileId, int page) {
-        Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by("creationDate").descending());
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by(CREATION_DATE).descending());
         Page<Follower> pageProfileFollowers = followerRepository.findFollowerPageById_AuthorId(profileId, pageable);
 
         return pageProfileFollowers;
@@ -87,7 +88,7 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public Page<Comment> returnProfilePaginatedCommentsByCreationDateDescending(Long profileId, int page) {
-        Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by("creationDate").descending());
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by(CREATION_DATE).descending());
         Page<Comment> pageProfileComments = commentRepository.findCommentPageByProfile_Id(profileId, pageable);
 
         return pageProfileComments;
@@ -97,14 +98,14 @@ public class ProfileServiceImpl implements ProfileService {
     public List<Integer> returnListOfPageNumbers(int totalPages) {
         return IntStream.rangeClosed(1, totalPages)
                 .boxed()
-                .collect(toList());
+                .toList();
     }
 
     @Override
     public Profile returnProfileById(Long profileId) {
         Optional<Profile> optionalProfile = profileRepository.findById(profileId);
         if (optionalProfile.isEmpty()) {
-            String message = "Profile with this id: " + profileId + " doesn`t exist";
+            String message = MessageFormat.format("Profile with ID {0} doesn''t exist", profileId);
             log.info(message);
             throw new ProfileNotFoundException(message);
         }
@@ -119,14 +120,14 @@ public class ProfileServiceImpl implements ProfileService {
 
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isEmpty()) {
-            String message = "User with id: " + userId + " doesn`t exist";
+            String message = MessageFormat.format("User with ID {0} doesn''t exist", userId);
             log.info(message);
             throw new UserNotFoundException(message);
         }
 
         Optional<Profile> optionalProfile = profileRepository.findByUser_Id(userId);
         if (optionalProfile.isPresent()) {
-            String message = "Profile for user: " + userId + " already exist";
+            String message = MessageFormat.format("Profile for user with ID {0} already exist", userId);
             log.info(message);
             throw new ProfileForUserAlreadyExistException(message);
         }
@@ -152,7 +153,7 @@ public class ProfileServiceImpl implements ProfileService {
 
         Optional<Profile> optionalProfile = profileRepository.findById(profileId);
         if (optionalProfile.isEmpty()) {
-            String message = "Profile for user with id: " + profileId + " doesn`t exist";
+            String message = MessageFormat.format("Profile for user with ID {0} doesn''t exist", profileId);
             log.info(message);
             throw new ProfileNotFoundException(message);
         }
@@ -173,14 +174,14 @@ public class ProfileServiceImpl implements ProfileService {
 
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isEmpty()) {
-            String message = "User with id: " + userId + " doesn`t exist";
+            String message = MessageFormat.format("User with ID {0} doesn''t exist", userId);
             log.info(message);
             throw new UserNotFoundException(message);
         }
 
         Optional<Profile> optionalProfile = profileRepository.findByUser_Id(profileId);
         if (optionalProfile.isEmpty()) {
-            String message = "Profile for user with id: " + profileId + " doesn`t exist";
+            String message = MessageFormat.format("Profile for user with ID {0} doesn''t exist", profileId);
             log.info(message);
             throw new ProfileNotFoundException(message);
         }

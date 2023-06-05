@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.MessageFormat;
 import java.time.Instant;
 import java.util.Objects;
 import java.util.Optional;
@@ -38,20 +39,20 @@ public class FollowerServiceImpl implements FollowerService {
 
         Optional<Profile> optionalAuthorsProfile = profileRepository.findById(authorId);
         if (optionalAuthorsProfile.isEmpty()) {
-            String message = "Authors Profile with id: " + authorId + " doesn`t exist";
+            String message = MessageFormat.format("Authors Profile with ID {0} doesn''t exist", authorId);
             log.info(message);
             throw new AuthorNotFoundException(message);
         }
 
         Optional<Profile> optionalFollowersProfile = profileRepository.findById(followerId);
         if (optionalFollowersProfile.isEmpty()) {
-            String message = "Followers Profile with id: " + followerId + " doesn`t exist";
+            String message = MessageFormat.format("Followers Profile with ID {0} doesn''t exist", followerId);
             log.info(message);
             throw new ProfileNotFoundException(message);
         }
 
         if (Objects.equals(followerId, authorId)) {
-            String message = "Follower with id: " + followerId + " can`t follow author with same id: " + authorId + " because Self-following is not allowed";
+            String message = MessageFormat.format("Follower with ID {0} can''t follow author with same ID {1} because Self-following is not allowed", followerId, authorId);
             log.info(message);
             throw new FollowerServiceException(message);
         }
@@ -78,16 +79,16 @@ public class FollowerServiceImpl implements FollowerService {
 
         Optional<Profile> optionalAuthorsProfile = profileRepository.findById(authorId);
         if (optionalAuthorsProfile.isEmpty()) {
-            String message = "Authors Profile with id: " + authorId + " doesn`t exist";
+            String message = MessageFormat.format("Authors Profile with ID {0} doesn''t exist", authorId);
             log.info(message);
             throw new AuthorNotFoundException(message);
         }
 
         Optional<Profile> optionalFollowersProfile = profileRepository.findById(followerId);
         if (optionalFollowersProfile.isEmpty()) {
-            String message = "Followers Profile with id: " + followerId + " doesn`t exist";
+            String message = MessageFormat.format("Followers Profile with ID {0} doesn''t exist", followerId);
             log.info(message);
-            throw new ProfileNotFoundException("Followers Profile with id: " + followerId + " doesn`t exist");
+            throw new ProfileNotFoundException(message);
         }
 
         followerRepository.deleteById_AuthorIdAndId_FollowerId(authorId, followerId);

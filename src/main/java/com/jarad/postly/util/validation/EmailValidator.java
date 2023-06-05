@@ -4,19 +4,11 @@ import com.jarad.postly.util.annotation.ValidEmail;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class EmailValidator
-        implements ConstraintValidator<ValidEmail, String> {
+public class EmailValidator implements ConstraintValidator<ValidEmail, String> {
 
     private static final String EMAIL_PATTERN = "^(.+)@(\\S+)$";
-    private Pattern pattern;
-    private Matcher matcher;
-
-    @Override
-    public void initialize(ValidEmail constraintAnnotation) {
-    }
 
     @Override
     public boolean isValid(String email, ConstraintValidatorContext context) {
@@ -24,8 +16,8 @@ public class EmailValidator
     }
 
     private boolean validateEmail(String email) {
-        pattern = Pattern.compile(EMAIL_PATTERN);
-        matcher = pattern.matcher(email);
-        return matcher.matches();
+        return Pattern.compile(EMAIL_PATTERN)
+                .matcher(email)
+                .matches();
     }
 }

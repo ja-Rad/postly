@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
+import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -70,7 +71,7 @@ public class UserServiceImpl implements UserService {
     public void registerNewUserAccount(UserDto userDto) {
         String userEmail = userDto.getEmail();
         if (userRepository.existsByEmail(userEmail)) {
-            String message = "Account with that email: " + userEmail + " already exist";
+            String message = MessageFormat.format("Account with this user email: {0} already exist", userEmail);
             log.info(message);
             throw new UserAlreadyExistException(message);
         }
@@ -97,7 +98,7 @@ public class UserServiceImpl implements UserService {
 
         Optional<User> optionalUser = userRepository.findByEmail(userEmail);
         if (optionalUser.isEmpty()) {
-            String message = "User with email: " + userEmail + " doesn`t exist";
+            String message = MessageFormat.format("User with email: {0} doesn''t exist", userEmail);
             log.info(message);
             throw new UserNotFoundException(message);
         }
@@ -194,10 +195,8 @@ public class UserServiceImpl implements UserService {
             log.info("Email Template for user: {} has been created", userEmail);
 
         } catch (MessagingException | UnsupportedEncodingException e) {
-            String message = "Exception occurred while creating the Email Template. Details: " + e.getMessage();
-
+            String message = MessageFormat.format("Exception occurred while creating the Email Template. Details: {0}", e.getMessage());
             log.info(message);
-
             throw new EmailTemplateException(message);
         }
     }
@@ -231,10 +230,8 @@ public class UserServiceImpl implements UserService {
             log.info("Email Template for user: {} has been created", userEmail);
 
         } catch (MessagingException | UnsupportedEncodingException e) {
-            String message = "Exception occurred while creating the Email Template. Details: " + e.getMessage();
-
+            String message = MessageFormat.format("Exception occurred while creating the Email Template. Details: {0}", e.getMessage());
             log.info(message);
-
             throw new EmailTemplateException(message);
         }
     }
@@ -253,7 +250,7 @@ public class UserServiceImpl implements UserService {
             Optional<User> optionalUser = userRepository.findByVerificationCode(verificationCode);
 
             if (optionalUser.isEmpty()) {
-                String message = "User with verificationCode: " + verificationCode + " doesn`t exist";
+                String message = MessageFormat.format("User with verificationCode: {0} doesn''t exist", verificationCode);
                 log.info(message);
                 throw new UserNotFoundException(message);
             }
@@ -292,7 +289,7 @@ public class UserServiceImpl implements UserService {
             Optional<User> optionalUser = userRepository.findByVerificationCode(verificationCode);
 
             if (optionalUser.isEmpty()) {
-                String message = "User with verificationCode: " + verificationCode + " doesn`t exist";
+                String message = MessageFormat.format("User with verificationCode: {0} doesn''t exist", verificationCode);
                 log.info(message);
                 throw new UserNotFoundException(message);
             }

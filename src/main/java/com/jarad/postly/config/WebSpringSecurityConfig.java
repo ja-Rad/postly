@@ -61,7 +61,7 @@ public class WebSpringSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 // Authorization Filter
-                .authorizeHttpRequests((requests) -> requests
+                .authorizeHttpRequests(requests -> requests
                         // Public access
                         .requestMatchers(ENDPOINTS_WHITELIST).permitAll()
                         .requestMatchers(STATIC_RESOURCES_WHITELIST).permitAll()
@@ -72,14 +72,14 @@ public class WebSpringSecurityConfig {
                 )
 
                 // Login Filter
-                .formLogin((form) -> form
+                .formLogin(form -> form
                         .loginPage(LOGIN).usernameParameter("email").permitAll()
                         .defaultSuccessUrl("/", true)
                         .failureUrl("/login?error=true")
                 )
 
                 // Logout Filter
-                .logout((logout) -> logout
+                .logout(logout -> logout
                         .logoutUrl("/logout").permitAll()
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")

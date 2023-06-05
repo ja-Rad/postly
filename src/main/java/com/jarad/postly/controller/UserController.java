@@ -21,9 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class UserController {
 
     public static final String VALIDATION_ERRORS_OCCURRED = "Validation errors occurred";
+    private static final String USER_SUBFOLDER_PREFIX = "user/";
     private final UserService userService;
-
-    private final String USER_SUBFOLDER_PREFIX = "user/";
 
     @Autowired
     public UserController(UserService userService) {

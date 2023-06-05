@@ -37,8 +37,8 @@ public class ProfileController {
     public static final String PAGE_NUMBERS = "pageNumbers";
     public static final String PROFILE = "profile";
     public static final String PERSONAL_PROFILE = "personalProfile";
+    private static final String PROFILE_SUBFOLDER_PREFIX = "profile/";
     private final ProfileService profileService;
-    private final String PROFILE_SUBFOLDER_PREFIX = "profile/";
 
     @Autowired
     public ProfileController(ProfileService profileService) {

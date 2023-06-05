@@ -31,7 +31,7 @@ public class FollowerController {
      * @return partial URL with only a Path/Page part left
      */
     private static String getTrimmedRefererPath(String referer) {
-        return referer.replaceAll("(.*\\/{2})(.*?\\/)", "");
+        return referer.replaceAll("(.*/{2})([^/]*+/)", "");
     }
 
     /**

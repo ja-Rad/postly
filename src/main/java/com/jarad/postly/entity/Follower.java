@@ -1,6 +1,6 @@
 package com.jarad.postly.entity;
 
-import com.jarad.postly.entity.embeddable.FollowerId;
+import com.jarad.postly.entity.embeddable.FollowerPK;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -27,16 +27,16 @@ import java.time.Instant;
 public class Follower implements Serializable {
 
     @EmbeddedId
-    private FollowerId id;
+    private FollowerPK id;
 
     @Column(name = "creation_date")
     private Instant creationDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", insertable = false, updatable = false)
-    private Profile author;
+    private Profile profileAuthor;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "follower_id", insertable = false, updatable = false)
-    private Profile follower;
+    private Profile profileFollower;
 }

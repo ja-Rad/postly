@@ -2,7 +2,7 @@ package com.jarad.postly.service;
 
 import com.jarad.postly.entity.Follower;
 import com.jarad.postly.entity.Profile;
-import com.jarad.postly.entity.embeddable.FollowerId;
+import com.jarad.postly.entity.embeddable.FollowerPK;
 import com.jarad.postly.repository.FollowerRepository;
 import com.jarad.postly.repository.ProfileRepository;
 import com.jarad.postly.util.exception.AuthorNotFoundException;
@@ -57,7 +57,7 @@ public class FollowerServiceImpl implements FollowerService {
             throw new FollowerServiceException(message);
         }
 
-        FollowerId followerPrimaryKey = FollowerId.builder()
+        FollowerPK followerPrimaryKey = FollowerPK.builder()
                 .authorId(authorId)
                 .followerId(followerId)
                 .build();

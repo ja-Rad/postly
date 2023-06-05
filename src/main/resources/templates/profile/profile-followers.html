@@ -42,9 +42,9 @@
                                     </thead>
                                     <tbody>
                                         <tr th:each="follower : ${followerPage.content}">
-                                            <td th:text="${follower.follower.username}">John Doe</td>
+                                            <td th:text="${follower.profileFollower.username}">John Doe</td>
                                             <td>
-                                                <p class="text-muted"><a th:href="@{/profiles/{id}(id=${follower.follower.id})}" role="button">View follower</a></p>
+                                                <p class="text-muted"><a th:href="@{/profiles/{id}(id=${follower.profileFollower.id})}" role="button">View follower</a></p>
                                             </td>
                                         </tr>
                                     </tbody>

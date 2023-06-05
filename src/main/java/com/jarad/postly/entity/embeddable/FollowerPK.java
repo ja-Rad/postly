@@ -18,7 +18,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @EqualsAndHashCode
 @Builder
-public class FollowerId implements Serializable {
+public class FollowerPK implements Serializable {
 
     @Column(name = "author_id")
     private Long authorId;

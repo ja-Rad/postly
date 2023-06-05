@@ -167,73 +167,98 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Helper method to create a template for user registration verification
+     * Helper method to create a template for user email verification
      *
-     * @param user   entity that's representing the client
-     * @param helper MimeMessageHelper instance that provides easy access to the JavaMail API
+     * @param user    entity representing the client
+     * @param helper  MimeMessageHelper instance providing access to the JavaMail API
+     * @param subject email subject
      */
-    @Override
-    public void createVerifyEmailTemplate(User user, MimeMessageHelper helper) {
-        String verifyURL = "http://localhost:8080" + "/users/verify?code=" + user.getVerificationCode();
+    private void createEmailVerificationTemplate(User user, MimeMessageHelper helper, String subject) {
+        String verifyURL = "http://localhost:8080/users/verify?code=" + user.getVerificationCode();
         String userEmail = user.getEmail();
         String senderName = "Postly";
         String toAddress = userEmail;
-        String subject = "Please verify your registration";
-        String content = """
-                Dear %s,<br>
-                Please click the link below to verify your registration:<br>
-                <h3><a href="%s" target="_self">VERIFY</a></h3>
-                Thank you,<br>
-                postly.
-                """.formatted(userEmail, verifyURL);
+        String content = String.format(
+                "Dear %s,<br>" +
+                        "Please click the link below to verify your registration:<br>" +
+                        "<h3><a href=\"%s\" target=\"_self\">VERIFY</a></h3>" +
+                        "Thank you,<br>" +
+                        "postly.", userEmail, verifyURL);
+
+        setEmailTemplateProperties(helper, subject, senderName, toAddress, content, userEmail);
+    }
+
+    /**
+     * Helper method to create a template for resetting the user's password
+     *
+     * @param user    entity representing the client
+     * @param helper  MimeMessageHelper instance providing access to the JavaMail API
+     * @param subject email subject
+     */
+    private void createForgotPasswordTemplate(User user, MimeMessageHelper helper, String subject) {
+        String verifyURL = "http://localhost:8080/users/forgot-password-verify?code=" + user.getVerificationCode();
+        String userEmail = user.getEmail();
+        String senderName = "Postly";
+        String toAddress = userEmail;
+        String content = String.format(
+                "Dear %s,<br>" +
+                        "Please click the link below to reset your password:<br>" +
+                        "<h3><a href=\"%s\" target=\"_self\">RESET PASSWORD</a></h3>" +
+                        "Thank you,<br>" +
+                        "postly.", userEmail, verifyURL);
+
+        setEmailTemplateProperties(helper, subject, senderName, toAddress, content, userEmail);
+    }
+
+    /**
+     * Sets the common properties for email templates
+     *
+     * @param helper     MimeMessageHelper instance providing access to the JavaMail API
+     * @param subject    email subject
+     * @param senderName sender name
+     * @param toAddress  recipient email address
+     * @param content    email content
+     * @param userEmail  user's email
+     */
+    private void setEmailTemplateProperties(MimeMessageHelper helper, String subject, String senderName,
+                                            String toAddress, String content, String userEmail) {
         try {
             helper.setFrom(postlyEmailAddress, senderName);
             helper.setTo(toAddress);
             helper.setSubject(subject);
             helper.setText(content, true);
 
-            log.info("Email Template for user: {} has been created", userEmail);
+            log.info("Email template for user: {} has been created", userEmail);
 
         } catch (MessagingException | UnsupportedEncodingException e) {
-            String message = MessageFormat.format("Exception occurred while creating the Email Template. Details: {0}", e.getMessage());
+            String message = String.format("Exception occurred while creating the email template. Details: %s", e.getMessage());
             log.info(message);
             throw new EmailTemplateException(message);
         }
     }
 
     /**
-     * Helper method to create a template for user reset password verification
+     * Helper method to create a template for user registration verification
      *
-     * @param user   entity that's representing the client
-     * @param helper MimeMessageHelper instance that provides easy access to the JavaMail API
+     * @param user   entity representing the client
+     * @param helper MimeMessageHelper instance providing access to the JavaMail API
+     */
+    @Override
+    public void createVerifyEmailTemplate(User user, MimeMessageHelper helper) {
+        String subject = "Please verify your registration";
+        createEmailVerificationTemplate(user, helper, subject);
+    }
+
+    /**
+     * Helper method to create a template for user password reset verification
+     *
+     * @param user   entity representing the client
+     * @param helper MimeMessageHelper instance providing access to the JavaMail API
      */
     @Override
     public void createForgotPasswordEmailTemplate(User user, MimeMessageHelper helper) {
-        String verifyURL = "http://localhost:8080" + "/users/forgot-password-verify?code=" + user.getVerificationCode();
-        String userEmail = user.getEmail();
-        String senderName = "Postly";
-        String toAddress = userEmail;
         String subject = "Please reset your password";
-        String content = """
-                Dear %s,<br>
-                Please click the link below to reset your password:<br>
-                <h3><a href="%s" target="_self">RESET PASSWORD</a></h3>
-                Thank you,<br>
-                postly.
-                """.formatted(userEmail, verifyURL);
-        try {
-            helper.setFrom(postlyEmailAddress, senderName);
-            helper.setTo(toAddress);
-            helper.setSubject(subject);
-            helper.setText(content, true);
-
-            log.info("Email Template for user: {} has been created", userEmail);
-
-        } catch (MessagingException | UnsupportedEncodingException e) {
-            String message = MessageFormat.format("Exception occurred while creating the Email Template. Details: {0}", e.getMessage());
-            log.info(message);
-            throw new EmailTemplateException(message);
-        }
+        createForgotPasswordTemplate(user, helper, subject);
     }
 
     /**

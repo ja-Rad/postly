@@ -13,16 +13,18 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.Hibernate;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Objects;
 
+@Entity
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
-@Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "followers")
 public class Follower implements Serializable {
 
@@ -39,4 +41,17 @@ public class Follower implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "follower_id", insertable = false, updatable = false)
     private Profile profileFollower;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Follower follower = (Follower) o;
+        return getId() != null && Objects.equals(getId(), follower.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

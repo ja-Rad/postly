@@ -17,17 +17,19 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.Hibernate;
 
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 
+@Entity
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
-@Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "profiles")
 public class Profile implements Serializable {
     @Id
@@ -43,13 +45,13 @@ public class Profile implements Serializable {
     @Column(name = "creation_date", nullable = false)
     private Instant creationDate;
 
-    @OneToMany(mappedBy = "profile", orphanRemoval = true)
-    private List<Post> posts;
-
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "profile_id")
     private User user;
+
+    @OneToMany(mappedBy = "profile", orphanRemoval = true)
+    private List<Post> posts;
 
     @OneToMany(mappedBy = "profileAuthor", orphanRemoval = true)
     private List<Follower> authors;
@@ -59,4 +61,17 @@ public class Profile implements Serializable {
 
     @OneToMany(mappedBy = "profile", orphanRemoval = true)
     private List<Comment> comments;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Profile profile = (Profile) o;
+        return getId() != null && Objects.equals(getId(), profile.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

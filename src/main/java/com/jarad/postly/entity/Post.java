@@ -20,20 +20,20 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import org.hibernate.Hibernate;
 
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
+@Entity
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
-@Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "posts")
 public class Post implements Serializable {
     @Id
@@ -59,7 +59,6 @@ public class Post implements Serializable {
     @JoinColumn(name = "profile_id")
     private Profile profile;
 
-    @Fetch(FetchMode.JOIN)
     @ManyToMany
     @JoinTable(name = "posts_tags",
             joinColumns = @JoinColumn(name = "post_id"),
@@ -68,4 +67,17 @@ public class Post implements Serializable {
 
     @OneToMany(mappedBy = "post", orphanRemoval = true)
     private List<Comment> comments;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Post post = (Post) o;
+        return getId() != null && Objects.equals(getId(), post.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

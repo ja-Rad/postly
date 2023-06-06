@@ -19,18 +19,20 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.Set;
 
+@Entity
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
-@Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "users", indexes = {
         @Index(name = "idx_user_email_unq", columnList = "email", unique = true)
 })
@@ -60,8 +62,8 @@ public class User implements Serializable {
     @Column(name = "active_profile")
     private boolean activeProfile;
 
-    @Fetch(FetchMode.JOIN)
     @ManyToMany
+    @Fetch(FetchMode.JOIN)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -70,4 +72,17 @@ public class User implements Serializable {
     @OneToOne(mappedBy = "user", orphanRemoval = true)
     @PrimaryKeyJoinColumn
     private Profile profile;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        User user = (User) o;
+        return getId() != null && Objects.equals(getId(), user.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

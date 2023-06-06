@@ -13,7 +13,9 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -39,10 +41,12 @@ public class ProfileController {
     public static final String PERSONAL_PROFILE = "personalProfile";
     private static final String PROFILE_SUBFOLDER_PREFIX = "profile/";
     private final ProfileService profileService;
+    private final AuthenticationManager authenticationManager;
 
     @Autowired
-    public ProfileController(ProfileService profileService) {
+    public ProfileController(ProfileService profileService, AuthenticationManager authenticationManager) {
         this.profileService = profileService;
+        this.authenticationManager = authenticationManager;
     }
 
     /**
@@ -260,9 +264,11 @@ public class ProfileController {
 
         Long userId = userDetails.getUserId();
         session.setAttribute("usersActiveProfileId", userId);
-        Long profileId = profileService.createNewProfileAndReturnProfileId(userId, profileDto);
+        profileService.createNewProfileAndReturnProfileId(userId, profileDto);
 
-        return "redirect:/profiles/" + profileId;
+        SecurityContextHolder.clearContext();
+        session.invalidate();
+        return "redirect:/login";
     }
 
     @PutMapping("/profiles/{id}")
@@ -296,6 +302,8 @@ public class ProfileController {
         profileService.deleteExistingProfile(userId, profileId);
         session.setAttribute("usersActiveProfileId", null);
 
-        return "redirect:/profiles/create-form";
+        SecurityContextHolder.clearContext();
+        session.invalidate();
+        return "redirect:/login";
     }
 }

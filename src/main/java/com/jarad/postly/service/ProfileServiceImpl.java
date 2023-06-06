@@ -115,7 +115,7 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Transactional
     @Override
-    public Long createNewProfileAndReturnProfileId(Long userId, ProfileDto profileDto) {
+    public void createNewProfileAndReturnProfileId(Long userId, ProfileDto profileDto) {
         log.info("Creating a new profile for user with ID {}", userId);
 
         Optional<User> optionalUser = userRepository.findById(userId);
@@ -142,8 +142,6 @@ public class ProfileServiceImpl implements ProfileService {
         Profile savedProfile = profileRepository.save(profile);
 
         log.info("New profile created with ID {} for user with ID {}", savedProfile.getId(), userId);
-
-        return savedProfile.getId();
     }
 
     @Transactional

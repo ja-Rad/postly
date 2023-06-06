@@ -58,40 +58,31 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public Page<Profile> returnPaginatedProfilesByCreationDateDescending(int page) {
         Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by(CREATION_DATE).descending());
-        Page<Profile> pageProfile = profileRepository.findAll(pageable);
-        return pageProfile;
+        return profileRepository.findAll(pageable);
     }
 
     @Override
     public Page<Post> returnProfilePaginatedPostsByCreationDateDescending(Long profileId, int page) {
         Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by(CREATION_DATE).descending());
-        Page<Post> pageProfilePosts = postRepository.findPostPageByProfileId(profileId, pageable);
-
-        return pageProfilePosts;
+        return postRepository.findPostPageByProfileId(profileId, pageable);
     }
 
     @Override
     public Page<Follower> returnProfilePaginatedAuthorsByCreationDateDescending(Long profileId, int page) {
         Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by(CREATION_DATE).descending());
-        Page<Follower> pageProfileAuthors = followerRepository.findAuthorPageByIdFollowerId(profileId, pageable);
-
-        return pageProfileAuthors;
+        return followerRepository.findAuthorPageByIdFollowerId(profileId, pageable);
     }
 
     @Override
     public Page<Follower> returnProfilePaginatedFollowersByCreationDateDescending(Long profileId, int page) {
         Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by(CREATION_DATE).descending());
-        Page<Follower> pageProfileFollowers = followerRepository.findFollowerPageByIdAuthorId(profileId, pageable);
-
-        return pageProfileFollowers;
+        return followerRepository.findFollowerPageByIdAuthorId(profileId, pageable);
     }
 
     @Override
     public Page<Comment> returnProfilePaginatedCommentsByCreationDateDescending(Long profileId, int page) {
         Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by(CREATION_DATE).descending());
-        Page<Comment> pageProfileComments = commentRepository.findCommentPageByProfileId(profileId, pageable);
-
-        return pageProfileComments;
+        return commentRepository.findCommentPageByProfileId(profileId, pageable);
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.jarad.postly.service;
 
-import com.jarad.postly.entity.Comment;
 import com.jarad.postly.entity.Post;
 import com.jarad.postly.util.dto.PostDto;
 import org.springframework.data.domain.Page;
@@ -12,8 +11,6 @@ public interface PostService {
     List<Integer> returnListOfPageNumbers(int totalPages);
 
     Page<Post> returnPaginatedPostsByCreationDateDescending(int page);
-
-    Page<Comment> returnPaginatedCommentsByCreationDateDescending(Long postId, int page);
 
     Set<Long> returnAuthorsByUserId(Long userId);
 

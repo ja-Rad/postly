@@ -13,7 +13,6 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -41,12 +40,10 @@ public class ProfileController {
     public static final String PERSONAL_PROFILE = "personalProfile";
     private static final String PROFILE_SUBFOLDER_PREFIX = "profile/";
     private final ProfileService profileService;
-    private final AuthenticationManager authenticationManager;
 
     @Autowired
-    public ProfileController(ProfileService profileService, AuthenticationManager authenticationManager) {
+    public ProfileController(ProfileService profileService) {
         this.profileService = profileService;
-        this.authenticationManager = authenticationManager;
     }
 
     /**

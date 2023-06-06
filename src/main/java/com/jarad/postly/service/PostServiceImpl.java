@@ -1,6 +1,5 @@
 package com.jarad.postly.service;
 
-import com.jarad.postly.entity.Comment;
 import com.jarad.postly.entity.Post;
 import com.jarad.postly.entity.Profile;
 import com.jarad.postly.repository.CommentRepository;
@@ -55,12 +54,6 @@ public class PostServiceImpl implements PostService {
     public Page<Post> returnPaginatedPostsByCreationDateDescending(int page) {
         Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by("creationDate").descending());
         return postRepository.findAll(pageable);
-    }
-
-    @Override
-    public Page<Comment> returnPaginatedCommentsByCreationDateDescending(Long postId, int page) {
-        Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by("creationDate").descending());
-        return commentRepository.findByPostId(postId, pageable);
     }
 
     @Override

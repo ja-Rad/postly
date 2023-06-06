@@ -31,7 +31,7 @@ public interface ProfileService {
 
     void createNewProfileAndReturnProfileId(Long userId, ProfileDto profileDto);
 
-    Long updateExistingProfile(Long profileId, ProfileDto profileDto);
+    void updateExistingProfile(Long profileId, ProfileDto profileDto);
 
     void deleteExistingProfile(Long userId, Long profileId);
 

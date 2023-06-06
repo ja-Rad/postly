@@ -137,7 +137,7 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Transactional
     @Override
-    public Long updateExistingProfile(Long profileId, ProfileDto profileDto) {
+    public void updateExistingProfile(Long profileId, ProfileDto profileDto) {
         log.info("Updating profile with ID {}", profileId);
 
         Optional<Profile> optionalProfile = profileRepository.findById(profileId);
@@ -149,11 +149,6 @@ public class ProfileServiceImpl implements ProfileService {
 
         Profile profile = optionalProfile.get();
         profile.setUsername(profileDto.getUsername());
-        Profile savedProfile = profileRepository.save(profile);
-
-        log.info("Profile with ID {} has been updated", profileId);
-
-        return savedProfile.getId();
     }
 
     @Transactional

@@ -1,6 +1,5 @@
 package com.jarad.postly.service;
 
-import com.jarad.postly.entity.Role;
 import com.jarad.postly.entity.User;
 import com.jarad.postly.util.dto.UserDto;
 import com.jarad.postly.util.dto.UserDtoOnlyEmail;
@@ -15,8 +14,6 @@ public interface UserService {
     void sendVerificationEmail(User user);
 
     void sendForgotPasswordEmail(User user);
-
-    Role getRoleUser();
 
     void createVerifyEmailTemplate(User user, MimeMessageHelper helper);
 

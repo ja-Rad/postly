@@ -2,7 +2,6 @@ package com.jarad.postly.service;
 
 import com.jarad.postly.entity.Role;
 import com.jarad.postly.entity.User;
-import com.jarad.postly.repository.RoleRepository;
 import com.jarad.postly.repository.UserRepository;
 import com.jarad.postly.util.dto.UserDto;
 import com.jarad.postly.util.dto.UserDtoOnlyEmail;
@@ -25,11 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
 import java.text.MessageFormat;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
-import static org.apache.commons.lang3.ObjectUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @Service
@@ -38,7 +34,6 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
     private final JavaMailSender mailSender;
     private final PasswordEncoder passwordEncoder;
 
@@ -46,24 +41,10 @@ public class UserServiceImpl implements UserService {
     private String postlyEmailAddress;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, JavaMailSender mailSender, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, JavaMailSender mailSender, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
         this.mailSender = mailSender;
         this.passwordEncoder = passwordEncoder;
-    }
-
-    /**
-     * Helper method that checks Set of Roles for NPE. Creates new HashSet if Set is null or empty
-     *
-     * @return Set of Roles
-     */
-    private static Set<Role> getUserRoles(User user) {
-        Set<Role> userRoles = user.getRoles();
-        if (isEmpty(userRoles)) {
-            userRoles = new HashSet<>();
-        }
-        return userRoles;
     }
 
     @Transactional
@@ -81,9 +62,7 @@ public class UserServiceImpl implements UserService {
                 .password(passwordEncoder.encode(userDto.getPassword()))
                 .verificationCode(RandomString.make(64))
                 .build();
-
-        Set<Role> userRoles = getUserRoles(user);
-        userRoles.add(getRoleUser());
+        user.addRole(Role.builder().name(SecurityRole.ROLE_USER.toString()).build());
 
         userRepository.save(user);
         sendVerificationEmail(user);
@@ -137,33 +116,6 @@ public class UserServiceImpl implements UserService {
         mailSender.send(message);
 
         log.info("Email was sent to user {}", user.getEmail());
-    }
-
-    /**
-     * Helper method that checks if ROLE_USER already exists in Database. If not creates it
-     *
-     * @return ROLE_USER from table 'roles'
-     */
-    @Transactional
-    @Override
-    public Role getRoleUser() {
-        String roleName = SecurityRole.ROLE_USER.toString();
-
-        log.info("Retrieving the {} role", roleName);
-
-        Optional<Role> optionalRoleUser = roleRepository.findByName(roleName);
-
-        if (optionalRoleUser.isEmpty()) {
-            log.info("Creating and saving the {} role", roleName);
-
-            Role roleUser = Role.builder()
-                    .name(SecurityRole.ROLE_USER.toString())
-                    .build();
-            roleRepository.save(roleUser);
-            return roleUser;
-        }
-
-        return optionalRoleUser.get();
     }
 
     /**

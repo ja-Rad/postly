@@ -1,5 +1,6 @@
 package com.jarad.postly.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,6 +25,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -62,7 +64,10 @@ public class User implements Serializable {
     @Column(name = "active_profile")
     private boolean activeProfile;
 
-    @ManyToMany
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
     @Fetch(FetchMode.JOIN)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -72,6 +77,31 @@ public class User implements Serializable {
     @OneToOne(mappedBy = "user", orphanRemoval = true)
     @PrimaryKeyJoinColumn
     private Profile profile;
+
+    public void addRole(Role role) {
+        if (roles == null) {
+            roles = new HashSet<>();
+        }
+
+        roles.add(role);
+        role.getUsers().add(this);
+    }
+
+    public void removeRoleFromUserByRoleName(String roleName) {
+        roles.stream()
+                .filter(r -> r.getName().equals(roleName))
+                .findFirst()
+                .ifPresent(role -> role.getUsers().remove(this));
+    }
+
+    public void removeRoleById(Long roleId) {
+        Role role = roles.stream().filter(r -> r.getId().equals(roleId)).findFirst().orElse(null);
+
+        if (role != null) {
+            roles.remove(role);
+            role.getUsers().remove(this);
+        }
+    }
 
     @Override
     public boolean equals(Object o) {

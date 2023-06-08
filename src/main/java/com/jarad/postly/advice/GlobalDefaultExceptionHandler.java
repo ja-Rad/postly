@@ -7,6 +7,7 @@ import com.jarad.postly.util.exception.FollowerNotFoundException;
 import com.jarad.postly.util.exception.FollowerServiceException;
 import com.jarad.postly.util.exception.PostNotFoundException;
 import com.jarad.postly.util.exception.ProfileNotFoundException;
+import com.jarad.postly.util.exception.RoleNotFoundException;
 import com.jarad.postly.util.exception.UserNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -53,6 +54,7 @@ class GlobalDefaultExceptionHandler {
             FollowerNotFoundException.class,
             PostNotFoundException.class,
             ProfileNotFoundException.class,
+            RoleNotFoundException.class,
             UserNotFoundException.class
     })
     public String errorHandler404(HttpServletRequest request, Exception ex, Model model) {

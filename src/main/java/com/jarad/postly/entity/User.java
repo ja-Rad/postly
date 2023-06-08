@@ -83,24 +83,17 @@ public class User implements Serializable {
             roles = new HashSet<>();
         }
 
-        roles.add(role);
+        this.roles.add(role);
         role.getUsers().add(this);
     }
 
-    public void removeRoleFromUserByRoleName(String roleName) {
-        roles.stream()
-                .filter(r -> r.getName().equals(roleName))
-                .findFirst()
-                .ifPresent(role -> role.getUsers().remove(this));
-    }
-
-    public void removeRoleById(Long roleId) {
-        Role role = roles.stream().filter(r -> r.getId().equals(roleId)).findFirst().orElse(null);
-
-        if (role != null) {
-            roles.remove(role);
-            role.getUsers().remove(this);
+    public void removeRole(Role role) {
+        if (roles == null) {
+            roles = new HashSet<>();
         }
+
+        this.roles.remove(role);
+        role.getUsers().remove(this);
     }
 
     @Override

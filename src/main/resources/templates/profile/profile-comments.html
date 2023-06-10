@@ -49,10 +49,10 @@
                                             <td th:text="${#strings.length(comment.post.title) > 61} ? ${#strings.substring(comment.post.title,0,60)} + '...' : ${comment.post.title}">Post Title Example</td>
                                             <td th:text="${#strings.length(comment.description) > 61} ? ${#strings.substring(comment.description,0,60)} + '...' : ${comment.description}">Post Title Example</td>
                                             <td>
-                                                <p class="text-muted"><a th:href="@{/posts/{id}(id=${comment.post.id})}" role="button">View post</a></p>
+                                                <p class="text-muted"><a th:href="@{~/posts/{postId}(postId=${comment.post.id})}" role="button">View post</a></p>
                                             </td>
                                             <td>
-                                                <p class="text-muted"><a th:href="@{/posts/{postId}/comments/{commentId}(postId=${comment.post.id}, commentId=${comment.id})}" role="button">View comment</a></p>
+                                                <p class="text-muted"><a th:href="@{~/posts/{postId}/comments/{commentId}(postId=${comment.post.id}, commentId=${comment.id})}" role="button">View comment</a></p>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -63,7 +63,7 @@
                             <div th:if="${pageNumbers}">
                                 <ul class="pagination">
                                     <li th:each="pageNumber : ${pageNumbers}" class="page-item" th:classappend="${pageNumber==commentPage.number + 1} ? active">
-                                        <a class="page-link" th:href="@{/profiles/{profileId}/comments(profileId=${profileId}, page=${pageNumber})}">
+                                        <a class="page-link" th:href="@{~/profiles/{profileId}/comments(profileId=${profileId}, page=${pageNumber})}">
                                             <span th:text="${pageNumber}">42</span>
                                         </a>
                                     </li>

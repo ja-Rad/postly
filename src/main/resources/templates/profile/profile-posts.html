@@ -49,10 +49,10 @@
                                             <td th:text="${#strings.length(post.title) > 61} ? ${#strings.substring(post.title,0,60)} + '...' : ${post.title}">Post Title Example</td>
                                             <td th:text="${#strings.length(post.description) > 61} ? ${#strings.substring(description,0,60)} + '...' : ${post.description}">Post Title Example</td>
                                             <td>
-                                                <p class="text-muted"><a th:href="@{/posts/{id}(id=${post.id})}" role="button">View post</a></p>
+                                                <p class="text-muted"><a th:href="@{~/posts/{postId}(postId=${post.id})}" role="button">View post</a></p>
                                             </td>
                                             <td>
-                                                <p class="text-muted"><a th:href="@{/posts/{postId}(postId=${post.id})}" role="button">View post</a></p>
+                                                <p class="text-muted"><a th:href="@{~/posts/{postId}(postId=${post.id})}" role="button">View post</a></p>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -63,7 +63,7 @@
                             <div th:if="${pageNumbers}">
                                 <ul class="pagination">
                                     <li th:each="pageNumber : ${pageNumbers}" class="page-item" th:classappend="${pageNumber==postPage.number + 1} ? active">
-                                        <a class="page-link" th:href="@{/profiles/{profileId}/posts(profileId=${profileId}, page=${pageNumber})}">
+                                        <a class="page-link" th:href="@{~/profiles/{profileId}/posts(profileId=${profileId}, page=${pageNumber})}">
                                             <span th:text="${pageNumber}">42</span>
                                         </a>
                                     </li>

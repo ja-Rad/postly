@@ -44,7 +44,7 @@
                                         <tr th:each="author : ${authorPage.content}">
                                             <td th:text="${author.profileAuthor.username}">John Doe</td>
                                             <td>
-                                                <p class="text-muted"><a th:href="@{/profiles/{id}(id=${author.profileAuthor.id})}" role="button">View author</a></p>
+                                                <p class="text-muted"><a th:href="@{~/profiles/{profileId}(profileId=${author.profileAuthor.id})}" role="button">View author</a></p>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -55,7 +55,7 @@
                             <div th:if="${pageNumbers}">
                                 <ul class="pagination">
                                     <li th:each="pageNumber : ${pageNumbers}" class="page-item" th:classappend="${pageNumber==authorPage.number + 1} ? active">
-                                        <a class="page-link" th:href="@{/profiles/{profileId}/authors(profileId=${profileId}, page=${pageNumber})}">
+                                        <a class="page-link" th:href="@{~/profiles/{profileId}/authors(profileId=${profileId}, page=${pageNumber})}">
                                             <span th:text="${pageNumber}">42</span>
                                         </a>
                                     </li>

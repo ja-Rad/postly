@@ -40,27 +40,27 @@
                                         <div class="d-flex flex-column">
                                             <div>
                                                 <!-- author's posts link -->
-                                                <p class="text-muted">Visit author's posts? <a th:href="@{~/profiles/{id}/posts(id=${profile.user.id})}" role="button">author's posts</a></p>
+                                                <p class="text-muted">Visit author's posts? <a th:href="@{~/profiles/{profileId}/posts(profileId=${profile.user.id})}" role="button">author's posts</a></p>
                                             </div>
                                             <div>
                                                 <!-- author's comments link -->
-                                                <p class="text-muted">Visit author's comments? <a th:href="@{~/profiles/{id}/comments(id=${profile.user.id})}" role="button">author's comments</a></p>
+                                                <p class="text-muted">Visit author's comments? <a th:href="@{~/profiles/{profileId}/comments(profileId=${profile.user.id})}" role="button">author's comments</a></p>
                                             </div>
                                         </div>
 
                                         <!-- View link -->
-                                        <p class="text-center text-muted">View this author separately? <a th:href="@{~/profiles/{id}(id=${profile.user.id})}" role="button">View</a></p>
+                                        <p class="text-center text-muted">View this author separately? <a th:href="@{~/profiles/{profileId}(profileId=${profile.user.id})}" role="button">View</a></p>
 
                                         <!-- Follow-Unfollow Block -->
                                         <div th:if="${activeProfile}">
                                             <div th:if="${userId} != ${profile.user.id}">
                                                 <div th:unless="${#lists.contains(authorsByUserId, profile.user.id)}">
-                                                    <form th:action="@{~/followers/{id}(id=${profile.user.id})}" th:method="post">
+                                                    <form th:action="@{~/followers/{authorId}(authorId=${profile.user.id})}" th:method="post">
                                                         <input type="submit" class="btn btn-primary w-100" value="Follow Author" />
                                                     </form>
                                                 </div>
                                                 <div th:if="${#lists.contains(authorsByUserId, profile.user.id)}">
-                                                    <form th:action="@{~/followers/{id}(id=${profile.user.id})}" th:method="delete">
+                                                    <form th:action="@{~/followers/{authorId}(authorId=${profile.user.id})}" th:method="delete">
                                                         <input type="submit" class="btn btn-primary w-100" value="Unfollow Author" />
                                                     </form>
                                                 </div>
@@ -82,7 +82,7 @@
                             <div th:if="${pageNumbers}">
                                 <ul class="pagination">
                                     <li th:each="pageNumber : ${pageNumbers}" class="page-item" th:classappend="${pageNumber==profilePage.number + 1} ? active">
-                                        <a class="page-link" th:href="@{/profiles(page=${pageNumber})}">
+                                        <a class="page-link" th:href="@{~/profiles(page=${pageNumber})}">
                                             <span th:text="${pageNumber}">42</span>
                                         </a>
                                     </li>

@@ -21,7 +21,7 @@
                             </div>
 
                             <!-- Form Login -->
-                            <form th:action="@{/login}" th:method="post" class="form">
+                            <form th:action="@{~/login}" th:method="post" class="form">
                                 <!-- Title -->
                                 <div class="text-center p-2">
                                     <h4>Welcome to Postly</h4>
@@ -52,7 +52,7 @@
                                     </div>
                                     <div class="col-6">
                                         <!-- Forgot password link -->
-                                        <a th:href="@{/users/forgot-password}">Forgot password?</a>
+                                        <a th:href="@{~/users/forgot-password}">Forgot password?</a>
                                     </div>
                                 </div>
 
@@ -60,7 +60,7 @@
                                 <input type="submit" class="btn btn-primary w-100" value="Sign In" />
 
                                 <!-- Register link -->
-                                <p class="text-center text-muted m-2">Not a member? <a th:href="@{/users/registration}" role="button">Register</a></p>
+                                <p class="text-center text-muted m-2">Not a member? <a th:href="@{~/users/registration}" role="button">Register</a></p>
                             </form>
                         </div>
                     </div>

@@ -21,7 +21,7 @@
                             </div>
 
                             <!-- Form Login -->
-                            <form th:action="@{/users/registration}" th:object="${user}" th:method="post" class="form">
+                            <form th:action="@{~/users/registration}" th:object="${user}" th:method="post" class="form">
                                 <!-- Title -->
                                 <div class="text-center p-2">
                                     <h4>Create an account</h4>
@@ -53,7 +53,7 @@
                                 <input type="submit" class="btn btn-primary w-100" value="Register" />
 
                                 <!-- Log in link -->
-                                <p class="text-center text-muted m-2">Already a member? <a th:href="@{/login}" role="button">Log in</a></p>
+                                <p class="text-center text-muted m-2">Already a member? <a th:href="@{~/login}" role="button">Log in</a></p>
                             </form>
                         </div>
                     </div>

@@ -34,6 +34,7 @@ public class SecurityConfig {
             "/posts/{postId}/comments/{commentId}",
 
             "/profiles",
+            "/profiles/create-form",
             "/profiles/{profileId}",
             "/profiles/{profileId}/*"
     };
@@ -105,9 +106,8 @@ public class SecurityConfig {
                         .requestMatchers(STATIC_RESOURCES_WHITELIST).permitAll()
 
                         // Authorization
-                        .requestMatchers(HttpMethod.GET, "/profiles/create-form").hasRole(formatRole(SecurityRole.ROLE_USER.getRole()))
-                        .requestMatchers(HttpMethod.POST, "/profiles").hasRole(formatRole(SecurityRole.ROLE_USER.getRole()))
                         .requestMatchers(HttpMethod.GET, ENDPOINTS_ROLE_USER).hasRole(formatRole(SecurityRole.ROLE_USER.getRole()))
+                        .requestMatchers(HttpMethod.POST, "/profiles").hasRole(formatRole(SecurityRole.ROLE_USER.getRole()))
 
                         .requestMatchers(ENDPOINTS_ROLE_PROFILE_ACTIVE).hasRole(formatRole(SecurityRole.ROLE_PROFILE_ACTIVE.getRole()))
 

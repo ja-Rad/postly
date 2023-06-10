@@ -65,10 +65,10 @@ public class PostController {
         return POST_SUBFOLDER_PREFIX + "posts";
     }
 
-    @GetMapping("/posts/{id}")
+    @GetMapping("/posts/{postId}")
     @LogExecutionTime
     public String getPostById(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                              @PathVariable("id") Long postId,
+                              @PathVariable("postId") Long postId,
                               Model model) {
         log.info("Entering getPostById");
 
@@ -101,9 +101,9 @@ public class PostController {
         return POST_SUBFOLDER_PREFIX + "post-create-form";
     }
 
-    @GetMapping("/posts/{id}/update-form")
+    @GetMapping("/posts/{postId}/update-form")
     @LogExecutionTime
-    public String getPostUpdateForm(@PathVariable("id") Long postId,
+    public String getPostUpdateForm(@PathVariable("postId") Long postId,
                                     Model model) {
         log.info("Entering getPostCreateForm");
 
@@ -117,7 +117,7 @@ public class PostController {
     /**
      * WRITE Mappings
      */
-    @PostMapping("posts")
+    @PostMapping("/posts")
     @LogExecutionTime
     public String addPost(@AuthenticationPrincipal UserDetailsImpl userDetails,
                           @ModelAttribute("post") @Valid PostDto postDto,
@@ -136,10 +136,10 @@ public class PostController {
         return "redirect:/posts/" + postId;
     }
 
-    @PutMapping("posts/{id}")
+    @PutMapping("/posts/{postId}")
     @LogExecutionTime
     public String updatePostById(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                 @PathVariable("id") Long postId,
+                                 @PathVariable("postId") Long postId,
                                  @ModelAttribute("post") @Valid PostDto postDto,
                                  BindingResult bindingResult,
                                  Model model) {
@@ -158,10 +158,10 @@ public class PostController {
         return "redirect:/posts/" + postId;
     }
 
-    @DeleteMapping("posts/{id}")
+    @DeleteMapping("/posts/{postId}")
     @LogExecutionTime
     public String deletePostById(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                 @PathVariable("id") Long postId) {
+                                 @PathVariable("postId") Long postId) {
         log.info("Entering deletePostById");
 
         Long userId = userDetails.getUserId();

@@ -77,10 +77,10 @@ public class ProfileController {
         return PROFILE_SUBFOLDER_PREFIX + "profiles";
     }
 
-    @GetMapping("/profiles/{id}")
+    @GetMapping("/profiles/{profileId}")
     @LogExecutionTime
     public String getProfileById(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                 @PathVariable("id") Long profileId,
+                                 @PathVariable("profileId") Long profileId,
                                  Model model) {
         log.info("Entering getProfileById");
 
@@ -102,10 +102,10 @@ public class ProfileController {
         return PROFILE_SUBFOLDER_PREFIX + PROFILE;
     }
 
-    @GetMapping("/profiles/{id}/posts")
+    @GetMapping("/profiles/{profileId}/posts")
     @LogExecutionTime
     public String getProfilePosts(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                  @PathVariable("id") Long profileId,
+                                  @PathVariable("profileId") Long profileId,
                                   @RequestParam(value = "page", defaultValue = "1") int page,
                                   Model model) {
         log.info("Entering getProfilePosts");
@@ -129,10 +129,10 @@ public class ProfileController {
         return PROFILE_SUBFOLDER_PREFIX + "profile-posts";
     }
 
-    @GetMapping("/profiles/{id}/authors")
+    @GetMapping("/profiles/{profileId}/authors")
     @LogExecutionTime
     public String getProfileAuthors(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                    @PathVariable("id") Long profileId,
+                                    @PathVariable("profileId") Long profileId,
                                     @RequestParam(value = "page", defaultValue = "1") int page,
                                     Model model) {
         log.info("Entering getProfileAuthors");
@@ -156,10 +156,10 @@ public class ProfileController {
         return PROFILE_SUBFOLDER_PREFIX + "profile-authors";
     }
 
-    @GetMapping("/profiles/{id}/followers")
+    @GetMapping("/profiles/{profileId}/followers")
     @LogExecutionTime
     public String getProfileFollowers(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                      @PathVariable("id") Long profileId,
+                                      @PathVariable("profileId") Long profileId,
                                       @RequestParam(value = "page", defaultValue = "1") int page,
                                       Model model) {
         log.info("Entering getProfileFollowers");
@@ -183,10 +183,10 @@ public class ProfileController {
         return PROFILE_SUBFOLDER_PREFIX + "profile-followers";
     }
 
-    @GetMapping("/profiles/{id}/comments")
+    @GetMapping("/profiles/{profileId}/comments")
     @LogExecutionTime
     public String getProfileComments(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                     @PathVariable("id") Long profileId,
+                                     @PathVariable("profileId") Long profileId,
                                      @RequestParam(value = "page", defaultValue = "1") int page,
                                      Model model) {
         log.info("Entering getProfileComments");
@@ -229,9 +229,9 @@ public class ProfileController {
         return PROFILE_SUBFOLDER_PREFIX + "profile-create-form";
     }
 
-    @GetMapping("/profiles/{id}/update-form")
+    @GetMapping("/profiles/{profileId}/update-form")
     @LogExecutionTime
-    public String getProfileUpdateForm(@PathVariable("id") Long profileId,
+    public String getProfileUpdateForm(@PathVariable("profileId") Long profileId,
                                        Model model) {
         log.info("Entering getProfileUpdateForm");
 
@@ -268,14 +268,16 @@ public class ProfileController {
         return "redirect:/login";
     }
 
-    @PutMapping("/profiles/{id}")
+    @PutMapping("/profiles/{profileId}")
     @LogExecutionTime
-    public String updateExistingProfile(@PathVariable("id") Long profileId,
+    public String updateExistingProfile(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                        @PathVariable("profileId") Long profileId,
                                         @ModelAttribute(PROFILE) @Valid ProfileDto profileDto,
                                         BindingResult bindingResult,
                                         Model model) {
         log.info("Entering updateExistingProfile");
 
+        Long userId = userDetails.getUserId();
         if (bindingResult.hasErrors()) {
             log.info("Validation errors occurred");
 
@@ -283,15 +285,15 @@ public class ProfileController {
             return PROFILE_SUBFOLDER_PREFIX + "profile-update-form";
         }
 
-        profileService.updateExistingProfile(profileId, profileDto);
+        profileService.updateExistingProfile(userId, profileId, profileDto);
 
         return "redirect:/profiles/" + profileId;
     }
 
-    @DeleteMapping("/profiles/{id}")
+    @DeleteMapping("/profiles/{profileId}")
     @LogExecutionTime
     public String deleteExistingProfile(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                        @PathVariable("id") Long profileId,
+                                        @PathVariable("profileId") Long profileId,
                                         HttpSession session) {
         log.info("Entering deleteExistingProfile");
 

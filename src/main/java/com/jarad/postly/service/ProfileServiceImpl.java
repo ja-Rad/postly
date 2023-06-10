@@ -12,8 +12,9 @@ import com.jarad.postly.repository.PostRepository;
 import com.jarad.postly.repository.ProfileRepository;
 import com.jarad.postly.repository.RoleRepository;
 import com.jarad.postly.repository.UserRepository;
+import com.jarad.postly.security.SecurityRole;
 import com.jarad.postly.util.dto.ProfileDto;
-import com.jarad.postly.util.enums.SecurityRole;
+import com.jarad.postly.util.exception.PostNotFoundException;
 import com.jarad.postly.util.exception.ProfileForUserAlreadyExistException;
 import com.jarad.postly.util.exception.ProfileNotFoundException;
 import com.jarad.postly.util.exception.RoleNotFoundException;
@@ -145,18 +146,19 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Transactional
     @Override
-    public void updateExistingProfile(Long profileId, ProfileDto profileDto) {
+    public void updateExistingProfile(Long userId, Long profileId, ProfileDto profileDto) {
         log.info("Updating profile with ID {}", profileId);
-
-        Optional<Profile> optionalProfile = profileRepository.findById(profileId);
+        Optional<Profile> optionalProfile = profileRepository.findByUserIdAndId(userId, profileId);
         if (optionalProfile.isEmpty()) {
-            String message = MessageFormat.format("Profile for user with ID {0} doesn''t exist", profileId);
+            String message = MessageFormat.format("Profile with ID {0} that is owned by user with ID {1} doesn''t exist", profileId, userId);
             log.info(message);
-            throw new ProfileNotFoundException(message);
+            throw new PostNotFoundException(message);
         }
 
         Profile profile = optionalProfile.get();
         profile.setUsername(profileDto.getUsername());
+
+        profileRepository.save(profile);
     }
 
     @Transactional
@@ -178,7 +180,7 @@ public class ProfileServiceImpl implements ProfileService {
             throw new ProfileNotFoundException(message);
         }
 
-        Optional<Role> optionalRole = roleRepository.findByName(SecurityRole.ROLE_PROFILE_ACTIVE.toString());
+        Optional<Role> optionalRole = roleRepository.findByName(SecurityRole.ROLE_PROFILE_ACTIVE.getRole());
         if (optionalRole.isEmpty()) {
             String message = MessageFormat.format("Role for user with name {0} doesn''t exist", SecurityRole.ROLE_PROFILE_ACTIVE);
             log.warn(message);
@@ -186,8 +188,7 @@ public class ProfileServiceImpl implements ProfileService {
         }
 
         User user = optionalUser.get();
-        Role role = optionalRole.get();
-        
+
         profileRepository.deleteByUserAndId(user, profileId);
 
         user.setActiveProfile(false);
@@ -230,12 +231,12 @@ public class ProfileServiceImpl implements ProfileService {
     @Transactional
     public Role getOrCreateRole(SecurityRole securityRoleName) {
         log.info("Retrieving the {} role", securityRoleName);
-        Optional<Role> optionalRole = roleRepository.findByName(securityRoleName.toString());
+        Optional<Role> optionalRole = roleRepository.findByName(securityRoleName.getRole());
 
         if (optionalRole.isEmpty()) {
             log.info("Creating and saving the {} role", securityRoleName);
             Role roleUser = Role.builder()
-                    .name(securityRoleName.toString())
+                    .name(securityRoleName.getRole())
                     .build();
             roleRepository.save(roleUser);
             return roleUser;

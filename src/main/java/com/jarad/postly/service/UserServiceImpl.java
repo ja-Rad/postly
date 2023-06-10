@@ -4,10 +4,10 @@ import com.jarad.postly.entity.Role;
 import com.jarad.postly.entity.User;
 import com.jarad.postly.repository.RoleRepository;
 import com.jarad.postly.repository.UserRepository;
+import com.jarad.postly.security.SecurityRole;
 import com.jarad.postly.util.dto.UserDto;
 import com.jarad.postly.util.dto.UserDtoOnlyEmail;
 import com.jarad.postly.util.dto.UserDtoOnlyPassword;
-import com.jarad.postly.util.enums.SecurityRole;
 import com.jarad.postly.util.exception.EmailTemplateException;
 import com.jarad.postly.util.exception.UserAlreadyExistException;
 import com.jarad.postly.util.exception.UserNotFoundException;
@@ -302,12 +302,12 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public Role getOrCreateRole(SecurityRole securityRoleName) {
         log.info("Retrieving the {} role", securityRoleName);
-        Optional<Role> optionalRole = roleRepository.findByName(securityRoleName.toString());
+        Optional<Role> optionalRole = roleRepository.findByName(securityRoleName.getRole());
 
         if (optionalRole.isEmpty()) {
             log.info("Creating and saving the {} role", securityRoleName);
             Role roleUser = Role.builder()
-                    .name(securityRoleName.toString())
+                    .name(securityRoleName.getRole())
                     .build();
             roleRepository.save(roleUser);
             return roleUser;

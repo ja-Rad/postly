@@ -37,10 +37,10 @@ public class FollowerController {
     /**
      * WRITE Mappings
      */
-    @PostMapping("/followers/{id}")
+    @PostMapping("/followers/{authorId}")
     @LogExecutionTime
     public String addFollower(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                              @PathVariable("id") Long authorId,
+                              @PathVariable("authorId") Long authorId,
                               @RequestHeader(HttpHeaders.REFERER) String referer) {
         log.info("Entering addFollower");
 
@@ -51,10 +51,10 @@ public class FollowerController {
         return "redirect:/" + trimmedRefererPath;
     }
 
-    @DeleteMapping("/followers/{id}")
+    @DeleteMapping("/followers/{authorId}")
     @LogExecutionTime
     public String deleteFollower(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                 @PathVariable("id") Long authorId,
+                                 @PathVariable("authorId") Long authorId,
                                  @RequestHeader(HttpHeaders.REFERER) String referer) {
         log.info("Entering deleteFollower");
 

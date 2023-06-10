@@ -28,10 +28,10 @@ class GlobalDefaultExceptionHandler {
      *
      * @return error page located at templates/error.html
      */
-    @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler({
             FollowerServiceException.class
     })
+    @ResponseStatus(HttpStatus.FORBIDDEN)
     public String errorHandler403(HttpServletRequest request, Exception ex, Model model) {
         HttpStatus status = HttpStatus.FORBIDDEN;
         model.addAttribute(STATUS, status.value());
@@ -46,7 +46,6 @@ class GlobalDefaultExceptionHandler {
      *
      * @return error page located at templates/error.html
      */
-    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler({
             AuthorNotFoundException.class,
             CommentNotFoundException.class,
@@ -57,6 +56,7 @@ class GlobalDefaultExceptionHandler {
             RoleNotFoundException.class,
             UserNotFoundException.class
     })
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public String errorHandler404(HttpServletRequest request, Exception ex, Model model) {
         HttpStatus status = HttpStatus.NOT_FOUND;
         model.addAttribute(STATUS, status.value());
@@ -71,8 +71,8 @@ class GlobalDefaultExceptionHandler {
      *
      * @return error page located at templates/error.html
      */
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler({RuntimeException.class})
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String errorHandler500(HttpServletRequest request, Exception ex, Model model) {
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
         model.addAttribute(STATUS, status.value());

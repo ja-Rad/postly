@@ -23,11 +23,15 @@ import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.IntStream;
 
+import static java.util.stream.Collectors.toSet;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
@@ -159,6 +163,51 @@ class PostServiceImplTest {
         assertThrows(PostNotFoundException.class, () -> postService.deleteExistingPost(1L, 1L));
         verify(postRepository, times(1)).findByProfileIdAndId(anyLong(), anyLong());
         verifyNoMoreInteractions(postRepository);
+    }
+
+    @Test
+    void isPostOwnedByUser_WhenPostIsOwnedByUser_ReturnsTrue() {
+        when(postRepository.existsByProfileUserIdAndId(anyLong(), anyLong())).thenReturn(true);
+
+        boolean actualResult = postService.isPostOwnedByUser(1L, 2L);
+
+        assertTrue(actualResult, "When Post IS owned by User returns True");
+        verify(postRepository, times(1)).existsByProfileUserIdAndId(anyLong(), anyLong());
+    }
+
+    @Test
+    void isPostOwnedByUser_WhenPostIsNotOwnedByUser_ReturnsFalse() {
+        when(postRepository.existsByProfileUserIdAndId(anyLong(), anyLong())).thenReturn(false);
+
+        boolean actualResult = postService.isPostOwnedByUser(1L, 2L);
+
+        assertFalse(actualResult, "When Post IS NOT owned by User returns True");
+        verify(postRepository, times(1)).existsByProfileUserIdAndId(anyLong(), anyLong());
+    }
+
+    @Test
+    void returnAuthorsByUserId_ProfileSetOfAuthorsIdsIsPresent_ReturnsValidSetOfLongs() {
+        Set<Long> profileSetOfAuthorIds = profile.getFollowers().stream()
+                .map(follower -> follower.getId().getAuthorId())
+                .collect(toSet());
+        when(profileRepository.findByUserId(anyLong())).thenReturn(Optional.of(profile));
+
+        Set<Long> actualResult = postService.returnAuthorsByUserId(1L);
+
+        assertThat(actualResult).isNotEmpty();
+        assertEquals(profileSetOfAuthorIds, actualResult, "Sets of Author Ids should be equal");
+        verify(profileRepository, times(1)).findByUserId(anyLong());
+
+    }
+
+    @Test
+    void returnAuthorsByUserId_ProfileIsEmpty_ReturnsEmptySet() {
+        when(profileRepository.findByUserId(anyLong())).thenReturn(Optional.empty());
+
+        Set<Long> actualResult = postService.returnAuthorsByUserId(1L);
+
+        assertThat(actualResult).isEmpty();
+        verify(profileRepository, times(1)).findByUserId(anyLong());
     }
 
     /**

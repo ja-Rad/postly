@@ -2,7 +2,6 @@ package com.jarad.postly.service;
 
 import com.jarad.postly.entity.Post;
 import com.jarad.postly.entity.Profile;
-import com.jarad.postly.repository.CommentRepository;
 import com.jarad.postly.repository.PostRepository;
 import com.jarad.postly.repository.ProfileRepository;
 import com.jarad.postly.util.dto.PostDto;
@@ -34,13 +33,11 @@ public class PostServiceImpl implements PostService {
     public static final int PAGE_SIZE = 10;
     private final PostRepository postRepository;
     private final ProfileRepository profileRepository;
-    private final CommentRepository commentRepository;
 
     @Autowired
-    public PostServiceImpl(PostRepository postRepository, ProfileRepository profileRepository, CommentRepository commentRepository) {
+    public PostServiceImpl(PostRepository postRepository, ProfileRepository profileRepository) {
         this.postRepository = postRepository;
         this.profileRepository = profileRepository;
-        this.commentRepository = commentRepository;
     }
 
     @Override

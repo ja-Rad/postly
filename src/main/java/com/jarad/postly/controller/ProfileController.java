@@ -261,7 +261,7 @@ public class ProfileController {
 
         Long userId = userDetails.getUserId();
         session.setAttribute("usersActiveProfileId", userId);
-        profileService.createNewProfileAndReturnProfileId(userId, profileDto);
+        profileService.createNewProfile(userId, profileDto);
 
         SecurityContextHolder.clearContext();
         session.invalidate();

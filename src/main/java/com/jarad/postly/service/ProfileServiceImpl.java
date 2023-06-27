@@ -17,7 +17,6 @@ import com.jarad.postly.util.dto.ProfileDto;
 import com.jarad.postly.util.exception.PostNotFoundException;
 import com.jarad.postly.util.exception.ProfileForUserAlreadyExistException;
 import com.jarad.postly.util.exception.ProfileNotFoundException;
-import com.jarad.postly.util.exception.RoleNotFoundException;
 import com.jarad.postly.util.exception.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,7 +112,7 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Transactional
     @Override
-    public void createNewProfileAndReturnProfileId(Long userId, ProfileDto profileDto) {
+    public void createNewProfile(Long userId, ProfileDto profileDto) {
         log.info("Creating a new profile for user with ID {}", userId);
 
         Optional<User> optionalUser = userRepository.findById(userId);
@@ -180,13 +179,6 @@ public class ProfileServiceImpl implements ProfileService {
             throw new ProfileNotFoundException(message);
         }
 
-        Optional<Role> optionalRole = roleRepository.findByName(SecurityRole.ROLE_PROFILE_ACTIVE.getRole());
-        if (optionalRole.isEmpty()) {
-            String message = MessageFormat.format("Role for user with name {0} doesn''t exist", SecurityRole.ROLE_PROFILE_ACTIVE);
-            log.warn(message);
-            throw new RoleNotFoundException(message);
-        }
-
         User user = optionalUser.get();
 
         profileRepository.deleteByUserAndId(user, profileId);
@@ -238,8 +230,8 @@ public class ProfileServiceImpl implements ProfileService {
             Role roleUser = Role.builder()
                     .name(securityRoleName.getRole())
                     .build();
-            roleRepository.save(roleUser);
-            return roleUser;
+
+            return roleRepository.save(roleUser);
         }
 
         return optionalRole.get();

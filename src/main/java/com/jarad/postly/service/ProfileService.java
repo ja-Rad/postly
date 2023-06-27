@@ -29,7 +29,7 @@ public interface ProfileService {
 
     Profile returnProfileById(Long profileId);
 
-    void createNewProfileAndReturnProfileId(Long userId, ProfileDto profileDto);
+    void createNewProfile(Long userId, ProfileDto profileDto);
 
     void updateExistingProfile(Long userId, Long profileId, ProfileDto profileDto);
 

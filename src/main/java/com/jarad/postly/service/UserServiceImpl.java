@@ -67,8 +67,8 @@ public class UserServiceImpl implements UserService {
                 .build();
         user.addRole(getOrCreateRole(SecurityRole.ROLE_USER));
 
-        userRepository.save(user);
         sendVerificationEmail(user);
+        userRepository.save(user);
 
         log.info("User {} wants to register an account", userEmail);
     }
@@ -89,8 +89,8 @@ public class UserServiceImpl implements UserService {
         String newVerificationCode = RandomString.make(64);
         user.setVerificationCode(newVerificationCode);
 
-        userRepository.save(user);
         sendForgotPasswordEmail(user);
+        userRepository.save(user);
 
         log.info("User {} wants to reset the password", user.getEmail());
     }
@@ -188,7 +188,7 @@ public class UserServiceImpl implements UserService {
         } catch (MessagingException | UnsupportedEncodingException e) {
             String message = String.format("Exception occurred while creating the email template. Details: %s", e.getMessage());
             log.info(message);
-            throw new EmailTemplateException(message);
+            throw new EmailTemplateException(message, e);
         }
     }
 
@@ -309,8 +309,7 @@ public class UserServiceImpl implements UserService {
             Role roleUser = Role.builder()
                     .name(securityRoleName.getRole())
                     .build();
-            roleRepository.save(roleUser);
-            return roleUser;
+            return roleRepository.save(roleUser);
         }
 
         return optionalRole.get();

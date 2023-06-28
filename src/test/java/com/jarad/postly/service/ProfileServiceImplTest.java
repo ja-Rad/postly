@@ -343,7 +343,7 @@ class ProfileServiceImplTest {
     }
 
     @Test
-    void getOrCreateRole_RoleIsEmpty_() {
+    void getOrCreateRole_RoleIsEmpty_ReturnsNewSavedRole() {
         when(roleRepository.findByName(anyString())).thenReturn(Optional.empty());
         when(roleRepository.save(any(Role.class))).thenReturn(role);
 

@@ -1,10 +1,11 @@
-package com.jarad.postly.service;
+package com.jarad.postly.unit.service;
 
 import com.jarad.postly.entity.Role;
 import com.jarad.postly.entity.User;
 import com.jarad.postly.repository.RoleRepository;
 import com.jarad.postly.repository.UserRepository;
 import com.jarad.postly.security.SecurityRole;
+import com.jarad.postly.service.UserServiceImpl;
 import com.jarad.postly.util.dto.UserDto;
 import com.jarad.postly.util.dto.UserDtoOnlyEmail;
 import com.jarad.postly.util.dto.UserDtoOnlyPassword;

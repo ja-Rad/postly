@@ -1,10 +1,11 @@
-package com.jarad.postly.service;
+package com.jarad.postly.unit.service;
 
 import com.jarad.postly.entity.Follower;
 import com.jarad.postly.entity.Profile;
 import com.jarad.postly.entity.embeddable.FollowerPK;
 import com.jarad.postly.repository.FollowerRepository;
 import com.jarad.postly.repository.ProfileRepository;
+import com.jarad.postly.service.FollowerServiceImpl;
 import com.jarad.postly.util.exception.FollowerServiceException;
 import com.jarad.postly.util.exception.ProfileNotFoundException;
 import org.junit.jupiter.api.BeforeEach;

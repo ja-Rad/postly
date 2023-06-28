@@ -1,4 +1,4 @@
-package com.jarad.postly.service;
+package com.jarad.postly.unit.service;
 
 import com.jarad.postly.entity.Follower;
 import com.jarad.postly.entity.Post;
@@ -6,6 +6,7 @@ import com.jarad.postly.entity.Profile;
 import com.jarad.postly.entity.embeddable.FollowerPK;
 import com.jarad.postly.repository.PostRepository;
 import com.jarad.postly.repository.ProfileRepository;
+import com.jarad.postly.service.PostServiceImpl;
 import com.jarad.postly.util.dto.PostDto;
 import com.jarad.postly.util.exception.PostNotFoundException;
 import com.jarad.postly.util.exception.ProfileNotFoundException;

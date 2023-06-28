@@ -1,6 +1,7 @@
-package com.jarad.postly.service;
+package com.jarad.postly.unit.service;
 
 import com.jarad.postly.repository.ProfileRepository;
+import com.jarad.postly.service.LoginServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

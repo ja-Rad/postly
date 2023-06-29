@@ -102,8 +102,8 @@ public class CommentController {
 
     @GetMapping("/posts/{postId}/comments/create-form")
     @LogExecutionTime
-    public String getPostCommentsById(@PathVariable(POST_ID) Long postId,
-                                      Model model) {
+    public String getPostCreateForm(@PathVariable(POST_ID) Long postId,
+                                    Model model) {
         log.info("Entering getPostCommentsById");
 
         CommentDto commentDto = new CommentDto();

@@ -104,10 +104,10 @@ public class ProfileController {
 
     @GetMapping("/profiles/{profileId}/posts")
     @LogExecutionTime
-    public String getProfilePosts(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                  @PathVariable("profileId") Long profileId,
-                                  @RequestParam(value = "page", defaultValue = "1") int page,
-                                  Model model) {
+    public String getProfilePaginatedPosts(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                           @PathVariable("profileId") Long profileId,
+                                           @RequestParam(value = "page", defaultValue = "1") int page,
+                                           Model model) {
         log.info("Entering getProfilePosts");
 
         Long userId = userDetails.getUserId();
@@ -131,10 +131,10 @@ public class ProfileController {
 
     @GetMapping("/profiles/{profileId}/authors")
     @LogExecutionTime
-    public String getProfileAuthors(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                    @PathVariable("profileId") Long profileId,
-                                    @RequestParam(value = "page", defaultValue = "1") int page,
-                                    Model model) {
+    public String getProfilePaginatedAuthors(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                             @PathVariable("profileId") Long profileId,
+                                             @RequestParam(value = "page", defaultValue = "1") int page,
+                                             Model model) {
         log.info("Entering getProfileAuthors");
 
         Long userId = userDetails.getUserId();
@@ -158,10 +158,10 @@ public class ProfileController {
 
     @GetMapping("/profiles/{profileId}/followers")
     @LogExecutionTime
-    public String getProfileFollowers(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                      @PathVariable("profileId") Long profileId,
-                                      @RequestParam(value = "page", defaultValue = "1") int page,
-                                      Model model) {
+    public String getProfilePaginatedFollowers(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                               @PathVariable("profileId") Long profileId,
+                                               @RequestParam(value = "page", defaultValue = "1") int page,
+                                               Model model) {
         log.info("Entering getProfileFollowers");
 
         Long userId = userDetails.getUserId();
@@ -185,10 +185,10 @@ public class ProfileController {
 
     @GetMapping("/profiles/{profileId}/comments")
     @LogExecutionTime
-    public String getProfileComments(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                     @PathVariable("profileId") Long profileId,
-                                     @RequestParam(value = "page", defaultValue = "1") int page,
-                                     Model model) {
+    public String getProfilePaginatedComments(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                              @PathVariable("profileId") Long profileId,
+                                              @RequestParam(value = "page", defaultValue = "1") int page,
+                                              Model model) {
         log.info("Entering getProfileComments");
 
         Long userId = userDetails.getUserId();

@@ -23,4 +23,6 @@ public interface PostService {
     void deleteExistingPost(Long profileId, Long postId);
 
     boolean isPostOwnedByUser(Long userId, Long postId);
+
+    String returnTitleByPostId(Long postId);
 }

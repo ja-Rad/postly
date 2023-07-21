@@ -110,11 +110,13 @@ public class CommentController {
     @LogExecutionTime
     public String getPostCreateForm(@PathVariable(POST_ID) Long postId,
                                     Model model) {
-        log.info("Entering getPostCommentsById");
+        log.info("Entering getPostCreateForm");
 
         CommentDto commentDto = new CommentDto();
+        String postTitle = commentService.returnPostTitleByPostId(postId);
         model.addAttribute(POST_ID, postId);
         model.addAttribute(COMMENT, commentDto);
+        model.addAttribute("postTitle", postTitle);
 
         return COMMENT_SUBFOLDER_PREFIX + "comment-create-form";
     }
@@ -127,9 +129,11 @@ public class CommentController {
         log.info("Entering getPostUpdateForm");
 
         Comment comment = commentService.returnCommentById(postId, commentId);
+        String postTitle = commentService.returnPostTitleByPostId(postId);
         model.addAttribute(COMMENT, comment);
         model.addAttribute(POST_ID, postId);
         model.addAttribute(COMMENT_ID, commentId);
+        model.addAttribute("postTitle", postTitle);
 
         return COMMENT_SUBFOLDER_PREFIX + "comment-update-form";
     }
@@ -148,8 +152,10 @@ public class CommentController {
 
         if (bindingResult.hasErrors()) {
             log.info("Validation errors occurred");
-
+            String postTitle = commentService.returnPostTitleByPostId(postId);
             model.addAttribute(POST_ID, postId);
+            model.addAttribute("postTitle", postTitle);
+
             return COMMENT_SUBFOLDER_PREFIX + "comment-create-form";
         }
 
@@ -171,9 +177,11 @@ public class CommentController {
 
         if (bindingResult.hasErrors()) {
             log.info("Validation errors occurred");
-
+            String postTitle = commentService.returnPostTitleByPostId(postId);
             model.addAttribute(POST_ID, postId);
             model.addAttribute(COMMENT_ID, commentId);
+            model.addAttribute("postTitle", postTitle);
+
             return COMMENT_SUBFOLDER_PREFIX + "comment-update-form";
         }
 

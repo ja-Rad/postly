@@ -132,6 +132,22 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public String returnTitleByPostId(Long postId) {
+        log.info("Returning post's title with ID {}", postId);
+
+        Optional<Post> optionalPost = postRepository.findById(postId);
+        if (optionalPost.isEmpty()) {
+            String message = MessageFormat.format("Post with ID {0} doesn''t exist", postId);
+            log.info(message);
+            throw new PostNotFoundException(message);
+        }
+
+        Post post = optionalPost.get();
+
+        return post.getTitle();
+    }
+
+    @Override
     public Set<Long> returnAuthorsByUserId(Long userId) {
         Optional<Profile> optionalProfile = profileRepository.findByUserId(userId);
 

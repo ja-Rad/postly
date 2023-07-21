@@ -110,8 +110,10 @@ public class PostController {
         log.info("Entering getPostCreateForm");
 
         Post post = postService.returnPostById(postId);
+        String postTitle = postService.returnTitleByPostId(postId);
         model.addAttribute("post", post);
         model.addAttribute("postId", postId);
+        model.addAttribute("postTitle", postTitle);
 
         return POST_SUBFOLDER_PREFIX + "post-update-form";
     }
@@ -150,7 +152,10 @@ public class PostController {
         if (bindingResult.hasErrors()) {
             log.info("Validation errors occurred");
 
+            String postTitle = postService.returnTitleByPostId(postId);
             model.addAttribute("postId", postId);
+            model.addAttribute("postTitle", postTitle);
+            
             return POST_SUBFOLDER_PREFIX + "post-update-form";
         }
 

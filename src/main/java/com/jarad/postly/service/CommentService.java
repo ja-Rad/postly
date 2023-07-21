@@ -26,4 +26,6 @@ public interface CommentService {
     void deleteExistingComment(Long userId, Long postId, Long commentId);
 
     boolean isCommentOwnedByUser(Long userId, Long commentId);
+
+    String returnPostTitleByPostId(Long postId);
 }

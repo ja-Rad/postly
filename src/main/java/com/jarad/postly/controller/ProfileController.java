@@ -198,7 +198,7 @@ public class ProfileController {
                                                @RequestParam(value = "page", defaultValue = "1") int page,
                                                Model model) {
         log.info("Entering getProfileFollowers");
-        
+
         model.addAttribute(PROFILE_ID, profileId);
 
         String profileUsername = profileService.returnProfileUsername(profileId);
@@ -244,8 +244,10 @@ public class ProfileController {
         log.info("Entering getProfileUpdateForm");
 
         Profile profile = profileService.returnProfileById(profileId);
+        String profileUsername = profileService.returnProfileUsername(profileId);
         model.addAttribute(PROFILE, profile);
         model.addAttribute(PROFILE_ID, profileId);
+        model.addAttribute("profileUsername", profileUsername);
 
         return PROFILE_SUBFOLDER_PREFIX + "profile-update-form";
     }
@@ -289,7 +291,9 @@ public class ProfileController {
         if (bindingResult.hasErrors()) {
             log.info("Validation errors occurred");
 
+            String profileUsername = profileService.returnProfileUsername(profileId);
             model.addAttribute(PROFILE_ID, profileId);
+            model.addAttribute("profileUsername", profileUsername);
             return PROFILE_SUBFOLDER_PREFIX + "profile-update-form";
         }
 

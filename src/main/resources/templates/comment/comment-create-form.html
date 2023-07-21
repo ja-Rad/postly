@@ -13,10 +13,24 @@
             <header>
                 <div th:insert="~{fragments/navbar}" id="navbar-content"></div>
             </header>
-            <main class="mt-auto">
+            <main class="mb-auto">
                 <div class="container-lg">
                     <div class="row align-items-center justify-content-center">
                         <div class="col-lg-4">
+                            <!-- Breadcrumb -->
+                            <nav class="mt-4" style="--bs-breadcrumb-divider: '>'">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item">
+                                        <a th:href="@{~/posts/{postId}(postId=${postId})}"><span th:text="${postTitle}" th:remove="tag"></span></a>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        <a th:href="@{~/posts/{postId}/comments(postId=${postId})}">Comments</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        <a th:href="@{~/posts/{postId}/comments/create-form(postId=${postId})}">Create comment</a>
+                                    </li>
+                                </ol>
+                            </nav>
                             <!-- Form -->
                             <form th:action="@{~/posts/{postId}/comments/create-form(postId=${postId})}" th:object="${comment}" th:method="post" class="form">
                                 <!-- Title -->

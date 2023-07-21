@@ -165,5 +165,21 @@ public class CommentServiceImpl implements CommentService {
     public boolean isCommentOwnedByUser(Long userId, Long commentId) {
         return commentRepository.existsByProfileUserIdAndId(userId, commentId);
     }
+
+    @Override
+    public String returnPostTitleByPostId(Long postId) {
+        log.info("Returning post's title with ID {}", postId);
+
+        Optional<Post> optionalPost = postRepository.findById(postId);
+        if (optionalPost.isEmpty()) {
+            String message = MessageFormat.format("Post with ID {0} doesn''t exist", postId);
+            log.info(message);
+            throw new ProfileNotFoundException(message);
+        }
+
+        Post post = optionalPost.get();
+
+        return post.getTitle();
+    }
 }
 

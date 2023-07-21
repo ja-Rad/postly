@@ -4,9 +4,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link th:replace="~{fragments/bootstrap-stylesheet}" />
         <link th:replace="~{fragments/main-stylesheet}" />
-        <link rel="icon" type="image/x-icon" th:href="@{~/images/favicon/postly-symbol-logo-light-favicon.ico}" />
         <meta charset="utf-8" />
-        <title>Edit Post</title>
+        <title>Postly - Edit Post</title>
     </head>
 
     <body>
@@ -40,7 +39,7 @@
                                 </div>
 
                                 <!-- Edit Comment button -->
-                                <input type="submit" class="btn btn-primary w-100" value="Update" />
+                                <input type="submit" class="btn w-100" value="Update" />
 
                                 <!-- Go back link -->
                                 <p class="text-center text-muted m-2">Prefer not to edit comment? <a th:href="@{~/posts/{postId}(postId=${postId})}" role="button">Go back</a></p>
@@ -49,7 +48,7 @@
                     </div>
                 </div>
             </main>
-            <footer class="bg-primary mt-auto" id="footer-content" th:insert="~{fragments/footer-content}"></footer>
+            <footer class="mt-auto" id="footer-content" th:insert="~{fragments/footer-content}"></footer>
         </div>
         <link th:insert="~{fragments/bootstrap-js-bundle}" />
     </body>

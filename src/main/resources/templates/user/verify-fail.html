@@ -4,9 +4,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link th:replace="~{fragments/bootstrap-stylesheet}" />
         <link th:replace="~{fragments/main-stylesheet}" />
-        <link rel="icon" type="image/x-icon" th:href="@{~/images/favicon/postly-symbol-logo-light-favicon.ico}" />
         <meta charset="utf-8" />
-        <title>Account Verification Unsuccessful</title>
+        <title>Postly - Account Verification Unsuccessful</title>
     </head>
 
     <body>
@@ -15,11 +14,10 @@
                 <div class="container-lg">
                     <div class="row align-items-center justify-content-center">
                         <div class="col-lg-4">
-                            <!-- Logo -->
-                            <div class="row">
-                                <img alt="Logo" class="img-fluid" th:src="@{~/images/potly-full-logo-light.png}" />
+                            <!-- Title -->
+                            <div class="text-center p-2 brand-font">
+                                <h1>Postly</h1>
                             </div>
-
                             <!-- Notification -->
                             <div class="text-center p-2">
                                 <h4>Account Verification Unsuccessful</h4>
@@ -32,7 +30,7 @@
                     </div>
                 </div>
             </main>
-            <footer class="bg-primary mt-auto" id="footer-content" th:insert="~{fragments/footer-content}"></footer>
+            <footer class="mt-auto" id="footer-content" th:insert="~{fragments/footer-content}"></footer>
         </div>
         <link th:insert="~{fragments/bootstrap-js-bundle}" />
     </body>

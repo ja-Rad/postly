@@ -4,9 +4,8 @@
         <meta content="width=device-width, initial-scale=1" name="viewport" />
         <link th:replace="~{fragments/bootstrap-stylesheet}" />
         <link th:replace="~{fragments/main-stylesheet}" />
-        <link rel="icon" th:href="@{~/images/favicon/postly-symbol-logo-light-favicon.ico}" type="image/x-icon" />
         <meta charset="utf-8" />
-        <title>Login</title>
+        <title>Postly - Error occurred</title>
     </head>
 
     <body>
@@ -17,11 +16,11 @@
                     <p class="fs-3"><span class="text-danger">Opps!</span> Something went wrong.</p>
                     <p class="lead">You have tried to access url: <span th:text="${url}" class="text-danger"></span></p>
                     <p class="lead">The error message: <span th:text="${message}" class="text-danger"></span></p>
-                    <a th:href="@{~/posts}" class="btn btn-primary">Go to Posts</a>
+                    <a th:href="@{~/posts}" class="btn">Go to Posts</a>
                 </div>
             </div>
         </main>
-        <footer class="bg-primary" id="footer-content" th:insert="~{fragments/footer-content}"></footer>
+        <footer class=" " id="footer-content" th:insert="~{fragments/footer-content}"></footer>
         <link th:insert="~{fragments/bootstrap-js-bundle}" />
     </body>
 </html>

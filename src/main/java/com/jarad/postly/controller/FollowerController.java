@@ -47,8 +47,9 @@ public class FollowerController {
         Long userId = userDetails.getUserId();
         followerService.addFollowerToAuthor(userId, authorId);
         String trimmedRefererPath = getTrimmedRefererPath(referer);
+        String anchorLink = "#" + authorId;
 
-        return "redirect:/" + trimmedRefererPath;
+        return "redirect:/" + trimmedRefererPath + anchorLink;
     }
 
     @DeleteMapping("/followers/{authorId}")
@@ -61,8 +62,9 @@ public class FollowerController {
         Long userId = userDetails.getUserId();
         followerService.deleteFollowerFromAuthor(userId, authorId);
         String trimmedRefererPath = getTrimmedRefererPath(referer);
+        String anchorLink = "#" + authorId;
 
-        return "redirect:/" + trimmedRefererPath;
+        return "redirect:/" + trimmedRefererPath + anchorLink;
     }
 
 

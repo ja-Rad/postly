@@ -3,6 +3,7 @@ package com.jarad.postly.controller;
 
 import com.jarad.postly.aspect.LogExecutionTime;
 import com.jarad.postly.entity.Comment;
+import com.jarad.postly.entity.Post;
 import com.jarad.postly.security.UserDetailsImpl;
 import com.jarad.postly.service.CommentService;
 import com.jarad.postly.util.dto.CommentDto;
@@ -33,7 +34,7 @@ public class CommentController {
     public static final String COMMENT = "comment";
     public static final String COMMENT_ID = "commentId";
     private static final String COMMENT_SUBFOLDER_PREFIX = "comment/";
-    private CommentService commentService;
+    private final CommentService commentService;
 
     @Autowired
     public CommentController(CommentService commentService) {
@@ -54,11 +55,16 @@ public class CommentController {
         Long userId = userDetails.getUserId();
         boolean activeProfile = userDetails.isActiveProfile();
 
+        Post post = commentService.returnPostByPostId(postId);
+        model.addAttribute("post", post);
+
         Set<Long> authorsByUserId = commentService.returnAuthorsByUserId(userId);
         model.addAttribute("authorsByUserId", authorsByUserId);
 
         Page<Comment> commentPage = commentService.returnPaginatedCommentsByCreationDateDescending(postId, page - 1);
+
         int totalPages = commentPage.getTotalPages();
+        model.addAttribute("totalPages", totalPages);
 
         if (totalPages > 1) {
             List<Integer> pageNumbers = commentService.returnListOfPageNumbers(totalPages);

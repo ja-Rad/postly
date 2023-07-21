@@ -67,6 +67,8 @@ public class ProfileController {
         model.addAttribute("profilePage", profilePage);
 
         int totalPages = profilePage.getTotalPages();
+        model.addAttribute("totalPages", totalPages);
+
         if (totalPages > 1) {
             List<Integer> pageNumbers = profileService.returnListOfPageNumbers(totalPages);
             model.addAttribute(PAGE_NUMBERS, pageNumbers);
@@ -93,6 +95,12 @@ public class ProfileController {
         Profile profile = profileService.returnProfileById(profileId);
         model.addAttribute(PROFILE, profile);
 
+        Post latestPost = profileService.returnLatestPostById(profileId);
+        model.addAttribute("latestPost", latestPost);
+
+        Comment latestComment = profileService.returnLatestCommentById(profileId);
+        model.addAttribute("latestComment", latestComment);
+
         if (profileService.isUserOwnsThisProfile(userId, profileId)) {
             model.addAttribute(PERSONAL_PROFILE, true);
         }
@@ -110,23 +118,50 @@ public class ProfileController {
                                            Model model) {
         log.info("Entering getProfilePosts");
 
-        Long userId = userDetails.getUserId();
         model.addAttribute(PROFILE_ID, profileId);
 
-        if (profileService.isUserOwnsThisProfile(userId, profileId)) {
-            model.addAttribute(PERSONAL_PROFILE, true);
-        }
+        String profileUsername = profileService.returnProfileUsername(profileId);
+        model.addAttribute("profileUsername", profileUsername);
 
         Page<Post> postPage = profileService.returnProfilePaginatedPostsByCreationDateDescending(profileId, page - 1);
         model.addAttribute("postPage", postPage);
 
         int totalPages = postPage.getTotalPages();
+        model.addAttribute("totalPages", totalPages);
+
         if (totalPages > 1) {
             List<Integer> pageNumbers = profileService.returnListOfPageNumbers(totalPages);
             model.addAttribute(PAGE_NUMBERS, pageNumbers);
         }
 
         return PROFILE_SUBFOLDER_PREFIX + "profile-posts";
+    }
+
+    @GetMapping("/profiles/{profileId}/comments")
+    @LogExecutionTime
+    public String getProfilePaginatedComments(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                              @PathVariable("profileId") Long profileId,
+                                              @RequestParam(value = "page", defaultValue = "1") int page,
+                                              Model model) {
+        log.info("Entering getProfileComments");
+
+        model.addAttribute(PROFILE_ID, profileId);
+
+        String profileUsername = profileService.returnProfileUsername(profileId);
+        model.addAttribute("profileUsername", profileUsername);
+
+        Page<Comment> commentPage = profileService.returnProfilePaginatedCommentsByCreationDateDescending(profileId, page - 1);
+        model.addAttribute("commentPage", commentPage);
+
+        int totalPages = commentPage.getTotalPages();
+        model.addAttribute("totalPages", totalPages);
+
+        if (totalPages > 1) {
+            List<Integer> pageNumbers = profileService.returnListOfPageNumbers(totalPages);
+            model.addAttribute(PAGE_NUMBERS, pageNumbers);
+        }
+
+        return PROFILE_SUBFOLDER_PREFIX + "profile-comments";
     }
 
     @GetMapping("/profiles/{profileId}/authors")
@@ -137,17 +172,17 @@ public class ProfileController {
                                              Model model) {
         log.info("Entering getProfileAuthors");
 
-        Long userId = userDetails.getUserId();
         model.addAttribute(PROFILE_ID, profileId);
 
-        if (profileService.isUserOwnsThisProfile(userId, profileId)) {
-            model.addAttribute(PERSONAL_PROFILE, true);
-        }
+        String profileUsername = profileService.returnProfileUsername(profileId);
+        model.addAttribute("profileUsername", profileUsername);
 
         Page<Follower> authorPage = profileService.returnProfilePaginatedAuthorsByCreationDateDescending(profileId, page - 1);
         model.addAttribute("authorPage", authorPage);
 
         int totalPages = authorPage.getTotalPages();
+        model.addAttribute("totalPages", totalPages);
+
         if (totalPages > 1) {
             List<Integer> pageNumbers = profileService.returnListOfPageNumbers(totalPages);
             model.addAttribute(PAGE_NUMBERS, pageNumbers);
@@ -163,51 +198,24 @@ public class ProfileController {
                                                @RequestParam(value = "page", defaultValue = "1") int page,
                                                Model model) {
         log.info("Entering getProfileFollowers");
-
-        Long userId = userDetails.getUserId();
+        
         model.addAttribute(PROFILE_ID, profileId);
 
-        if (profileService.isUserOwnsThisProfile(userId, profileId)) {
-            model.addAttribute(PERSONAL_PROFILE, true);
-        }
+        String profileUsername = profileService.returnProfileUsername(profileId);
+        model.addAttribute("profileUsername", profileUsername);
 
         Page<Follower> followerPage = profileService.returnProfilePaginatedFollowersByCreationDateDescending(profileId, page - 1);
         model.addAttribute("followerPage", followerPage);
 
         int totalPages = followerPage.getTotalPages();
+        model.addAttribute("totalPages", totalPages);
+
         if (totalPages > 1) {
             List<Integer> pageNumbers = profileService.returnListOfPageNumbers(totalPages);
             model.addAttribute(PAGE_NUMBERS, pageNumbers);
         }
 
         return PROFILE_SUBFOLDER_PREFIX + "profile-followers";
-    }
-
-    @GetMapping("/profiles/{profileId}/comments")
-    @LogExecutionTime
-    public String getProfilePaginatedComments(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                              @PathVariable("profileId") Long profileId,
-                                              @RequestParam(value = "page", defaultValue = "1") int page,
-                                              Model model) {
-        log.info("Entering getProfileComments");
-
-        Long userId = userDetails.getUserId();
-        model.addAttribute(PROFILE_ID, profileId);
-
-        if (profileService.isUserOwnsThisProfile(userId, profileId)) {
-            model.addAttribute(PERSONAL_PROFILE, true);
-        }
-
-        Page<Comment> commentPage = profileService.returnProfilePaginatedCommentsByCreationDateDescending(profileId, page - 1);
-        model.addAttribute("commentPage", commentPage);
-
-        int totalPages = commentPage.getTotalPages();
-        if (totalPages > 1) {
-            List<Integer> pageNumbers = profileService.returnListOfPageNumbers(totalPages);
-            model.addAttribute(PAGE_NUMBERS, pageNumbers);
-        }
-
-        return PROFILE_SUBFOLDER_PREFIX + "profile-comments";
     }
 
     @GetMapping("/profiles/create-form")

@@ -4,9 +4,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link th:replace="~{fragments/bootstrap-stylesheet}" />
         <link th:replace="~{fragments/main-stylesheet}" />
-        <link rel="icon" type="image/x-icon" th:href="@{~/images/favicon/postly-symbol-logo-light-favicon.ico}" />
         <meta charset="utf-8" />
-        <title>Search</title>
+        <title>Postly - Search</title>
     </head>
 
     <body>
@@ -47,7 +46,7 @@
                                                                     <h4 th:text="${post.title}">Post Title</h4>
                                                                 </div>
                                                                 <div class="col">
-                                                                    <label th:text="${post.creationDate}" class="text-end">01/01/2001</label>
+                                                                    <label th:text="${post.creationDate}" class="formatDate text-end">01/01/2001</label>
                                                                 </div>
                                                             </div>
                                                             <div class="row row-cols-1 mt-5">
@@ -109,7 +108,7 @@
                                 <div th:if="${profilePage}">
                                     <div th:if="${profilePage.content}">
                                         <div th:each="profile : ${profilePage.content}">
-                                            <!-- Post Card -->
+                                            <!-- Profile Card -->
                                             <a class="anchor" th:id="${profile.id}"></a>
                                             <article>
                                                 <div class="card mb-4">
@@ -120,7 +119,7 @@
                                                                     <h4 th:text="${profile.username}">John Doe</h4>
                                                                 </div>
                                                                 <div class="col">
-                                                                    <label th:text="${profile.creationDate}" class="text-end">01/01/2001</label>
+                                                                    <label th:text="${profile.creationDate}" class="formatDate text-end">01/01/2001</label>
                                                                 </div>
                                                             </div>
                                                             <div class="row row-cols-sm-2 row-cols-1">
@@ -165,9 +164,9 @@
                                         </div>
 
                                         <!-- Page Configuration -->
-                                        <div class="dropdown d-flex align-items-center">
+                                        <div class="dropup d-flex align-items-center">
                                             <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                                <span th:text="${postPage.number + 1}" th:remove="tag"> <span>arrow_drop_up</span></span>
+                                                <span th:text="${postPage.number + 1}" th:remove="tag"></span>
                                             </button>
                                             <ul class="dropdown-menu">
                                                 <li th:each="pageNumber : ${postPageNumbers}">
@@ -198,9 +197,9 @@
                                         </div>
 
                                         <!-- Page Configuration -->
-                                        <div class="dropdown d-flex align-items-center">
+                                        <div class="dropup d-flex align-items-center">
                                             <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                                <span th:text="${profilePage.number + 1}" th:remove="tag"> <span>arrow_drop_up</span></span>
+                                                <span th:text="${profilePage.number + 1}" th:remove="tag"></span>
                                             </button>
                                             <ul class="dropdown-menu">
                                                 <li th:each="pageNumber : ${profilePageNumbers}">

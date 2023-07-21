@@ -1,75 +1,339 @@
+/* GENERAL SETTINGS */
+* {
+    -webkit-border-radius: 0 !important;
+    -moz-border-radius: 0 !important;
+    border-radius: 0 !important;
+}
+
 body {
     min-height: 100vh !important;
-    /* display: flex !important;
-    flex-direction: column !important; */
+    background-color: #f7f7f7 !important;
+    position: relative;
 }
 
 p {
     white-space: break-spaces !important;
 }
-
-.nav-link {
-    color: white !important;
-}
-
-.nav-link:hover {
-    color: #f0ad4e !important;
-}
-
 a {
     text-decoration: none;
 }
 
-.postly-background-gradient-orange {
-    background: linear-gradient(to right, #ef453b 0%, #fcbe65 100%);
+.not-selectable {
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    -khtml-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
 }
 
-.postly-background-gradient-blue {
-    background: linear-gradient(to right, #323f8f 0%, #31bcf1 100%);
+.navbar-nav {
+    flex-direction: row !important;
+}
+.navbar > .container-fluid {
+    justify-content: space-around !important;
+}
+.anchor {
+    visibility: hidden;
+    display: block;
+    position: relative;
+    top: -250px;
 }
 
-.postly-text-orange {
-    color: #f1580c;
+.dropdown-menu {
+    max-height: 150px !important;
+    overflow-y: auto !important;
 }
 
-.postly-text-blue {
-    color: #2199ea;
+.btn {
+    -webkit-transition: -webkit-transform 0.2s;
+    transition: -webkit-transform 0.2s;
+    transition: transform 0.2s;
+    transition: transform 0.2s, -webkit-transform 0.2s;
+}
+.btn:active {
+    -webkit-transform: scale(0.8);
+    transform: scale(0.8);
 }
 
-.gradient-text-orange {
-    /* Fallback: Set a background color. */
-    background-color: black;
-
-    /* Create the gradient. */
-    background-image: linear-gradient(to right, #ef453b 0%, #fcbe65 100%);
-
-    /* Set the background size and repeat properties. */
-    background-size: 100%;
-    background-repeat: repeat;
-
-    /* Use the text as a mask for the background. */
-    /* This will show the gradient as a text color rather than element bg. */
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-background-clip: text;
-    -moz-text-fill-color: transparent;
+.badge {
+    z-index: 2;
+    position: relative;
+    height: 40px !important;
+}
+.badge-static {
+    width: 180px !important;
 }
 
-.gradient-text-blue {
-    /* Fallback: Set a background color. */
-    background-color: black;
+header {
+    /*  navbar 56 itself + 8 padding-top + 8 padding-bottom => 72px/ */
+    margin-bottom: 72px;
+}
+.profile-navbar-dropdown {
+    left: 75% !important;
+    max-height: none !important;
+    position: absolute !important;
+}
+/* 552 px and less: is when container-fluid forms 2 rows  */
+@media (max-width: 552px) {
+    header {
+        /*  navbar 101 itself + 8 padding-top + 8 padding-bottom => 117px/ */
+        margin-bottom: 117px !important;
+    }
+    .profile-navbar-dropdown {
+        left: 60% !important;
+    }
+}
 
-    /* Create the gradient. */
-    background-image: linear-gradient(to right, #323f8f 0%, #31bcf1 100%);
+.progress-container {
+    width: 100%;
+    height: 8px;
+}
+.progress-bar {
+    height: 8px;
+    width: 0%;
+}
 
-    /* Set the background size and repeat properties. */
-    background-size: 100%;
-    background-repeat: repeat;
+/* Cancel Search button - pseudo element*/
+input[type="search"]::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    height: 1em;
+    width: 1em;
+    border-radius: 50em;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:%23ff7f50}</style><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg>')
+        no-repeat 50% 50%;
+    background-size: contain;
+    opacity: 0;
+    pointer-events: none;
+}
 
-    /* Use the text as a mask for the background. */
-    /* This will show the gradient as a text color rather than element bg. */
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-background-clip: text;
-    -moz-text-fill-color: transparent;
+input[type="search"]:focus::-webkit-search-cancel-button {
+    opacity: 1;
+    pointer-events: all;
+}
+
+input[type="search"].dark::-webkit-search-cancel-button {
+    filter: invert(1);
+}
+
+/* FONTS */
+@import url("https://fonts.googleapis.com/css2?family=Ysabeau+Infant:ital,wght@0,400;0,600;1,700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&display=swap");
+
+h1 {
+    font-family: "Ysabeau Infant", sans-serif !important;
+    font-style: italic !important;
+    font-weight: 700 !important;
+    font-size: 50px !important;
+
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    -khtml-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+}
+h2 {
+    font-family: "Ysabeau Infant", sans-serif !important;
+    font-style: italic !important;
+    font-weight: 700 !important;
+    font-size: 40px !important;
+
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    -khtml-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+}
+
+h3 {
+    font-family: "IBM Plex Mono", monospace !important;
+    font-style: normal !important;
+    font-weight: 500 !important;
+    font-size: 28px !important;
+}
+h4 {
+    font-family: "IBM Plex Mono", monospace !important;
+    font-style: normal !important;
+    font-weight: 500 !important;
+    font-size: 24px !important;
+}
+
+h6 {
+    font-family: "IBM Plex Mono", monospace !important;
+    font-style: normal !important;
+    font-weight: 300 !important;
+    font-size: 12px !important;
+}
+
+p {
+    font-family: "IBM Plex Mono", monospace !important;
+    font-style: normal !important;
+    font-weight: 300 !important;
+    font-size: 16px !important;
+}
+
+label {
+    font-family: "IBM Plex Mono", monospace !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    font-size: 18px !important;
+}
+input {
+    font-family: "IBM Plex Mono", monospace !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    font-size: 18px !important;
+}
+a {
+    font-family: "IBM Plex Mono", monospace !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    font-size: 18px !important;
+}
+
+.btn {
+    font-family: "IBM Plex Mono", monospace !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    font-size: 18px !important;
+}
+
+/* COLOR */
+.card-body {
+    box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 45%) !important;
+}
+.card-body:hover {
+    box-shadow: 0 0.5rem 1rem rgb(62 180 137 / 45%) !important;
+}
+
+.navbar-light {
+    background-color: #3eb489 !important;
+    box-shadow: 0 0.5rem 1rem -0.5rem rgb(255 127 80 / 45%) !important;
+}
+.footer-color {
+    color: white !important;
+    background-color: #3eb489 !important;
+}
+
+.progress-container {
+    background: #ff7f50;
+}
+.progress-bar {
+    background: #3eb489;
+}
+
+.btn {
+    color: white !important;
+    background-color: #3eb489 !important;
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0) !important;
+}
+.btn:hover {
+    color: #3eb489 !important;
+    background-color: white !important;
+    box-shadow: 0 0 0 0.25rem rgb(62 180 137 / 25%) !important;
+}
+.btn:focus {
+    outline: 0 !important;
+    box-shadow: 0 0 0 0.25rem rgb(62 180 137 / 25%) !important;
+}
+.btn:active {
+    color: white !important;
+    background-color: #3eb489 !important;
+    border-color: #ff7f50 !important;
+    box-shadow: 0 0 0 0.25rem rgba(255, 127, 80, 0.25) !important;
+}
+.card:active {
+    border-color: #ff7f50 !important;
+    box-shadow: 0 0 0 0.25rem rgba(255, 127, 80, 0.25) !important;
+}
+
+.form-check-input:checked {
+    background-color: #3eb489 !important;
+    border-color: #3eb489 !important;
+}
+.form-check-input:focus {
+    border-color: #3eb489 !important;
+    outline: 0 !important;
+    box-shadow: 0 0 0 0.25rem rgb(62 180 137 / 25%) !important;
+}
+.form-control:focus {
+    border-color: #3eb489 !important;
+    outline: 0 !important;
+    box-shadow: 0 0 0 0.25rem rgb(62 180 137 / 25%) !important;
+}
+
+.search-input:focus {
+    border-color: #ff7f50 !important;
+    box-shadow: 0 0 0 0.25rem rgba(255, 127, 80, 1) !important;
+}
+
+a {
+    color: #3eb489 !important;
+}
+a:hover {
+    color: white !important;
+    background-color: #3eb489 !important;
+}
+
+.border-green {
+    border-color: #3eb489 !important;
+}
+.border-white {
+    border-color: #f7f7f7 !important;
+}
+.border-coral {
+    border-color: #ff7f50 !important;
+}
+
+input {
+    color: white;
+}
+i {
+    color: white;
+}
+
+h1 {
+    color: white;
+    background-color: #3eb489;
+}
+h2 {
+    color: white;
+}
+h6 {
+    color: white;
+    background-color: #3eb489;
+}
+
+.bg-green {
+    background-color: #3eb489 !important;
+}
+.bg-white {
+    background-color: #f7f7f7 !important;
+}
+
+.nav-link {
+    color: #f7f7f7 !important;
+    background-color: #3eb489 !important;
+}
+.nav-link.active {
+    color: #f7f7f7 !important;
+    background-color: #3eb489 !important;
+}
+.nav-link:hover {
+    color: #3eb489 !important;
+    background-color: #f7f7f7 !important;
+}
+.nav-link-static {
+    color: #3eb489 !important;
+    background-color: #f7f7f7 !important;
+}
+
+.color-white {
+    color: white;
+}
+
+.breadcrumb-item.active {
+    text-decoration: underline #3eb489 !important;
 }

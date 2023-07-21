@@ -36,7 +36,9 @@ public class SecurityConfig {
             "/profiles",
             "/profiles/create-form",
             "/profiles/{profileId}",
-            "/profiles/{profileId}/*"
+            "/profiles/{profileId}/*",
+
+            "/search"
     };
 
     private static final String[] ENDPOINTS_ROLE_PROFILE_ACTIVE = {
@@ -55,7 +57,9 @@ public class SecurityConfig {
 
     private static final String[] STATIC_RESOURCES_WHITELIST = {
             "/images/**",
-            "/styles/**"
+            "/styles/**",
+            "/js/**",
+            "/favicon.ico"
     };
     private final UserDetailsService userDetailsService;
 

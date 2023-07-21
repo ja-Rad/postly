@@ -4,9 +4,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link th:replace="~{fragments/bootstrap-stylesheet}" />
         <link th:replace="~{fragments/main-stylesheet}" />
-        <link rel="icon" type="image/x-icon" th:href="@{~/images/favicon/postly-symbol-logo-light-favicon.ico}" />
         <meta charset="utf-8" />
-        <title th:text="${post.title}">Post Title</title>
+        <title th:text="'Postly - ' + ${post.title}"></title>
     </head>
 
     <body>
@@ -14,87 +13,114 @@
             <header>
                 <div th:insert="~{fragments/navbar}" id="navbar-content"></div>
             </header>
-            <main class="mt-auto">
+            <main class="mb-auto">
                 <div class="container-lg">
                     <div class="row align-items-center justify-content-center">
                         <div class="col-lg-6">
-                            <!-- Title -->
-                            <div class="p-2">
-                                <p class="text-muted">Post</p>
-                            </div>
+                            <!-- Breadcrumb -->
+                            <nav class="mt-4" style="--bs-breadcrumb-divider: '>'">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item">
+                                        <a th:href="@{~/profiles/{profileId}(profileId=${post.profile.id})}"><span th:text="${post.profile.username}" th:remove="tag"></span></a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        <a th:href="@{~/posts/{postId}(postId=${post.id})}"><span th:text="${post.title}" th:remove="tag"></span></a>
+                                    </li>
+                                </ol>
+                            </nav>
 
                             <!-- Post Card -->
-                            <div class="card mb-4">
-                                <div class="card-body">
-                                    <!-- Title -->
-                                    <div class="d-flex justify-content-between">
-                                        <div>
-                                            <p class="text-muted">Post title <span class="gradient-text-orange" th:text="${post.title}">Post Title Example</span></p>
-                                        </div>
-                                        <div>
-                                            <p class="text-muted">View comments for this post? <a th:href="@{~/posts/{postId}/comments(postId=${post.id})}" role="button">View</a></p>
-                                        </div>
-                                    </div>
-
-                                    <!-- Post -->
-                                    <p th:text="${post.description}">post example</p>
-                                    <div class="d-flex justify-content-between">
-                                        <div>
-                                            <p class="text-muted">Written by <span class="gradient-text-orange" th:text="${post.profile.username}">John Doe</span></p>
-                                        </div>
-                                        <div>
-                                            <p class="text-muted">Publication Date <span class="gradient-text-orange" th:text="${post.creationDate}">01/01/2001</span></p>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex justify-content-between">
-                                        <div>
-                                            <!-- author's page link -->
-                                            <p class="text-center text-muted">Visit author's page? <a th:href="@{~/profiles/{profileId}(profileId=${post.profile.user.id})}" role="button">author's page</a></p>
-                                        </div>
-                                        <div>
-                                            <!-- Go back link -->
-                                            <p class="text-center text-muted">Return to recent posts? <a th:href="@{~/posts}" role="button">Go back</a></p>
-                                        </div>
-                                    </div>
-
-                                    <!-- Follow-Unfollow Block -->
-                                    <div th:if="${activeProfile}">
-                                        <div th:if="${userId} != ${post.profile.user.id}">
-                                            <div th:unless="${#lists.contains(authorsByUserId, post.profile.user.id)}">
-                                                <form th:action="@{~/followers/{authorId}(authorId=${post.profile.user.id})}" th:method="post">
-                                                    <input type="submit" class="btn btn-primary w-100" value="Follow Author" />
-                                                </form>
+                            <article>
+                                <div class="card mb-4">
+                                    <div class="card-body">
+                                        <div class="container-lg">
+                                            <div class="row row row-cols-sm-2 row-cols-1 d-flex justify-content-between">
+                                                <div class="col">
+                                                    <h4 th:text="${post.title}">Post Title</h4>
+                                                </div>
+                                                <div class="col">
+                                                    <label th:text="${post.creationDate}" class="formatDate text-end">01/01/2001</label>
+                                                </div>
                                             </div>
-                                            <div th:if="${#lists.contains(authorsByUserId, post.profile.user.id)}">
-                                                <form th:action="@{~/followers/{authorId}(authorId=${post.profile.user.id})}" th:method="delete">
-                                                    <input type="submit" class="btn btn-primary w-100" value="Unfollow Author" />
-                                                </form>
+                                            <div class="row row-cols-sm-2 row-cols-1 mt-5">
+                                                <div class="col d-flex justify-content-start">
+                                                    <div class="me-4">
+                                                        <a class="btn badge badge-static me-4 mt-3" th:href="@{~/posts/{postId}/comments(postId=${post.id})}">
+                                                            <span class="material-symbols-rounded"> comment </span>
+                                                            <span th:text="${#lists.size(post.comments)}" th:remove="tag">500</span> Comments
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="col d-flex justify-content-start">
+                                                    <div class="me-4">
+                                                        <form th:action="@{~/posts/{postId}/comments/create-form(postId=${post.id})}" th:method="get">
+                                                            <button class="btn badge badge-static h-100 mt-3" type="submit">
+                                                                <span class="material-symbols-rounded"> add </span>
+                                                                Add Comment
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- NOT Personal Post Block -->
+                                            <div th:unless="${personalPost}">
+                                                <div class="row row-cols-sm-2 row-cols-1 mt-3">
+                                                    <div class="col d-flex justify-content-start">
+                                                        <div class="me-4">
+                                                            <a class="btn badge me-4 mt-3" th:href="@{~/profiles/{profileId}(profileId=${post.profile.id})}">
+                                                                <span class="material-symbols-rounded"> person </span>
+                                                                <p th:text="${post.profile.username}" th:remove="tag">John Doe</p>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Follow-Unfollow Block -->
+                                                    <div class="col d-flex justify-content-start">
+                                                        <div class="me-4">
+                                                            <div th:if="${activeProfile}" th:remove="tag">
+                                                                <div th:if="${userId} != ${post.profile.user.id}" th:remove="tag">
+                                                                    <div th:unless="${#lists.contains(authorsByUserId, post.profile.user.id)}" th:remove="tag">
+                                                                        <form th:action="@{~/followers/{authorId}(authorId=${post.profile.user.id})}" th:method="post" class="h-100">
+                                                                            <button class="btn badge badge-static h-100 mt-3" type="submit">
+                                                                                <span class="material-symbols-rounded"> heart_plus </span>
+                                                                                Follow
+                                                                            </button>
+                                                                        </form>
+                                                                    </div>
+                                                                    <div th:if="${#lists.contains(authorsByUserId, post.profile.user.id)}" th:remove="tag">
+                                                                        <form th:action="@{~/followers/{authorId}(authorId=${post.profile.user.id})}" th:method="delete" class="h-100">
+                                                                            <button class="btn badge badge-static h-100 mt-3" type="submit">
+                                                                                <span class="material-symbols-rounded"> heart_broken </span>
+                                                                                Unfollow
+                                                                            </button>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-
+                            </article>
                             <!-- Personal Post Block -->
                             <div th:if="${personalPost}">
                                 <div class="d-flex flex-row justify-content-center">
-                                    <div class="p-2">
-                                        <form th:action="@{~/posts/{postId}/update-form(postId=${post.id})}" th:method="get">
-                                            <input type="submit" class="btn btn-primary w-100" value="Edit Post" />
-                                        </form>
-                                    </div>
-                                    <div class="p-2">
-                                        <form th:action="@{~/posts/{postId}(postId=${post.id})}" th:method="delete">
-                                            <input type="submit" class="btn btn-primary w-100" value="Delete Post" />
-                                        </form>
-                                    </div>
+                                    <form th:action="@{~/posts/{postId}/update-form(postId=${post.id})}" th:method="get">
+                                        <button class="btn badge badge-static h-100 border border-white me-2" type="submit"><span class="material-symbols-rounded"> edit </span>Edit Post</button>
+                                    </form>
+
+                                    <form th:action="@{~/posts/{postId}(postId=${post.id})}" th:method="delete">
+                                        <button class="btn badge badge-static h-100 border border-white" type="submit"><span class="material-symbols-rounded"> delete </span>Delete Post</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </main>
-            <footer class="bg-primary mt-auto" id="footer-content" th:insert="~{fragments/footer-content}"></footer>
+            <footer class="mt-auto" id="footer-content" th:insert="~{fragments/footer-content}"></footer>
         </div>
         <link th:insert="~{fragments/bootstrap-js-bundle}" />
     </body>

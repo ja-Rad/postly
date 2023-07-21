@@ -52,7 +52,9 @@ public class PostController {
         model.addAttribute("authorsByUserId", authorsByUserId);
 
         Page<Post> postPage = postService.returnPaginatedPostsByCreationDateDescending(page - 1);
+
         int totalPages = postPage.getTotalPages();
+        model.addAttribute("totalPages", totalPages);
 
         if (totalPages > 1) {
             List<Integer> pageNumbers = postService.returnListOfPageNumbers(totalPages);

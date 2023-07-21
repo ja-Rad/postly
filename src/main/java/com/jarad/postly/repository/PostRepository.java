@@ -12,11 +12,14 @@ import java.util.Optional;
 public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findPostPageByProfileId(Long profileId, Pageable pageable);
 
+    Page<Post> findByTitleContainsIgnoreCase(String title, Pageable pageable);
+
     Optional<Post> findByProfileIdAndId(Long profileId, Long postId);
 
     Optional<Post> findByProfileUserIdAndId(Long userId, Long postId);
 
-    boolean existsByProfileUserIdAndId(Long userId, Long postId);
+    Optional<Post> findFirstByProfileIdOrderByIdDesc(Long profileId);
 
+    boolean existsByProfileUserIdAndId(Long userId, Long postId);
 
 }

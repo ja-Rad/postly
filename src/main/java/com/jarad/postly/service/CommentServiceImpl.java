@@ -86,6 +86,11 @@ public class CommentServiceImpl implements CommentService {
         return optionalComment.get();
     }
 
+    @Override
+    public Post returnPostByPostId(Long postId) {
+        return postRepository.findById(postId).orElse(null);
+    }
+
     @Transactional
     @Override
     public Long createNewCommentAndReturnCommentId(Long userId, Long postId, CommentDto commentDto) {

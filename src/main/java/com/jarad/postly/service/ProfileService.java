@@ -36,4 +36,10 @@ public interface ProfileService {
     void deleteExistingProfile(Long userId, Long profileId);
 
     boolean isProfileExistForUser(Long userId);
+
+    Post returnLatestPostById(Long profileId);
+
+    Comment returnLatestCommentById(Long profileId);
+
+    String returnProfileUsername(Long profileId);
 }

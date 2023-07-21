@@ -195,6 +195,38 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
+    public Post returnLatestPostById(Long profileId) {
+        log.info("Returning latest post for profile with ID {}", profileId);
+        Optional<Post> firstByProfileIdOrderByIdDesc = postRepository.findFirstByProfileIdOrderByIdDesc(profileId);
+
+        return firstByProfileIdOrderByIdDesc.orElse(null);
+    }
+
+    @Override
+    public Comment returnLatestCommentById(Long profileId) {
+        log.info("Returning latest comment for profile with ID {}", profileId);
+        Optional<Comment> firstByProfileIdOrderByIdDesc = commentRepository.findFirstByProfileIdOrderByIdDesc(profileId);
+
+        return firstByProfileIdOrderByIdDesc.orElse(null);
+    }
+
+    @Override
+    public String returnProfileUsername(Long profileId) {
+        log.info("Returning profile's username with ID {}", profileId);
+
+        Optional<Profile> optionalProfile = profileRepository.findByUserId(profileId);
+        if (optionalProfile.isEmpty()) {
+            String message = MessageFormat.format("Profile for user with ID {0} doesn''t exist", profileId);
+            log.info(message);
+            throw new ProfileNotFoundException(message);
+        }
+
+        Profile profile = optionalProfile.get();
+
+        return profile.getUsername();
+    }
+
+    @Override
     public boolean isUserOwnsThisProfile(Long userId, Long profileId) {
         return profileRepository.existsByUserIdAndId(userId, profileId);
     }

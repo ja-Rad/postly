@@ -6,8 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class PostlyApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(PostlyApplication.class, args);
-	}
-
+    public static void main(String[] args) {
+        SpringApplication.run(PostlyApplication.class, args);
+    }
 }

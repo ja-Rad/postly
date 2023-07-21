@@ -1,6 +1,7 @@
 package com.jarad.postly.service;
 
 import com.jarad.postly.entity.Comment;
+import com.jarad.postly.entity.Post;
 import com.jarad.postly.util.dto.CommentDto;
 import org.springframework.data.domain.Page;
 
@@ -15,6 +16,8 @@ public interface CommentService {
     Set<Long> returnAuthorsByUserId(Long userId);
 
     Comment returnCommentById(Long postId, Long commentId);
+
+    Post returnPostByPostId(Long postId);
 
     Long createNewCommentAndReturnCommentId(Long userId, Long postId, CommentDto commentDto);
 

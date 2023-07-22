@@ -23,7 +23,7 @@
             </li>
 
             <!-- Create Account -->
-            <div th:unless="${session.usersActiveProfileId}">
+            <div th:unless="${#authorization.expression('hasRole(''ROLE_PROFILE_ACTIVE'')')}">
                 <li class="nav-item">
                     <a class="btn" th:href="@{~/profiles/create-form}">
                         <span class="material-symbols-rounded"> person_add </span>
@@ -32,26 +32,26 @@
             </div>
 
             <!-- Go to Account -->
-            <div th:if="${session.usersActiveProfileId}">
+            <div th:if="${#authorization.expression('hasRole(''ROLE_PROFILE_ACTIVE'')')}">
                 <li class="nav-item">
-                    <a class="btn dropdown-toggle" data-bs-toggle="dropdown" th:href="@{~/profiles/{profileId}(profileId=${session.usersActiveProfileId})}">
+                    <a class="btn dropdown-toggle" data-bs-toggle="dropdown" th:href="@{~/profiles/{profileId}(profileId=${#authentication.getPrincipal().getUserId()})}">
                         <span class="material-symbols-rounded"> account_circle </span>
                     </a>
                     <ul class="dropdown-menu profile-navbar-dropdown">
                         <li>
-                            <a class="dropdown-item" th:href="@{~/profiles/{profileId}(profileId=${session.usersActiveProfileId})}"><span class="material-symbols-rounded"> account_circle </span>Profile</a>
+                            <a class="dropdown-item" th:href="@{~/profiles/{profileId}(profileId=${#authentication.getPrincipal().getUserId()})}"><span class="material-symbols-rounded"> account_circle </span>Profile</a>
                         </li>
                         <li>
-                            <a class="dropdown-item" th:href="@{~/profiles/{profileId}/posts(profileId=${session.usersActiveProfileId})}"><span class="material-symbols-rounded"> newspaper </span>Posts</a>
+                            <a class="dropdown-item" th:href="@{~/profiles/{profileId}/posts(profileId=${#authentication.getPrincipal().getUserId()})}"><span class="material-symbols-rounded"> newspaper </span>Posts</a>
                         </li>
                         <li>
-                            <a class="dropdown-item" th:href="@{~/profiles/{profileId}/comments(profileId=${session.usersActiveProfileId})}"><span class="material-symbols-rounded"> comment </span>Comments</a>
+                            <a class="dropdown-item" th:href="@{~/profiles/{profileId}/comments(profileId=${#authentication.getPrincipal().getUserId()})}"><span class="material-symbols-rounded"> comment </span>Comments</a>
                         </li>
                         <li>
-                            <a class="dropdown-item" th:href="@{~/profiles/{profileId}/authors(profileId=${session.usersActiveProfileId})}"><span class="material-symbols-rounded"> person </span>Authors</a>
+                            <a class="dropdown-item" th:href="@{~/profiles/{profileId}/authors(profileId=${#authentication.getPrincipal().getUserId()})}"><span class="material-symbols-rounded"> person </span>Authors</a>
                         </li>
                         <li>
-                            <a class="dropdown-item" th:href="@{~/profiles/{profileId}/followers(profileId=${session.usersActiveProfileId})}"><span class="material-symbols-rounded"> groups </span>Followers</a>
+                            <a class="dropdown-item" th:href="@{~/profiles/{profileId}/followers(profileId=${#authentication.getPrincipal().getUserId()})}"><span class="material-symbols-rounded"> groups </span>Followers</a>
                         </li>
                         <li><hr class="dropdown-divider" /></li>
                         <!-- Create Post-->

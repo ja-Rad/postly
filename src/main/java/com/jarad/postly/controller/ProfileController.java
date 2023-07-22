@@ -270,7 +270,6 @@ public class ProfileController {
         }
 
         Long userId = userDetails.getUserId();
-        session.setAttribute("usersActiveProfileId", userId);
         profileService.createNewProfile(userId, profileDto);
 
         SecurityContextHolder.clearContext();
@@ -311,7 +310,6 @@ public class ProfileController {
 
         Long userId = userDetails.getUserId();
         profileService.deleteExistingProfile(userId, profileId);
-        session.setAttribute("usersActiveProfileId", null);
 
         SecurityContextHolder.clearContext();
         session.invalidate();

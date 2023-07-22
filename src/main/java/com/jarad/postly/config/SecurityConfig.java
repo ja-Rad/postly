@@ -2,6 +2,7 @@ package com.jarad.postly.config;
 
 import com.jarad.postly.security.SecurityRole;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -25,7 +26,6 @@ public class SecurityConfig {
     private static final String[] ENDPOINTS_WHITELIST = {
             "/users/**",
     };
-
     private static final String[] ENDPOINTS_ROLE_USER = {
             "/",
             "/posts",
@@ -40,7 +40,6 @@ public class SecurityConfig {
 
             "/search"
     };
-
     private static final String[] ENDPOINTS_ROLE_PROFILE_ACTIVE = {
             "/posts",
             "/posts/**",
@@ -50,11 +49,9 @@ public class SecurityConfig {
 
             "/followers/*"
     };
-
     private static final String[] ENDPOINTS_ROLE_ADMIN = {
             "/admin/**"
     };
-
     private static final String[] STATIC_RESOURCES_WHITELIST = {
             "/images/**",
             "/styles/**",
@@ -62,6 +59,8 @@ public class SecurityConfig {
             "/favicon.ico"
     };
     private final UserDetailsService userDetailsService;
+    @Value("remember-me.secret.key")
+    private String rememberMeSecretKey;
 
     @Autowired
     public SecurityConfig(UserDetailsService userDetailsService) {
@@ -135,6 +134,12 @@ public class SecurityConfig {
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
                         .logoutSuccessUrl(LOGIN)
+                )
+
+                // RememberMe Filter
+                .rememberMe(rememberMe -> rememberMe
+                        .key(rememberMeSecretKey)
+                        .tokenValiditySeconds(30 * 24 * 60 * 60) // 30 days
                 )
 
                 // Session Filter

@@ -31,11 +31,9 @@ public class LoginController {
         boolean profileExistForUser = loginService.isProfileExistForUser(userId);
 
         if (profileExistForUser) {
-            session.setAttribute("usersActiveProfileId", userId);
             return "redirect:/posts";
         }
 
-        session.setAttribute("usersActiveProfileId", null);
         return "redirect:/profiles/create-form";
     }
 

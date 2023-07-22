@@ -81,11 +81,11 @@
                                         <!-- Personal Profile Block -->
                                         <div th:if="${personalProfile}">
                                             <div class="d-flex flex-row justify-content-center">
-                                                <form th:action="@{~/profiles/{profileId}/update-form(profileId=${session.usersActiveProfileId})}" th:method="get">
+                                                <form th:action="@{~/profiles/{profileId}/update-form(profileId=${#authentication.getPrincipal().getUserId()})}" th:method="get">
                                                     <button class="btn badge badge-static h-100 border border-white me-2" type="submit"><span class="material-symbols-rounded"> edit </span>Edit Profile</button>
                                                 </form>
 
-                                                <form th:action="@{~/profiles/{profileId}(profileId=${session.usersActiveProfileId})}" th:method="delete">
+                                                <form th:action="@{~/profiles/{profileId}(profileId=${#authentication.getPrincipal().getUserId()})}" th:method="delete">
                                                     <button class="btn badge badge-static h-100 border border-white" type="submit"><span class="material-symbols-rounded"> delete </span>Delete Profile</button>
                                                 </form>
                                             </div>

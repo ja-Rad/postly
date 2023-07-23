@@ -79,6 +79,8 @@ class ProfileServiceImplTest {
     private User user;
     private ProfileDto profileDto;
     private Role role;
+    private Post post;
+    private Comment comment;
 
     @BeforeEach
     void setUp() {
@@ -90,6 +92,8 @@ class ProfileServiceImplTest {
         user = getUser();
         profileDto = new ProfileDto();
         role = getRole();
+        post = getPost();
+        comment = getComment();
     }
 
     @Test
@@ -355,6 +359,67 @@ class ProfileServiceImplTest {
         assertEquals(role, actualResult, "Roles should be equal");
     }
 
+    @Test
+    void returnLatestPostById_PostIsPresent_ReturnsValidPost() {
+        when(postRepository.findFirstByProfileIdOrderByIdDesc(anyLong())).thenReturn(Optional.of(post));
+
+        Post actualResult = profileService.returnLatestPostById(1L);
+
+        assertThat(actualResult).isNotNull();
+        assertEquals(post, actualResult, "Posts should be equal");
+        verify(postRepository, times(1)).findFirstByProfileIdOrderByIdDesc(anyLong());
+    }
+
+    @Test
+    void returnLatestPostById_PostIsEmpty_ReturnsNull() {
+        when(postRepository.findFirstByProfileIdOrderByIdDesc(anyLong())).thenReturn(Optional.empty());
+
+        Post actualResult = profileService.returnLatestPostById(1L);
+
+        assertThat(actualResult).isNull();
+        verify(postRepository, times(1)).findFirstByProfileIdOrderByIdDesc(anyLong());
+    }
+
+    @Test
+    void returnLatestCommentById_CommentIsPresent_ReturnsValidComment() {
+        when(commentRepository.findFirstByProfileIdOrderByIdDesc(anyLong())).thenReturn(Optional.of(comment));
+
+        Comment actualResult = profileService.returnLatestCommentById(1L);
+
+        assertThat(actualResult).isNotNull();
+        assertEquals(comment, actualResult, "Posts should be equal");
+        verify(commentRepository, times(1)).findFirstByProfileIdOrderByIdDesc(anyLong());
+    }
+
+    @Test
+    void returnLatestCommentById_CommentIsEmpty_ReturnsNull() {
+        when(commentRepository.findFirstByProfileIdOrderByIdDesc(anyLong())).thenReturn(Optional.empty());
+
+        Comment actualResult = profileService.returnLatestCommentById(1L);
+
+        assertThat(actualResult).isNull();
+        verify(commentRepository, times(1)).findFirstByProfileIdOrderByIdDesc(anyLong());
+    }
+
+    @Test
+    void returnProfileUsername_ProfileIsPresent_ReturnsValidString() {
+        when(profileRepository.findByUserId(anyLong())).thenReturn(Optional.of(profile));
+
+        String actualResult = profileService.returnProfileUsername(1L);
+
+        assertThat(actualResult).isNotEmpty();
+        assertEquals(profile.getUsername(), actualResult, "Profile Usernames should be equal");
+        verify(profileRepository, times(1)).findByUserId(anyLong());
+    }
+    
+    @Test
+    void returnProfileUsername_ProfileIsEmpty_ThrowsProfileNotFoundException() {
+        when(profileRepository.findByUserId(anyLong())).thenReturn(Optional.empty());
+
+        assertThrows(ProfileNotFoundException.class, () -> profileService.returnProfileUsername(1L));
+        verify(profileRepository, times(1)).findByUserId(anyLong());
+    }
+
     /**
      * Helper method that creates Dummy Test Doubles for the List of Profiles
      *
@@ -469,6 +534,33 @@ class ProfileServiceImplTest {
                 .id(1L)
                 .email("useremail@example.com")
                 .password("User password Example")
+                .build();
+    }
+
+    /**
+     * Helper method that creates Dummy Test Double for the Post Entity
+     *
+     * @return Post object
+     */
+    private Post getPost() {
+        return Post.builder()
+                .id(1L)
+                .title("Title Example")
+                .description("Description Example")
+                .creationDate(Instant.now())
+                .build();
+    }
+
+    /**
+     * Helper method that creates Dummy Test Double for the Comment Entity
+     *
+     * @return Comment object
+     */
+    private Comment getComment() {
+        return Comment.builder()
+                .id(1L)
+                .description("Description Example")
+                .creationDate(Instant.now())
                 .build();
     }
 

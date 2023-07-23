@@ -231,6 +231,46 @@ class CommentServiceImplTest {
         verify(commentRepository, times(1)).existsByProfileUserIdAndId(anyLong(), anyLong());
     }
 
+    @Test
+    void returnPostTitleByPostId_PostIsPresent_ReturnsValidTitle() {
+        when(postRepository.findById(anyLong())).thenReturn(Optional.of(post));
+
+        String actualResult = commentService.returnPostTitleByPostId(1L);
+
+        assertThat(actualResult).isNotEmpty();
+        assertEquals(post.getTitle(), actualResult, "Titles of Profiles should be equal");
+        verify(postRepository, times(1)).findById(anyLong());
+    }
+
+    @Test
+    void returnPostTitleByPostId_PostIsAbsent_ThrowsProfileNotFoundException() {
+        when(postRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        assertThrows(ProfileNotFoundException.class, () -> commentService.returnPostTitleByPostId(1L));
+        verify(postRepository, times(1)).findById(anyLong());
+    }
+
+    @Test
+    void returnPostByPostId_PostIsPresent_ReturnsValidPost() {
+        when(postRepository.findById(anyLong())).thenReturn(Optional.of(post));
+
+        Post actualResult = commentService.returnPostByPostId(1L);
+
+        assertThat(actualResult).isNotNull();
+        assertEquals(post, actualResult, "Post should be the same");
+        verify(postRepository, times(1)).findById(anyLong());
+    }
+
+    @Test
+    void returnPostTitleByPostId_PostIsAbsent_ReturnsNull() {
+        when(postRepository.findById(anyLong())).thenReturn(Optional.empty());
+        
+        Post actualResult = commentService.returnPostByPostId(1L);
+
+        assertThat(actualResult).isNull();
+        verify(postRepository, times(1)).findById(anyLong());
+    }
+
     /**
      * Helper method that creates Dummy Test Double for the Profile Entity
      *

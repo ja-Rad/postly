@@ -211,6 +211,42 @@ class PostServiceImplTest {
         verify(profileRepository, times(1)).findByUserId(anyLong());
     }
 
+    @Test
+    void returnTitleByPostId_PostIsPresent_ReturnsValidTitle() {
+        when(postRepository.findById(anyLong())).thenReturn(Optional.of(post));
+
+        String actualResult = postService.returnTitleByPostId(1L);
+
+        assertThat(actualResult).isNotEmpty();
+        assertEquals(post.getTitle(), actualResult, "Titles of Profiles should be equal");
+        verify(postRepository, times(1)).findById(anyLong());
+    }
+
+    @Test
+    void returnTitleByPostId_PostIsAbsent_ThrowsPostNotFoundException() {
+        when(postRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        assertThrows(PostNotFoundException.class, () -> postService.returnTitleByPostId(1L));
+        verify(postRepository, times(1)).findById(anyLong());
+    }
+
+    @Test
+    void convertToHTMLContent_PostDescriptionIsPresent_ValidString() {
+        String testPostDescription = """
+                ##This is Header##
+                This is Paragraph
+                """;
+
+        String expectedPostDescription = """
+                <h4>This is Header</h4>
+                <p>This is Paragraph</p>
+                """;
+
+        String actualResult = postService.convertToHTMLContent(testPostDescription);
+
+        assertEquals(expectedPostDescription, actualResult, "Post Description Strings should be equal");
+    }
+
     /**
      * Helper method that creates Dummy Test Doubles for the List of Posts
      *

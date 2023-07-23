@@ -34,3 +34,11 @@ function localizeDate() {
 
 // Call the function
 localizeDate();
+
+// Bootstrap Popovers functionality
+var popoverHowToFormat = document.getElementById("popover-how-to-format");
+var popover = new bootstrap.Popover(popoverHowToFormat, {
+    trigger: "focus",
+    content: '<p class="p-highlight">Create content Headers with hashes:</p> <p>##like so##</p> <p class="p-highlight">The result:</p> <h4>like so</h4>',
+    html: true,
+});

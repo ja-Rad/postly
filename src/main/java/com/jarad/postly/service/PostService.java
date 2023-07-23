@@ -25,4 +25,6 @@ public interface PostService {
     boolean isPostOwnedByUser(Long userId, Long postId);
 
     String returnTitleByPostId(Long postId);
+
+    String convertToHTMLContent(String postDescription);
 }

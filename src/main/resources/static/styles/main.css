@@ -74,6 +74,7 @@ header {
     max-height: none !important;
     position: absolute !important;
 }
+
 /* 552 px and less: is when container-fluid forms 2 rows  */
 @media (max-width: 552px) {
     header {
@@ -92,6 +93,14 @@ header {
 .progress-bar {
     height: 8px;
     width: 0%;
+}
+
+.comment-textarea {
+    height: 300px !important;
+}
+
+.post-textarea {
+    height: 600px !important;
 }
 
 /* Cancel Search button - pseudo element*/
@@ -346,10 +355,7 @@ h6 {
     color: #ff7f50 !important;
 }
 
-.comment-textarea {
-    height: 300px !important;
-}
-
-.post-textarea {
-    height: 600px !important;
+.p-highlight {
+    color: white;
+    background-color: #3eb489;
 }

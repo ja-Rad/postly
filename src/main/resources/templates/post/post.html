@@ -41,6 +41,9 @@
                                                     <label th:text="${post.creationDate}" class="formatDate text-end">01/01/2001</label>
                                                 </div>
                                             </div>
+                                            <div class="row row-cols-1 mt-5">
+                                                <div th:utext="${postContent}"></div>
+                                            </div>
                                             <div class="row row-cols-sm-2 row-cols-1 mt-5">
                                                 <div class="col d-flex justify-content-start">
                                                     <div class="me-4">
@@ -105,7 +108,7 @@
                             </article>
                             <!-- Personal Post Block -->
                             <div th:if="${personalPost}">
-                                <div class="d-flex flex-row justify-content-center">
+                                <div class="d-flex flex-row justify-content-center mb-5">
                                     <form th:action="@{~/posts/{postId}/update-form(postId=${post.id})}" th:method="get">
                                         <button class="btn badge badge-static h-100 border border-white me-2" type="submit"><span class="material-symbols-rounded"> edit </span>Edit Post</button>
                                     </form>

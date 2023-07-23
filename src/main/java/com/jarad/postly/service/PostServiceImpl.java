@@ -148,6 +148,22 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public String convertToHTMLContent(String postDescription) {
+        String[] lines = postDescription.split("\n");
+        StringBuilder sb = new StringBuilder();
+
+        for (String line : lines) {
+            if (line.trim().startsWith("##") && line.trim().endsWith("##")) {
+                sb.append("<h4>").append(line.trim(), 2, line.trim().length() - 2).append("</h4>\n");
+            } else if (!line.trim().isEmpty()) {
+                sb.append("<p>").append(line.trim()).append("</p>\n");
+            }
+        }
+
+        return sb.toString();
+    }
+
+    @Override
     public Set<Long> returnAuthorsByUserId(Long userId) {
         Optional<Profile> optionalProfile = profileRepository.findByUserId(userId);
 

@@ -81,6 +81,7 @@ public class PostController {
         model.addAttribute("authorsByUserId", authorsByUserId);
 
         Post post = postService.returnPostById(postId);
+        String postContent = postService.convertToHTMLContent(post.getDescription());
 
         if (postService.isPostOwnedByUser(userId, postId)) {
             model.addAttribute("personalPost", true);
@@ -88,7 +89,7 @@ public class PostController {
         model.addAttribute("post", post);
         model.addAttribute("userId", userId);
         model.addAttribute("activeProfile", activeProfile);
-
+        model.addAttribute("postContent", postContent);
         return POST_SUBFOLDER_PREFIX + "post";
     }
 
@@ -155,7 +156,7 @@ public class PostController {
             String postTitle = postService.returnTitleByPostId(postId);
             model.addAttribute("postId", postId);
             model.addAttribute("postTitle", postTitle);
-            
+
             return POST_SUBFOLDER_PREFIX + "post-update-form";
         }
 

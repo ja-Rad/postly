@@ -30,8 +30,13 @@
                             <!-- Form -->
                             <form th:action="@{~/posts}" th:object="${post}" th:method="post" class="form">
                                 <!-- Title -->
-                                <div class="text-center p-2">
-                                    <h4>Add Post</h4>
+                                <div class="row row-cols-2 mb-3 mt-5 justify-content-end">
+                                    <div class="col-4">
+                                        <h4>Add Post</h4>
+                                    </div>
+                                    <div class="col-6">
+                                        <a id="popover-how-to-format" tabindex="0" class="btn" role="button" data-bs-toggle="popover" data-bs-trigger="focus">How to Format</a>
+                                    </div>
                                 </div>
 
                                 <!-- Title input -->

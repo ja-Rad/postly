@@ -337,3 +337,19 @@ h6 {
 .breadcrumb-item.active {
     text-decoration: underline #3eb489 !important;
 }
+
+.breadcrumb-item.active {
+    text-decoration: underline #3eb489 !important;
+}
+
+.search-nav-link-active {
+    color: #ff7f50 !important;
+}
+
+.comment-textarea {
+    height: 300px !important;
+}
+
+.post-textarea {
+    height: 600px !important;
+}

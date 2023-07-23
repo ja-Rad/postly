@@ -336,3 +336,7 @@ i {
     color: white;
     background-color: #3eb489;
 }
+
+.box-shadow-none-on-focus:focus {
+    box-shadow: none !important;
+}

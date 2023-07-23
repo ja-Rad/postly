@@ -117,12 +117,10 @@ public class ProfileControllerTest {
         mockMvc.perform(get("/profiles/" + profileId + "/posts"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("profileId", profileId))
-                .andExpect(model().attribute("personalProfile", true))
                 .andExpect(model().attribute("postPage", postPage))
                 .andExpect(model().attribute("pageNumbers", new ArrayList<>()))
                 .andExpect(view().name("profile/profile-posts"));
 
-        verify(profileService, times(1)).isUserOwnsThisProfile(anyLong(), anyLong());
         verify(profileService, times(1)).returnProfilePaginatedPostsByCreationDateDescending(profileId, 0);
         verify(profileService, times(1)).returnListOfPageNumbers(anyInt());
     }
@@ -138,12 +136,10 @@ public class ProfileControllerTest {
         mockMvc.perform(get("/profiles/" + profileId + "/authors"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("profileId", profileId))
-                .andExpect(model().attribute("personalProfile", true))
                 .andExpect(model().attribute("authorPage", authorPage))
                 .andExpect(model().attribute("pageNumbers", new ArrayList<>()))
                 .andExpect(view().name("profile/profile-authors"));
 
-        verify(profileService, times(1)).isUserOwnsThisProfile(anyLong(), anyLong());
         verify(profileService, times(1)).returnProfilePaginatedAuthorsByCreationDateDescending(profileId, 0);
         verify(profileService, times(1)).returnListOfPageNumbers(anyInt());
     }
@@ -159,12 +155,10 @@ public class ProfileControllerTest {
         mockMvc.perform(get("/profiles/" + profileId + "/followers"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("profileId", profileId))
-                .andExpect(model().attribute("personalProfile", true))
                 .andExpect(model().attribute("followerPage", followerPage))
                 .andExpect(model().attribute("pageNumbers", new ArrayList<>()))
                 .andExpect(view().name("profile/profile-followers"));
 
-        verify(profileService, times(1)).isUserOwnsThisProfile(anyLong(), anyLong());
         verify(profileService, times(1)).returnProfilePaginatedFollowersByCreationDateDescending(profileId, 0);
         verify(profileService, times(1)).returnListOfPageNumbers(anyInt());
     }
@@ -180,12 +174,10 @@ public class ProfileControllerTest {
         mockMvc.perform(get("/profiles/" + profileId + "/comments"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("profileId", profileId))
-                .andExpect(model().attribute("personalProfile", true))
                 .andExpect(model().attribute("commentPage", commentPage))
                 .andExpect(model().attribute("pageNumbers", new ArrayList<>()))
                 .andExpect(view().name("profile/profile-comments"));
 
-        verify(profileService, times(1)).isUserOwnsThisProfile(anyLong(), anyLong());
         verify(profileService, times(1)).returnProfilePaginatedCommentsByCreationDateDescending(profileId, 0);
         verify(profileService, times(1)).returnListOfPageNumbers(anyInt());
     }
@@ -324,7 +316,10 @@ public class ProfileControllerTest {
                     .creationDate(Instant.now())
                     .user(User.builder()
                             .id((long) i)
-                            .build())
+                            .build()
+                    )
+                    .comments(List.of(Comment.builder().build()))
+                    .posts(List.of(Post.builder().build()))
                     .build());
         }
 
@@ -344,6 +339,7 @@ public class ProfileControllerTest {
                     .title((long) i + "Post Title Example")
                     .description((long) i + "Post Description Example")
                     .creationDate(Instant.now())
+                    .comments(List.of(Comment.builder().build()))
                     .build());
         }
 
@@ -419,6 +415,9 @@ public class ProfileControllerTest {
                 .username("Profile Username Example")
                 .creationDate(Instant.now())
                 .user(User.builder().id(1L).build())
+                .authors(List.of(Follower.builder().profileAuthor(Profile.builder().build()).build()))
+                .posts(List.of(Post.builder().build()))
+                .comments(List.of(Comment.builder().build()))
                 .build();
     }
 

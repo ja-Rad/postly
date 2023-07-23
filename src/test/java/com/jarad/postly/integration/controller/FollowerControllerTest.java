@@ -51,7 +51,7 @@ public class FollowerControllerTest {
                         .with(user(userDetails))
                         .header(HttpHeaders.REFERER, refererUrl))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/previousPage"));
+                .andExpect(redirectedUrl("/previousPage#" + authorId));
     }
 
     @Test
@@ -64,7 +64,7 @@ public class FollowerControllerTest {
                         .with(user(userDetails))
                         .header(HttpHeaders.REFERER, refererUrl))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/previousPage"));
+                .andExpect(redirectedUrl("/previousPage#" + authorId));
     }
 
     /**

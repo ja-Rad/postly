@@ -67,6 +67,8 @@ public class CommentControllerTest {
     public void testGetPostCommentsById() throws Exception {
         Long postId = 1L;
         Page<Comment> commentPage = new PageImpl<>(getElevenComments(), PageRequest.of(0, 10), 2);
+        Post post = getPost();
+        when(commentService.returnPostByPostId(anyLong())).thenReturn(post);
         when(commentService.returnAuthorsByUserId(anyLong())).thenReturn(new HashSet<>());
         when(commentService.returnPaginatedCommentsByCreationDateDescending(anyLong(), anyInt())).thenReturn(commentPage);
         when(commentService.returnListOfPageNumbers(anyInt())).thenReturn(new ArrayList<>());
@@ -261,6 +263,7 @@ public class CommentControllerTest {
                 .title("Post Title Example")
                 .description("Post Description Example")
                 .creationDate(Instant.now())
+                .profile(getProfile())
                 .build();
     }
 
@@ -302,6 +305,7 @@ public class CommentControllerTest {
                     .description(i + " Comment Description Example")
                     .creationDate(Instant.now())
                     .profile(Profile.builder().username(i + " Profile Username Example").build())
+                    .post(Post.builder().profile(Profile.builder().id((long) i).build()).build())
                     .build());
         }
 

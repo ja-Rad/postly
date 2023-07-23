@@ -1,6 +1,7 @@
 package com.jarad.postly.integration.controller;
 
 import com.jarad.postly.controller.PostController;
+import com.jarad.postly.entity.Comment;
 import com.jarad.postly.entity.Post;
 import com.jarad.postly.entity.Profile;
 import com.jarad.postly.entity.Role;
@@ -188,7 +189,7 @@ public class PostControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("post/post-update-form"));
 
-        verifyNoInteractions(postService);
+        verify(postService, times(1)).returnTitleByPostId(postId);
     }
 
     @Test
@@ -234,6 +235,7 @@ public class PostControllerTest {
                         .user(User.builder().id(1L).build())
                         .build()
                 )
+                .comments(List.of(Comment.builder().id(1L).build()))
                 .build();
     }
 
@@ -251,6 +253,7 @@ public class PostControllerTest {
                     .description(i + " Post Description Example")
                     .creationDate(Instant.now())
                     .profile(Profile.builder().username(i + " Profile Username Example").build())
+                    .comments(List.of(Comment.builder().id((long) i).build()))
                     .build());
         }
 

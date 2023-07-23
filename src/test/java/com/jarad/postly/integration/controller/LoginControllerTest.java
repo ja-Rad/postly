@@ -17,7 +17,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -52,8 +51,7 @@ public class LoginControllerTest {
                         .with(user(userDetails))
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/posts"))
-                .andExpect(request().sessionAttribute("usersActiveProfileId", equalTo(1L)));
+                .andExpect(redirectedUrl("/posts"));
 
         verify(loginService).isProfileExistForUser(1L);
     }

@@ -1,4 +1,3 @@
-/* GENERAL SETTINGS */
 * {
     -webkit-border-radius: 0 !important;
     -moz-border-radius: 0 !important;
@@ -9,13 +8,6 @@ body {
     min-height: 100vh !important;
     background-color: #f7f7f7 !important;
     position: relative;
-}
-
-p {
-    white-space: break-spaces !important;
-}
-a {
-    text-decoration: none;
 }
 
 .not-selectable {
@@ -45,15 +37,14 @@ a {
     overflow-y: auto !important;
 }
 
-.btn {
-    -webkit-transition: -webkit-transform 0.2s;
-    transition: -webkit-transform 0.2s;
-    transition: transform 0.2s;
-    transition: transform 0.2s, -webkit-transform 0.2s;
-}
 .btn:active {
     -webkit-transform: scale(0.8);
     transform: scale(0.8);
+
+    color: white !important;
+    background-color: #3eb489 !important;
+    border-color: #ff7f50 !important;
+    box-shadow: 0 0 0 0.25rem rgba(255, 127, 80, 0.25) !important;
 }
 
 .badge {
@@ -89,10 +80,14 @@ header {
 .progress-container {
     width: 100%;
     height: 8px;
+
+    background: #ff7f50;
 }
 .progress-bar {
     height: 8px;
     width: 0%;
+
+    background: #3eb489;
 }
 
 .comment-textarea {
@@ -141,6 +136,9 @@ h1 {
     -moz-user-select: none !important;
     -ms-user-select: none !important;
     user-select: none !important;
+
+    color: white;
+    background-color: #3eb489;
 }
 h2 {
     font-family: "Ysabeau Infant", sans-serif !important;
@@ -154,6 +152,8 @@ h2 {
     -moz-user-select: none !important;
     -ms-user-select: none !important;
     user-select: none !important;
+
+    color: white;
 }
 
 h3 {
@@ -174,6 +174,9 @@ h6 {
     font-style: normal !important;
     font-weight: 300 !important;
     font-size: 12px !important;
+
+    color: white;
+    background-color: #3eb489;
 }
 
 p {
@@ -194,12 +197,17 @@ input {
     font-style: normal !important;
     font-weight: 400 !important;
     font-size: 18px !important;
+
+    color: white;
 }
 a {
     font-family: "IBM Plex Mono", monospace !important;
     font-style: normal !important;
     font-weight: 400 !important;
     font-size: 18px !important;
+
+    color: #3eb489 !important;
+    text-decoration: none;
 }
 
 .btn {
@@ -207,9 +215,17 @@ a {
     font-style: normal !important;
     font-weight: 400 !important;
     font-size: 18px !important;
+
+    -webkit-transition: -webkit-transform 0.2s;
+    transition: -webkit-transform 0.2s;
+    transition: transform 0.2s;
+    transition: transform 0.2s, -webkit-transform 0.2s;
+
+    color: white !important;
+    background-color: #3eb489 !important;
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0) !important;
 }
 
-/* COLOR */
 .card-body {
     box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 45%) !important;
 }
@@ -226,18 +242,6 @@ a {
     background-color: #3eb489 !important;
 }
 
-.progress-container {
-    background: #ff7f50;
-}
-.progress-bar {
-    background: #3eb489;
-}
-
-.btn {
-    color: white !important;
-    background-color: #3eb489 !important;
-    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0) !important;
-}
 .btn:hover {
     color: #3eb489 !important;
     background-color: white !important;
@@ -247,12 +251,7 @@ a {
     outline: 0 !important;
     box-shadow: 0 0 0 0.25rem rgb(62 180 137 / 25%) !important;
 }
-.btn:active {
-    color: white !important;
-    background-color: #3eb489 !important;
-    border-color: #ff7f50 !important;
-    box-shadow: 0 0 0 0.25rem rgba(255, 127, 80, 0.25) !important;
-}
+
 .card:active {
     border-color: #ff7f50 !important;
     box-shadow: 0 0 0 0.25rem rgba(255, 127, 80, 0.25) !important;
@@ -278,9 +277,6 @@ a {
     box-shadow: 0 0 0 0.25rem rgba(255, 127, 80, 1) !important;
 }
 
-a {
-    color: #3eb489 !important;
-}
 a:hover {
     color: white !important;
     background-color: #3eb489 !important;
@@ -296,23 +292,8 @@ a:hover {
     border-color: #ff7f50 !important;
 }
 
-input {
-    color: white;
-}
 i {
     color: white;
-}
-
-h1 {
-    color: white;
-    background-color: #3eb489;
-}
-h2 {
-    color: white;
-}
-h6 {
-    color: white;
-    background-color: #3eb489;
 }
 
 .bg-green {
@@ -341,10 +322,6 @@ h6 {
 
 .color-white {
     color: white;
-}
-
-.breadcrumb-item.active {
-    text-decoration: underline #3eb489 !important;
 }
 
 .breadcrumb-item.active {

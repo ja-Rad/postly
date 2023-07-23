@@ -23,6 +23,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     public static final String LOGIN = "/login";
+    public static final String PROFILES = "/profiles";
     private static final String[] ENDPOINTS_WHITELIST = {
             "/users/**",
     };
@@ -33,10 +34,10 @@ public class SecurityConfig {
             "/posts/{postId}/comments",
             "/posts/{postId}/comments/{commentId}",
 
-            "/profiles",
-            "/profiles/create-form",
-            "/profiles/{profileId}",
-            "/profiles/{profileId}/*",
+            PROFILES,
+            PROFILES + "/create-form",
+            PROFILES + "/{profileId}",
+            PROFILES + "/{profileId}/*",
 
             "/search"
     };
@@ -44,7 +45,7 @@ public class SecurityConfig {
             "/posts",
             "/posts/**",
 
-            "/profiles",
+            PROFILES,
             "/profiles/**",
 
             "/followers/*"
@@ -110,7 +111,7 @@ public class SecurityConfig {
 
                         // Authorization
                         .requestMatchers(HttpMethod.GET, ENDPOINTS_ROLE_USER).hasRole(formatRole(SecurityRole.ROLE_USER.getRole()))
-                        .requestMatchers(HttpMethod.POST, "/profiles").hasRole(formatRole(SecurityRole.ROLE_USER.getRole()))
+                        .requestMatchers(HttpMethod.POST, PROFILES).hasRole(formatRole(SecurityRole.ROLE_USER.getRole()))
 
                         .requestMatchers(ENDPOINTS_ROLE_PROFILE_ACTIVE).hasRole(formatRole(SecurityRole.ROLE_PROFILE_ACTIVE.getRole()))
 

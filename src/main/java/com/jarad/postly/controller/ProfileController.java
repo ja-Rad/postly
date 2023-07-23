@@ -38,6 +38,8 @@ public class ProfileController {
     public static final String PAGE_NUMBERS = "pageNumbers";
     public static final String PROFILE = "profile";
     public static final String PERSONAL_PROFILE = "personalProfile";
+    public static final String PROFILE_USERNAME = "profileUsername";
+    public static final String TOTAL_PAGES = "totalPages";
     private static final String PROFILE_SUBFOLDER_PREFIX = "profile/";
     private final ProfileService profileService;
 
@@ -67,7 +69,7 @@ public class ProfileController {
         model.addAttribute("profilePage", profilePage);
 
         int totalPages = profilePage.getTotalPages();
-        model.addAttribute("totalPages", totalPages);
+        model.addAttribute(TOTAL_PAGES, totalPages);
 
         if (totalPages > 1) {
             List<Integer> pageNumbers = profileService.returnListOfPageNumbers(totalPages);
@@ -121,13 +123,13 @@ public class ProfileController {
         model.addAttribute(PROFILE_ID, profileId);
 
         String profileUsername = profileService.returnProfileUsername(profileId);
-        model.addAttribute("profileUsername", profileUsername);
+        model.addAttribute(PROFILE_USERNAME, profileUsername);
 
         Page<Post> postPage = profileService.returnProfilePaginatedPostsByCreationDateDescending(profileId, page - 1);
         model.addAttribute("postPage", postPage);
 
         int totalPages = postPage.getTotalPages();
-        model.addAttribute("totalPages", totalPages);
+        model.addAttribute(TOTAL_PAGES, totalPages);
 
         if (totalPages > 1) {
             List<Integer> pageNumbers = profileService.returnListOfPageNumbers(totalPages);
@@ -148,13 +150,13 @@ public class ProfileController {
         model.addAttribute(PROFILE_ID, profileId);
 
         String profileUsername = profileService.returnProfileUsername(profileId);
-        model.addAttribute("profileUsername", profileUsername);
+        model.addAttribute(PROFILE_USERNAME, profileUsername);
 
         Page<Comment> commentPage = profileService.returnProfilePaginatedCommentsByCreationDateDescending(profileId, page - 1);
         model.addAttribute("commentPage", commentPage);
 
         int totalPages = commentPage.getTotalPages();
-        model.addAttribute("totalPages", totalPages);
+        model.addAttribute(TOTAL_PAGES, totalPages);
 
         if (totalPages > 1) {
             List<Integer> pageNumbers = profileService.returnListOfPageNumbers(totalPages);
@@ -175,13 +177,13 @@ public class ProfileController {
         model.addAttribute(PROFILE_ID, profileId);
 
         String profileUsername = profileService.returnProfileUsername(profileId);
-        model.addAttribute("profileUsername", profileUsername);
+        model.addAttribute(PROFILE_USERNAME, profileUsername);
 
         Page<Follower> authorPage = profileService.returnProfilePaginatedAuthorsByCreationDateDescending(profileId, page - 1);
         model.addAttribute("authorPage", authorPage);
 
         int totalPages = authorPage.getTotalPages();
-        model.addAttribute("totalPages", totalPages);
+        model.addAttribute(TOTAL_PAGES, totalPages);
 
         if (totalPages > 1) {
             List<Integer> pageNumbers = profileService.returnListOfPageNumbers(totalPages);
@@ -202,13 +204,13 @@ public class ProfileController {
         model.addAttribute(PROFILE_ID, profileId);
 
         String profileUsername = profileService.returnProfileUsername(profileId);
-        model.addAttribute("profileUsername", profileUsername);
+        model.addAttribute(PROFILE_USERNAME, profileUsername);
 
         Page<Follower> followerPage = profileService.returnProfilePaginatedFollowersByCreationDateDescending(profileId, page - 1);
         model.addAttribute("followerPage", followerPage);
 
         int totalPages = followerPage.getTotalPages();
-        model.addAttribute("totalPages", totalPages);
+        model.addAttribute(TOTAL_PAGES, totalPages);
 
         if (totalPages > 1) {
             List<Integer> pageNumbers = profileService.returnListOfPageNumbers(totalPages);
@@ -247,7 +249,7 @@ public class ProfileController {
         String profileUsername = profileService.returnProfileUsername(profileId);
         model.addAttribute(PROFILE, profile);
         model.addAttribute(PROFILE_ID, profileId);
-        model.addAttribute("profileUsername", profileUsername);
+        model.addAttribute(PROFILE_USERNAME, profileUsername);
 
         return PROFILE_SUBFOLDER_PREFIX + "profile-update-form";
     }
@@ -292,7 +294,7 @@ public class ProfileController {
 
             String profileUsername = profileService.returnProfileUsername(profileId);
             model.addAttribute(PROFILE_ID, profileId);
-            model.addAttribute("profileUsername", profileUsername);
+            model.addAttribute(PROFILE_USERNAME, profileUsername);
             return PROFILE_SUBFOLDER_PREFIX + "profile-update-form";
         }
 

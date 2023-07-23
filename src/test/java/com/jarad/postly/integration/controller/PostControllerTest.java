@@ -47,7 +47,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @WebMvcTest(controllers = PostController.class)
-public class PostControllerTest {
+class PostControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -64,7 +64,7 @@ public class PostControllerTest {
     }
 
     @Test
-    public void testGetPaginatedPosts() throws Exception {
+    void testGetPaginatedPosts() throws Exception {
         Page<Post> postPage = new PageImpl<>(getElevenPosts(), PageRequest.of(0, 10), 2);
         when(postService.returnAuthorsByUserId(anyLong())).thenReturn(new HashSet<>());
         when(postService.returnPaginatedPostsByCreationDateDescending(anyInt())).thenReturn(postPage);
@@ -85,7 +85,7 @@ public class PostControllerTest {
     }
 
     @Test
-    public void testGetPostById() throws Exception {
+    void testGetPostById() throws Exception {
         Long postId = 1L;
         Post post = getPost();
         when(postService.returnPostById(postId)).thenReturn(post);
@@ -107,7 +107,7 @@ public class PostControllerTest {
     }
 
     @Test
-    public void testGetPostCreateForm() throws Exception {
+    void testGetPostCreateForm() throws Exception {
         mockMvc.perform(get("/posts/create-form"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("post/post-create-form"))
@@ -115,7 +115,7 @@ public class PostControllerTest {
     }
 
     @Test
-    public void testGetPostUpdateForm() throws Exception {
+    void testGetPostUpdateForm() throws Exception {
         Long postId = 1L;
         Post post = getPost();
         post.setId(postId);
@@ -132,7 +132,7 @@ public class PostControllerTest {
     }
 
     @Test
-    public void testAddPost_Success() throws Exception {
+    void testAddPost_Success() throws Exception {
         PostDto postDto = getPostDto();
         Long postId = 1L;
         when(postService.createNewPostAndReturnPostId(anyLong(), any(PostDto.class))).thenReturn(postId);
@@ -147,7 +147,7 @@ public class PostControllerTest {
     }
 
     @Test
-    public void testAddPost_ValidationErrors() throws Exception {
+    void testAddPost_ValidationErrors() throws Exception {
         PostDto postDto = getPostDto();
         postDto.setTitle("");
         postDto.setDescription("");
@@ -162,7 +162,7 @@ public class PostControllerTest {
     }
 
     @Test
-    public void testUpdatePostById_Success() throws Exception {
+    void testUpdatePostById_Success() throws Exception {
         Long postId = 1L;
         PostDto postDto = getPostDto();
 
@@ -176,7 +176,7 @@ public class PostControllerTest {
     }
 
     @Test
-    public void testUpdatePostById_ValidationErrors() throws Exception {
+    void testUpdatePostById_ValidationErrors() throws Exception {
         Long postId = 1L;
 
         PostDto postDto = getPostDto();
@@ -193,7 +193,7 @@ public class PostControllerTest {
     }
 
     @Test
-    public void testDeletePostById() throws Exception {
+    void testDeletePostById() throws Exception {
         Long postId = 1L;
 
         mockMvc.perform(delete("/posts/" + postId)

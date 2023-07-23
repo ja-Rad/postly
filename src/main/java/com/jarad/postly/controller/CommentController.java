@@ -34,6 +34,7 @@ public class CommentController {
     public static final String COMMENT = "comment";
     public static final String COMMENT_ID = "commentId";
     private static final String COMMENT_SUBFOLDER_PREFIX = "comment/";
+    public static final String POST_TITLE = "postTitle";
     private final CommentService commentService;
 
     @Autowired
@@ -116,7 +117,7 @@ public class CommentController {
         String postTitle = commentService.returnPostTitleByPostId(postId);
         model.addAttribute(POST_ID, postId);
         model.addAttribute(COMMENT, commentDto);
-        model.addAttribute("postTitle", postTitle);
+        model.addAttribute(POST_TITLE, postTitle);
 
         return COMMENT_SUBFOLDER_PREFIX + "comment-create-form";
     }
@@ -133,7 +134,7 @@ public class CommentController {
         model.addAttribute(COMMENT, comment);
         model.addAttribute(POST_ID, postId);
         model.addAttribute(COMMENT_ID, commentId);
-        model.addAttribute("postTitle", postTitle);
+        model.addAttribute(POST_TITLE, postTitle);
 
         return COMMENT_SUBFOLDER_PREFIX + "comment-update-form";
     }
@@ -154,7 +155,7 @@ public class CommentController {
             log.info("Validation errors occurred");
             String postTitle = commentService.returnPostTitleByPostId(postId);
             model.addAttribute(POST_ID, postId);
-            model.addAttribute("postTitle", postTitle);
+            model.addAttribute(POST_TITLE, postTitle);
 
             return COMMENT_SUBFOLDER_PREFIX + "comment-create-form";
         }
@@ -180,7 +181,7 @@ public class CommentController {
             String postTitle = commentService.returnPostTitleByPostId(postId);
             model.addAttribute(POST_ID, postId);
             model.addAttribute(COMMENT_ID, commentId);
-            model.addAttribute("postTitle", postTitle);
+            model.addAttribute(POST_TITLE, postTitle);
 
             return COMMENT_SUBFOLDER_PREFIX + "comment-update-form";
         }

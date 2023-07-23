@@ -47,7 +47,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @WebMvcTest(controllers = CommentController.class)
-public class CommentControllerTest {
+class CommentControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -64,7 +64,7 @@ public class CommentControllerTest {
     }
 
     @Test
-    public void testGetPostCommentsById() throws Exception {
+    void testGetPostCommentsById() throws Exception {
         Long postId = 1L;
         Page<Comment> commentPage = new PageImpl<>(getElevenComments(), PageRequest.of(0, 10), 2);
         Post post = getPost();
@@ -115,7 +115,7 @@ public class CommentControllerTest {
     }
 
     @Test
-    public void testGetPostCreateForm() throws Exception {
+    void testGetPostCreateForm() throws Exception {
         Long postId = 1L;
 
         mockMvc.perform(get("/posts/{postId}/comments/create-form", postId))
@@ -128,7 +128,7 @@ public class CommentControllerTest {
     }
 
     @Test
-    public void testGetPostUpdateForm() throws Exception {
+    void testGetPostUpdateForm() throws Exception {
         Long postId = 1L;
         Comment comment = getComment();
 
@@ -144,7 +144,7 @@ public class CommentControllerTest {
     }
 
     @Test
-    public void testAddPostCommentById_Success() throws Exception {
+    void testAddPostCommentById_Success() throws Exception {
         Long postId = 1L;
         Long commentId = 1L;
         CommentDto commentDto = getCommentDto();
@@ -160,7 +160,7 @@ public class CommentControllerTest {
     }
 
     @Test
-    public void testAddPostCommentById_ValidationErrors() throws Exception {
+    void testAddPostCommentById_ValidationErrors() throws Exception {
         Long postId = 1L;
         CommentDto commentDto = getCommentDto();
         commentDto.setDescription(null);
@@ -177,7 +177,7 @@ public class CommentControllerTest {
     }
 
     @Test
-    public void testUpdateCommentById_Success() throws Exception {
+    void testUpdateCommentById_Success() throws Exception {
         Long postId = 1L;
         Long commentId = 1L;
         CommentDto commentDto = getCommentDto();
@@ -191,7 +191,7 @@ public class CommentControllerTest {
     }
 
     @Test
-    public void testUpdateCommentById_ValidationErrors() throws Exception {
+    void testUpdateCommentById_ValidationErrors() throws Exception {
         Long postId = 1L;
         Long commentId = 1L;
         CommentDto commentDto = getCommentDto();
@@ -211,7 +211,7 @@ public class CommentControllerTest {
     }
 
     @Test
-    public void testDeleteCommentById() throws Exception {
+    void testDeleteCommentById() throws Exception {
         Long postId = 1L;
         Long commentId = 1L;
 

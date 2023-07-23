@@ -48,7 +48,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @WebMvcTest(controllers = ProfileController.class)
-public class ProfileControllerTest {
+class ProfileControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -65,7 +65,7 @@ public class ProfileControllerTest {
     }
 
     @Test
-    public void testGetPaginatedProfiles() throws Exception {
+    void testGetPaginatedProfiles() throws Exception {
         Page<Profile> profilePage = new PageImpl<>(getElevenProfiles(), PageRequest.of(0, 10), 2);
         when(profileService.returnAuthorsByUserId(anyLong())).thenReturn(new HashSet<>());
         when(profileService.returnPaginatedProfilesByCreationDateDescending(anyInt())).thenReturn(profilePage);
@@ -86,7 +86,7 @@ public class ProfileControllerTest {
     }
 
     @Test
-    public void testGetProfileById() throws Exception {
+    void testGetProfileById() throws Exception {
         Profile profile = getProfile();
         Long profileId = profile.getId();
         when(profileService.returnAuthorsByUserId(anyLong())).thenReturn((new HashSet<>()));
@@ -107,7 +107,7 @@ public class ProfileControllerTest {
     }
 
     @Test
-    public void testGetProfilePaginatedPosts() throws Exception {
+    void testGetProfilePaginatedPosts() throws Exception {
         Long profileId = 1L;
         Page<Post> postPage = new PageImpl<>(getElevenPosts(), PageRequest.of(0, 10), 2);
         when(profileService.isUserOwnsThisProfile(anyLong(), anyLong())).thenReturn(true);
@@ -126,7 +126,7 @@ public class ProfileControllerTest {
     }
 
     @Test
-    public void testGetProfilePaginatedAuthors() throws Exception {
+    void testGetProfilePaginatedAuthors() throws Exception {
         Long profileId = 1L;
         Page<Follower> authorPage = new PageImpl<>(getElevenAuthors(profileId), PageRequest.of(0, 10), 2);
         when(profileService.isUserOwnsThisProfile(anyLong(), anyLong())).thenReturn(true);
@@ -145,7 +145,7 @@ public class ProfileControllerTest {
     }
 
     @Test
-    public void testGetProfilePaginatedFollowers() throws Exception {
+    void testGetProfilePaginatedFollowers() throws Exception {
         Long profileId = 1L;
         Page<Follower> followerPage = new PageImpl<>(getElevenFollowers(profileId), PageRequest.of(0, 10), 2);
         when(profileService.isUserOwnsThisProfile(anyLong(), anyLong())).thenReturn(true);
@@ -164,7 +164,7 @@ public class ProfileControllerTest {
     }
 
     @Test
-    public void testGetProfilePaginatedComments() throws Exception {
+    void testGetProfilePaginatedComments() throws Exception {
         Long profileId = 1L;
         Page<Comment> commentPage = new PageImpl<>(getElevenComments(), PageRequest.of(0, 10), 2);
         when(profileService.isUserOwnsThisProfile(anyLong(), anyLong())).thenReturn(true);
@@ -183,7 +183,7 @@ public class ProfileControllerTest {
     }
 
     @Test
-    public void testGetProfileForm_Success() throws Exception {
+    void testGetProfileForm_Success() throws Exception {
         when(profileService.isProfileExistForUser(anyLong())).thenReturn(true);
 
         mockMvc.perform(get("/profiles/create-form"))
@@ -194,7 +194,7 @@ public class ProfileControllerTest {
     }
 
     @Test
-    public void testGetProfileForm_ProfileNotExists() throws Exception {
+    void testGetProfileForm_ProfileNotExists() throws Exception {
         when(profileService.isProfileExistForUser(anyLong())).thenReturn(false);
 
         mockMvc.perform(get("/profiles/create-form"))
@@ -205,7 +205,7 @@ public class ProfileControllerTest {
     }
 
     @Test
-    public void testGetProfileUpdateForm() throws Exception {
+    void testGetProfileUpdateForm() throws Exception {
         Profile profile = getProfile();
         Long profileId = profile.getId();
         when(profileService.returnProfileById(profileId)).thenReturn(profile);
@@ -219,7 +219,7 @@ public class ProfileControllerTest {
     }
 
     @Test
-    public void testCreateNewProfile_Success() throws Exception {
+    void testCreateNewProfile_Success() throws Exception {
         ProfileDto profileDto = getProfileDto();
         MockHttpSession session = new MockHttpSession();
 
@@ -235,7 +235,7 @@ public class ProfileControllerTest {
     }
 
     @Test
-    public void testCreateNewProfile_ValidationErrors() throws Exception {
+    void testCreateNewProfile_ValidationErrors() throws Exception {
         ProfileDto profileDto = getProfileDto();
         profileDto.setUsername("");
 
@@ -247,7 +247,7 @@ public class ProfileControllerTest {
     }
 
     @Test
-    public void testUpdateExistingProfile_Success() throws Exception {
+    void testUpdateExistingProfile_Success() throws Exception {
         Long profileId = 1L;
         ProfileDto profileDto = getProfileDto();
 
@@ -261,7 +261,7 @@ public class ProfileControllerTest {
     }
 
     @Test
-    public void testUpdateExistingProfile_ValidationErrors() throws Exception {
+    void testUpdateExistingProfile_ValidationErrors() throws Exception {
         Long profileId = 1L;
         ProfileDto profileDto = getProfileDto();
         profileDto.setUsername("");
@@ -274,7 +274,7 @@ public class ProfileControllerTest {
     }
 
     @Test
-    public void testDeleteExistingProfile() throws Exception {
+    void testDeleteExistingProfile() throws Exception {
         Long profileId = 1L;
         MockHttpSession session = new MockHttpSession();
 

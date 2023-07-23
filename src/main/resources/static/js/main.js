@@ -1,7 +1,7 @@
 function calculateScrollPercentage() {
-    var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-    var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    var scrolled = (winScroll / height) * 100;
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = (winScroll / height) * 100;
     document.getElementById("myBar").style.width = scrolled + "%";
 }
 
@@ -12,23 +12,23 @@ window.onscroll = function () {
 
 function localizeDate() {
     // Select all labels with the 'formatDate' class
-    var labels = document.getElementsByClassName("formatDate");
+    const labels = document.getElementsByClassName("formatDate");
 
     // Define options for date and time format
-    var dateOptions = { day: "numeric", month: "long", year: "numeric" };
-    var timeOptions = { hour: "numeric", minute: "numeric", hour12: true };
+    const dateOptions = { day: "numeric", month: "long", year: "numeric" };
+    const timeOptions = { hour: "numeric", minute: "numeric", hour12: true };
 
     // Loop through the labels and update each one
-    for (var i = 0; i < labels.length; i++) {
+    for (let label of labels) {
         // Convert the label's text content to a Date object
-        var date = new Date(labels[i].textContent);
+        const date = new Date(label.textContent);
 
         // Format the date and time as strings in the client's timezone
-        var localDateStr = date.toLocaleDateString(undefined, dateOptions);
-        var localTimeStr = date.toLocaleTimeString(undefined, timeOptions);
+        const localDateStr = date.toLocaleDateString(undefined, dateOptions);
+        const localTimeStr = date.toLocaleTimeString(undefined, timeOptions);
 
         // Replace the label's text with the local date and time strings
-        labels[i].textContent = localDateStr + " at " + localTimeStr;
+        label.textContent = localDateStr + " at " + localTimeStr;
     }
 }
 
@@ -36,8 +36,8 @@ function localizeDate() {
 localizeDate();
 
 // Bootstrap Popovers functionality
-var popoverHowToFormat = document.getElementById("popover-how-to-format");
-var popover = new bootstrap.Popover(popoverHowToFormat, {
+const popoverHowToFormat = document.getElementById("popover-how-to-format");
+const popover = new bootstrap.Popover(popoverHowToFormat, {
     trigger: "focus",
     content: '<p class="p-highlight">Create content Headers with hashes:</p> <p>##like so##</p> <p class="p-highlight">The result:</p> <h4>like so</h4>',
     html: true,

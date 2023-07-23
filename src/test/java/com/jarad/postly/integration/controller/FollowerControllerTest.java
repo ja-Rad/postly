@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = FollowerController.class)
-public class FollowerControllerTest {
+class FollowerControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @MockBean
@@ -42,7 +42,7 @@ public class FollowerControllerTest {
     }
 
     @Test
-    public void testAddFollower() throws Exception {
+    void testAddFollower() throws Exception {
         Long authorId = 1L;
         String refererUrl = "http://localhost:8080/previousPage";
 
@@ -55,7 +55,7 @@ public class FollowerControllerTest {
     }
 
     @Test
-    public void testDeleteFollower() throws Exception {
+    void testDeleteFollower() throws Exception {
         Long authorId = 1L;
         String refererUrl = "http://localhost:8080/previousPage";
 

@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @WebMvcTest(controllers = SecurityController.class)
-public class SecurityControllerTest {
+class SecurityControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @MockBean
@@ -40,7 +40,7 @@ public class SecurityControllerTest {
     }
 
     @Test
-    public void testAccessDeniedPage() throws Exception {
+    void testAccessDeniedPage() throws Exception {
         mockMvc.perform(get("/403"))
                 .andExpect(status().isForbidden())
                 .andExpect(model().attribute("status", HttpStatus.FORBIDDEN.value()))

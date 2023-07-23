@@ -43,12 +43,12 @@
 
                                 <!-- Content input -->
                                 <div class="form-floating mb-3">
-                                    <textarea class="form-control" type="text" th:field="*{description}" id="comment" rows="30"></textarea>
+                                    <textarea class="form-control post-textarea" type="text" th:field="*{description}" id="comment"></textarea>
                                     <label for="comment">Content</label>
                                     <div class="alert alert-warning" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Description Error</div>
                                 </div>
 
-                                <!-- Add Comment button -->
+                                <!-- Add Post button -->
                                 <input type="submit" class="btn w-100" value="Add Post" />
 
                                 <!-- Go back link -->

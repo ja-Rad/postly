@@ -34,25 +34,25 @@
                                     <h4>Edit Post</h4>
                                 </div>
 
-                                <!-- Comment input -->
+                                 <!-- Title input -->
                                 <div class="form-floating mb-3">
                                     <input class="form-control" type="text" th:field="*{title}" id="title" placeholder="Type title here:" />
                                     <label for="title">Title</label>
                                     <div class="alert alert-warning" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title Error</div>
                                 </div>
 
-                                <!-- Comment input -->
+                                <!-- Content input -->
                                 <div class="form-floating mb-3">
-                                    <textarea class="form-control" type="text" th:field="*{description}" id="comment" rows="30"></textarea>
+                                    <textarea class="form-control post-textarea" type="text" th:field="*{description}" id="comment"></textarea>
                                     <label for="comment">Content</label>
                                     <div class="alert alert-warning" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Description Error</div>
                                 </div>
 
-                                <!-- Edit Comment button -->
+                                <!-- Edit Post button -->
                                 <input type="submit" class="btn w-100" value="Update" />
 
                                 <!-- Go back link -->
-                                <p class="text-center text-muted m-2">Prefer not to edit comment? <a th:href="@{~/posts/{postId}(postId=${postId})}" role="button">Go back</a></p>
+                                <p class="text-center text-muted m-2">Prefer not to edit post? <a th:href="@{~/posts/{postId}(postId=${postId})}" role="button">Go back</a></p>
                             </form>
                         </div>
                     </div>

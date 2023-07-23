@@ -42,7 +42,7 @@
 
                                 <!-- Comment input -->
                                 <div class="form-floating mb-3">
-                                    <textarea class="form-control" type="text" th:field="*{description}" id="description" rows="10"></textarea>
+                                    <textarea class="form-control comment-textarea" type="text" th:field="*{description}" id="description"></textarea>
                                     <label for="description">Comment</label>
                                     <div class="alert alert-warning" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Description Error</div>
                                 </div>

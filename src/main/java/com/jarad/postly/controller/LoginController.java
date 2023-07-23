@@ -3,7 +3,6 @@ package com.jarad.postly.controller;
 import com.jarad.postly.aspect.LogExecutionTime;
 import com.jarad.postly.security.UserDetailsImpl;
 import com.jarad.postly.service.LoginService;
-import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,7 +23,7 @@ public class LoginController {
 
     @GetMapping("/")
     @LogExecutionTime
-    public String showIndexPage(@AuthenticationPrincipal UserDetailsImpl userDetails, HttpSession session) {
+    public String showIndexPage(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         log.info("Entering showIndexPage");
 
         Long userId = userDetails.getUserId();

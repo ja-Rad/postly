@@ -21,6 +21,10 @@
 
         <!-- JaCoCo Properties -->
         <jacoco.version>0.8.8</jacoco.version>
+        <sonar.coverage.jacoco.xmlReportPaths>
+            ${project.basedir}/target/site/jacoco/jacoco.xml,
+            ${project.basedir}/target/site/jacoco-it/jacoco.xml
+        </sonar.coverage.jacoco.xmlReportPaths>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
         <sonar.language>java</sonar.language>
@@ -29,7 +33,7 @@
         <dependency>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.8.6</version>
+            <version>${jacoco.version}</version>
         </dependency>
         <dependency>
             <groupId>net.bytebuddy</groupId>
@@ -163,6 +167,7 @@
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>${jacoco.version}</version>
                 <executions>
+                    <!-- For unit tests -->
                     <execution>
                         <id>jacoco-initialize</id>
                         <goals>
@@ -170,10 +175,24 @@
                         </goals>
                     </execution>
                     <execution>
-                        <id>jacoco-site</id>
-                        <phase>package</phase>
+                        <id>jacoco-report</id>
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <!-- For integration tests -->
+                    <execution>
+                        <id>jacoco-initialize-integration</id>
+                        <goals>
+                            <goal>prepare-agent-integration</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>jacoco-report-integration</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>report-integration</goal>
                         </goals>
                     </execution>
                 </executions>

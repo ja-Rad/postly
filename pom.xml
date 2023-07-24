@@ -177,6 +177,10 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>${jacoco.version}</version>
+                <configuration>
+                    <destFile>${project.build.directory}/jacoco.exec</destFile>
+                    <append>true</append>
+                </configuration>
                 <executions>
                     <!-- For unit tests -->
                     <execution>

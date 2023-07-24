@@ -76,7 +76,7 @@ public class SecurityConfig {
      * @param roleName the role name to be formatted
      * @return the formatted role name without the "ROLE_" prefix
      */
-    private static String formatRole(final String roleName) {
+    public static String formatRole(final String roleName) {
         return roleName.replace("ROLE_", "");
     }
 

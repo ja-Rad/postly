@@ -48,7 +48,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube-Server-localhost-9000') {
-                    sh 'mvn install -DargLine=" ${JASYPT_ENCRYPTOR_PASSWORD_VALUE} ${DOCKER_JENKINS_MYSQL_IP} ${DOCKER_JENKINS_MYSQL_PORT}"'
+                    sh 'mvn install Djacoco.destFile=target/jacoco.exec -DargLine=" ${JASYPT_ENCRYPTOR_PASSWORD_VALUE} ${DOCKER_JENKINS_MYSQL_IP} ${DOCKER_JENKINS_MYSQL_PORT}"'
                     sh 'mvn sonar:sonar -Dsonar.sources=src/main/java -Dsonar.java.binaries=target/classes -Dsonar.language=java -DargLine=" ${JASYPT_ENCRYPTOR_PASSWORD_VALUE} ${DOCKER_JENKINS_MYSQL_IP} ${DOCKER_JENKINS_MYSQL_PORT}"'
                 }
                 timeout(time: 2, unit: 'MINUTES') {

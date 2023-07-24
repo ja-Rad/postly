@@ -48,7 +48,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @WebMvcTest(controllers = ProfileController.class)
-class ProfileControllerTest {
+class ProfileControllerIT {
 
     @Autowired
     private MockMvc mockMvc;

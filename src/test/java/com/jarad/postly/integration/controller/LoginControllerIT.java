@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = LoginController.class)
-class LoginControllerTest {
+class LoginControllerIT {
     @Autowired
     private MockMvc mockMvc;
     @MockBean

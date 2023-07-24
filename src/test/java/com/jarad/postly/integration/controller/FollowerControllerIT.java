@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = FollowerController.class)
-class FollowerControllerTest {
+class FollowerControllerIT {
     @Autowired
     private MockMvc mockMvc;
     @MockBean

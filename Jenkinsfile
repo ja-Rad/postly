@@ -33,13 +33,13 @@ pipeline {
             parallel {
                 stage('Unit Tests') {
                     steps {
-                        sh 'mvn test -DargLine=" ${JASYPT_ENCRYPTOR_PASSWORD_VALUE} ${DOCKER_JENKINS_MYSQL_IP} ${DOCKER_JENKINS_MYSQL_PORT}"'
+                        sh 'mvn test -Djacoco.agent.append=true -DargLine=" ${JASYPT_ENCRYPTOR_PASSWORD_VALUE} ${DOCKER_JENKINS_MYSQL_IP} ${DOCKER_JENKINS_MYSQL_PORT}"'
                     }
                 }
 
                 stage('Integration Tests') {
                     steps {
-                        sh 'mvn failsafe:integration-test@it-tests -DargLine=" ${JASYPT_ENCRYPTOR_PASSWORD_VALUE} ${DOCKER_JENKINS_MYSQL_IP} ${DOCKER_JENKINS_MYSQL_PORT}"'
+                        sh 'mvn failsafe:integration-test@it-tests -Djacoco.agent.append=true -DargLine=" ${JASYPT_ENCRYPTOR_PASSWORD_VALUE} ${DOCKER_JENKINS_MYSQL_IP} ${DOCKER_JENKINS_MYSQL_PORT}"'
                     }
                 }
             }
@@ -48,7 +48,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube-Server-localhost-9000') {
-                    sh 'mvn clean install -DargLine=" ${JASYPT_ENCRYPTOR_PASSWORD_VALUE} ${DOCKER_JENKINS_MYSQL_IP} ${DOCKER_JENKINS_MYSQL_PORT}"'
+                    sh 'mvn install -DargLine=" ${JASYPT_ENCRYPTOR_PASSWORD_VALUE} ${DOCKER_JENKINS_MYSQL_IP} ${DOCKER_JENKINS_MYSQL_PORT}"'
                     sh 'mvn sonar:sonar -Dsonar.sources=src/main/java -Dsonar.java.binaries=target/classes -Dsonar.language=java -DargLine=" ${JASYPT_ENCRYPTOR_PASSWORD_VALUE} ${DOCKER_JENKINS_MYSQL_IP} ${DOCKER_JENKINS_MYSQL_PORT}"'
                 }
                 timeout(time: 2, unit: 'MINUTES') {

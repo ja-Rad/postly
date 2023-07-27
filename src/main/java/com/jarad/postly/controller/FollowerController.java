@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @Slf4j
@@ -41,13 +42,14 @@ public class FollowerController {
     @LogExecutionTime
     public String addFollower(@AuthenticationPrincipal UserDetailsImpl userDetails,
                               @PathVariable("authorId") Long authorId,
+                              @RequestParam(value = "anchorId", required = false) Long anchorId,
                               @RequestHeader(HttpHeaders.REFERER) String referer) {
         log.info("Entering addFollower");
 
         Long userId = userDetails.getUserId();
         followerService.addFollowerToAuthor(userId, authorId);
         String trimmedRefererPath = getTrimmedRefererPath(referer);
-        String anchorLink = "#" + authorId;
+        String anchorLink = "#" + anchorId;
 
         return "redirect:/" + trimmedRefererPath + anchorLink;
     }
@@ -56,13 +58,14 @@ public class FollowerController {
     @LogExecutionTime
     public String deleteFollower(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                  @PathVariable("authorId") Long authorId,
+                                 @RequestParam(value = "anchorId", required = false) Long anchorId,
                                  @RequestHeader(HttpHeaders.REFERER) String referer) {
         log.info("Entering deleteFollower");
 
         Long userId = userDetails.getUserId();
         followerService.deleteFollowerFromAuthor(userId, authorId);
         String trimmedRefererPath = getTrimmedRefererPath(referer);
-        String anchorLink = "#" + authorId;
+        String anchorLink = "#" + anchorId;
 
         return "redirect:/" + trimmedRefererPath + anchorLink;
     }

@@ -60,7 +60,7 @@ INSERT INTO posts (creation_date, title, `description`, profile_id) VALUES (NOW(
 
 -- comments table
 INSERT INTO comments (creation_date, `description`, post_id, profile_id) VALUES (NOW(), 'This post brought back wonderful memories of my own trip to Tuscany. The food, the people, the landscapes - pure magic!', 1, 2);
-INSERT INTO comments (creation_date, `description`, post_id, profile_id) VALUES (NOW(), 'The Northern Lights are truly a spectacle to behold! I\'m putting Iceland on my bucket list now.', 2, 4);
+INSERT INTO comments (creation_date, `description`, post_id, profile_id) VALUES (NOW(), 'The Northern Lights are truly a spectacle to behold! I\'m putting Iceland on my bucket list now.', 1, 7);
 INSERT INTO comments (creation_date, `description`, post_id, profile_id) VALUES (NOW(), 'I\'ve always wanted to experience Holi in India. Your post beautifully captures the essence of this colorful festival.', 3, 6);
 INSERT INTO comments (creation_date, `description`, post_id, profile_id) VALUES (NOW(), 'Central Park is indeed a haven in the midst of NYC\'s hustle and bustle. Lovely post!', 4, 8);
 INSERT INTO comments (creation_date, `description`, post_id, profile_id) VALUES (NOW(), 'Baking bread at home has become a therapeutic activity for me during the lockdown. Thanks for this delightful post!', 1, 10);

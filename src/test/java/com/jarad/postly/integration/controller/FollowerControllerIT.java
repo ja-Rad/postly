@@ -44,27 +44,31 @@ class FollowerControllerIT {
     @Test
     void testAddFollower() throws Exception {
         Long authorId = 1L;
+        String anchorId = "2";
         String refererUrl = "http://localhost:8080/previousPage";
 
         mockMvc.perform(post("/followers/{authorId}", authorId)
+                        .param("anchorId", anchorId)
                         .with(csrf())
                         .with(user(userDetails))
                         .header(HttpHeaders.REFERER, refererUrl))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/previousPage#" + authorId));
+                .andExpect(redirectedUrl("/previousPage#" + anchorId));
     }
 
     @Test
     void testDeleteFollower() throws Exception {
         Long authorId = 1L;
+        String anchorId = "2";
         String refererUrl = "http://localhost:8080/previousPage";
 
         mockMvc.perform(delete("/followers/{authorId}", authorId)
+                        .param("anchorId", anchorId)
                         .with(csrf())
                         .with(user(userDetails))
                         .header(HttpHeaders.REFERER, refererUrl))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/previousPage#" + authorId));
+                .andExpect(redirectedUrl("/previousPage#" + anchorId));
     }
 
     /**

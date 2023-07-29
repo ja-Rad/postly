@@ -26,7 +26,7 @@ The development of Postly involved various technologies. Here's what was used:
 * **Backend:** Java 17, Spring Boot (3.0.6 version), Spring MVC, Spring Data, Spring Security, Spring Boot Starter Mail
 * **Database:** MySQL (containerized via Docker)
 * **Testing:** JUnit, Mockito, Spring Boot Test Slices
-* **Frontend:** Thymeleaf, HTML, CSS, JavaScript
+* **Frontend:** Thymeleaf, HTML, CSS, Bootstrap, JavaScript
 * **Build Tools:** Apache Maven
 * **CI/CD:** Jenkins (containerized via Docker), SonarQube (containerized via Docker)
 * **Development Plugins:** JPA Buddy, Lombok (These plugins simplify development by aiding in tasks like accessing the database and reducing boilerplate code.)
